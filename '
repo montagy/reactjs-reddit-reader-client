@@ -1,0 +1,12 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+const SubReddit = ({ location }) => {
+  return (
+    <div>
+      SubReddit
+      <Link to="/p/permalin">Permalink</Link>
+    <div>
+  );
+};
+
+export default SubReddit;

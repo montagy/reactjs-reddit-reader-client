@@ -1,0 +1,129 @@
+CS_LAST_WORKSPACE: reddit
+CS_WORKSPACE_BEGIN: reddit
+let SessionLoad = 1
+let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
+let v:this_session=expand("<sfile>:p")
+silent only
+exe "cd " . escape(expand("<sfile>:p:h"), ' ')
+if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
+  let s:wipebuf = bufnr('%')
+endif
+set shortmess=aoO
+badd +51 package.json
+badd +20 webpack.config.js
+badd +15 src/index.jsx
+badd +1 src/pages/index.js
+badd +5 src/pages/Home/index.jsx
+badd +62 src/pages/SubReddit/index.jsx
+badd +38 src/pages/Post/index.jsx
+badd +22 src/molecules/Summary/index.jsx
+badd +13 src/molecules/PostView/index.jsx
+argglobal
+silent! argdel *
+set stal=2
+edit src/molecules/PostView/index.jsx
+edit src/pages/index.js
+edit src/pages/Home/index.jsx
+edit src/pages/SubReddit/index.jsx
+edit src/pages/Post/index.jsx
+edit src/molecules/Summary/index.jsx
+edit src/pages/Post/index.jsx
+set splitbelow splitright
+wincmd _ | wincmd |
+vsplit
+1wincmd h
+wincmd w
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+exe 'vert 1resize ' . ((&columns * 95 + 95) / 190)
+exe 'vert 2resize ' . ((&columns * 94 + 95) / 190)
+argglobal
+let s:l = 38 - ((37 * winheight(0) + 24) / 49)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+38
+normal! 0
+wincmd w
+argglobal
+edit src/molecules/Summary/index.jsx
+let s:l = 23 - ((22 * winheight(0) + 24) / 49)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+23
+normal! 0
+wincmd w
+exe 'vert 1resize ' . ((&columns * 95 + 95) / 190)
+exe 'vert 2resize ' . ((&columns * 94 + 95) / 190)
+tabedit src/index.jsx
+edit src/index.jsx
+edit src/index.jsx
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+let s:l = 7 - ((6 * winheight(0) + 24) / 49)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+7
+normal! 0
+tabedit webpack.config.js
+edit package.json
+edit webpack.config.js
+edit webpack.config.js
+set splitbelow splitright
+wincmd _ | wincmd |
+vsplit
+1wincmd h
+wincmd w
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+exe '1resize ' . ((&lines * 48 + 26) / 52)
+exe 'vert 1resize ' . ((&columns * 95 + 95) / 190)
+exe '2resize ' . ((&lines * 48 + 26) / 52)
+exe 'vert 2resize ' . ((&columns * 94 + 95) / 190)
+argglobal
+let s:l = 20 - ((6 * winheight(0) + 24) / 48)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+20
+normal! 0
+wincmd w
+argglobal
+edit package.json
+let s:l = 51 - ((40 * winheight(0) + 24) / 48)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+51
+normal! 05|
+wincmd w
+exe '1resize ' . ((&lines * 48 + 26) / 52)
+exe 'vert 1resize ' . ((&columns * 95 + 95) / 190)
+exe '2resize ' . ((&lines * 48 + 26) / 52)
+exe 'vert 2resize ' . ((&columns * 94 + 95) / 190)
+tabnext 1
+set stal=1
+if exists('s:wipebuf') && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
+  silent exe 'bwipe ' . s:wipebuf
+endif
+unlet! s:wipebuf
+set winheight=1 winwidth=20 shortmess=filnxtToOI
+let s:sx = expand("<sfile>:p:r")."x.vim"
+if file_readable(s:sx)
+  exe "source " . fnameescape(s:sx)
+endif
+let &so = s:so_save | let &siso = s:siso_save
+doautoall SessionLoadPost
+unlet SessionLoad
+" vim: set ft=vim :
+CS_WORKSPACE_END: reddit
