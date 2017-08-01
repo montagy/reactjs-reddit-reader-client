@@ -3,3 +3,4 @@ dist
 .stroybook
 package-lock.json
 .cs_files
+.cs_workspaces

@@ -17,11 +17,13 @@ class SubReddit extends React.Component {
       if (
         window.innerHeight ===
         document.body.scrollHeight - document.body.scrollTop
+        && document.body.scrollTop > 0 && !this.state.loading
       ) {
+        console.log('handle scroll');
         this.setState({
           loading: true,
         });
-        this.fetchData(props.location.pathname, (json) =>{
+        this.fetchData(this.props.location.pathname, (json) =>{
           this.setState(prevState => ({
             nextPageId: json.data.after,
             summaries: [...prevState.summaries, ...json.data.children.map(child => child.data)],
@@ -29,28 +31,47 @@ class SubReddit extends React.Component {
         }, this.state.nextPageId);
       }
     }, 2000, { leading: true });
+    /*
+     *this.handleScroll = (e) => {
+     *  console.log(e);
+     *  console.log('handle scroll');
+     *};
+     */
     this.update = (json) => {
+      console.log('update summaries');
       this.setState(prevState => ({
-        loading: false,
         summaries: json.data.children.map(child => child.data),
         nextPageId: json.data.after,
       }));
     };
+    this.fetchData = (path, resolve, after) => {
+      const basic = `https://www.reddit.com${path}.json`;
+      const url = after ? `${basic}?after=${after}` : basic;
+      console.log(url);
+      fetch(url)
+        .then(res => res.json())
+        .then(resolve)
+        .catch(err => {
+          console.log(err);
+        });
+    }
   }
   static propTypes = {
     location: PropTypes.object,
   }
-  componentWillMount() {
-    window.addEventListener('scroll', this.handleScroll, false);
-  }
+
   componentWillUnmount() {
+    console.log('unmount');
     window.removeEventListener('scroll', this.handleScroll);
   }
   componentDidMount() {
+    console.log('did mount');
     this.fetchData(this.props.location.pathname, this.update);
+    window.addEventListener('scroll', this.handleScroll, false);
   }
   // 全部初始化了重新fetch
   componentWillReceiveProps(nextProps) {
+    console.log('will receive');
     if (nextProps.location.pathname !== this.props.location.pathname) {
       this.setState({
         loading: true,
@@ -60,29 +81,28 @@ class SubReddit extends React.Component {
     }
   }
   componentDidUpdate(prevProps, prevState) {
+    console.log('did update');
     if (prevProps.location.pathname !== this.props.location.pathname)
-      this.fetchData(prevProps.location.pathname, this.update);
+      this.fetchData(this.props.location.pathname, this.update);
     if(prevState.loading)
       this.setState(prev => {
         return { loading: false };
       });
   }
-  fetchData(path, resolve, after) {
-    const basic = `https://www.reddit.com${path}.json`;
-    const url = after ? `${basic}?after=${after}` : basic;
-    fetch(url)
-      .then(res => res.json())
-      .then(resolve)
-      .catch(err => {
-        console.log(err);
-      });
+  scroll = (e) => {
+    console.log('scroll');
+    e.persist();
+    this.handleScroll(e);
+  }
+  onScroll = (e) => {
+    console.log('on scroll');
   }
   render() {
     const summaries = this.state.summaries.map(summary =>
       <Summary key={summary.id} data={summary} />,
     );
     return (
-      <div>
+      <div onScroll={this.onScroll}>
         {summaries}
         {this.state.loading && <p style={{lineHeight: '3em'}}>loading...</p>}
       </div>
