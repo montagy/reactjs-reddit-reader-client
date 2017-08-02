@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import debounce from 'lodash/debounce';
 import PropTypes from 'prop-types';
 import Summary from '../../molecules/Summary';
+import styles from './index.css';
 
 class SubReddit extends React.Component {
   constructor(props) {
@@ -23,7 +24,7 @@ class SubReddit extends React.Component {
         this.setState({
           loading: true,
         });
-        this.fetchData(this.props.location.pathname, (json) =>{
+        this.fetchReddit(this.props.location.pathname, (json) =>{
           this.setState(prevState => ({
             nextPageId: json.data.after,
             summaries: [...prevState.summaries, ...json.data.children.map(child => child.data)],
@@ -31,12 +32,6 @@ class SubReddit extends React.Component {
         }, this.state.nextPageId);
       }
     }, 2000, { leading: true });
-    /*
-     *this.handleScroll = (e) => {
-     *  console.log(e);
-     *  console.log('handle scroll');
-     *};
-     */
     this.update = (json) => {
       console.log('update summaries');
       this.setState(prevState => ({
@@ -44,7 +39,7 @@ class SubReddit extends React.Component {
         nextPageId: json.data.after,
       }));
     };
-    this.fetchData = (path, resolve, after) => {
+    this.fetchReddit = (path, resolve, after) => {
       const basic = `https://www.reddit.com${path}.json`;
       const url = after ? `${basic}?after=${after}` : basic;
       console.log(url);
@@ -66,7 +61,7 @@ class SubReddit extends React.Component {
   }
   componentDidMount() {
     console.log('did mount');
-    this.fetchData(this.props.location.pathname, this.update);
+    this.fetchReddit(this.props.location.pathname, this.update);
     window.addEventListener('scroll', this.handleScroll, false);
   }
   // 全部初始化了重新fetch
@@ -83,7 +78,7 @@ class SubReddit extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     console.log('did update');
     if (prevProps.location.pathname !== this.props.location.pathname)
-      this.fetchData(this.props.location.pathname, this.update);
+      this.fetchReddit(this.props.location.pathname, this.update);
     if(prevState.loading)
       this.setState(prev => {
         return { loading: false };
@@ -94,17 +89,14 @@ class SubReddit extends React.Component {
     e.persist();
     this.handleScroll(e);
   }
-  onScroll = (e) => {
-    console.log('on scroll');
-  }
   render() {
     const summaries = this.state.summaries.map(summary =>
       <Summary key={summary.id} data={summary} />,
     );
     return (
-      <div onScroll={this.onScroll}>
+      <div>
         {summaries}
-        {this.state.loading && <p style={{lineHeight: '3em'}}>loading...</p>}
+        {this.state.loading && <div className={styles.loading} />}
       </div>
     );
   }
