@@ -69,12 +69,14 @@ class SubReddit extends React.Component {
   componentWillUnmount() {
     console.log('unmount');
     window.removeEventListener('scroll', this.handleScroll);
+    // add to localstorage
   }
   componentDidMount() {
     console.log('did mount');
+    const twohour = 2 * 60 * 60 * 1000;
     if (
       this.reddit === undefined ||
-      new Date().getTime() - this.reddit.timestamp > 20000
+      new Date().getTime() - this.reddit.timestamp > twohour
     ) {
       this.fetchReddit(this.props.location.pathname, this.update);
     }
@@ -100,11 +102,6 @@ class SubReddit extends React.Component {
         return { loading: false };
       });
   }
-  scroll = e => {
-    console.log('scroll');
-    e.persist();
-    this.handleScroll(e);
-  };
   render() {
     const summaries = this.state.summaries.map(summary =>
       <Summary key={summary.id} data={summary} />,
