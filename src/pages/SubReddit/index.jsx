@@ -28,15 +28,7 @@ class SubReddit extends React.Component {
         });
         fetchReddit(
           this.props.location.pathname,
-          json => {
-            this.setState(prevState => ({
-              nextPageId: json.data.after,
-              summaries: [
-                ...prevState.summaries,
-                ...json.data.children.map(child => child.data),
-              ],
-            }));
-          },
+          this.update(true),
           this.state.nextPageId,
         );
       }
@@ -44,13 +36,17 @@ class SubReddit extends React.Component {
     2000,
     { leading: true },
   );
-  update = json => {
+  update = shouldCombine => json => {
     console.log('update summaries');
-    this.setState({
-      summaries: json.data.children.map(child => child.data),
-      nextPageId: json.data.after,
+    const newData = json.data.children.map(child => child.data);
+    this.setState(prevState => {
+      const result = shouldCombine ? prevState.summaries.concat(newData) : newData;
+      return {
+        summaries: result,
+        nextPageId: json.data.after,
+      };
     });
-  }
+  };
   static propTypes = {
     location: PropTypes.object,
   };
@@ -67,7 +63,7 @@ class SubReddit extends React.Component {
       this.reddit === undefined ||
       new Date().getTime() - this.reddit.timestamp > twohour
     ) {
-      fetchReddit(this.props.location.pathname, this.update);
+      fetchReddit(this.props.location.pathname, this.update(false));
     }
     window.addEventListener('scroll', this.handleScroll, false);
   }
@@ -85,7 +81,7 @@ class SubReddit extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     console.log('did update');
     if (prevProps.location.pathname !== this.props.location.pathname)
-      this.fetchReddit(this.props.location.pathname, this.update);
+      this.fetchReddit(this.props.location.pathname, this.update(false));
     if (prevState.loading)
       this.setState({
         loading: false,
