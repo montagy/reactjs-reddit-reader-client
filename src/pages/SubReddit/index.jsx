@@ -26,10 +26,8 @@ class SubReddit extends React.Component {
         this.setState({
           loading: true,
         });
-        fetchReddit(
-          this.props.location.pathname,
+        fetchReddit(this.props.location.pathname, this.state.nextPageId).then(
           this.update(true),
-          this.state.nextPageId,
         );
       }
     },
@@ -40,7 +38,9 @@ class SubReddit extends React.Component {
     console.log('update summaries');
     const newData = json.data.children.map(child => child.data);
     this.setState(prevState => {
-      const result = shouldCombine ? prevState.summaries.concat(newData) : newData;
+      const result = shouldCombine
+        ? prevState.summaries.concat(newData)
+        : newData;
       return {
         summaries: result,
         nextPageId: json.data.after,
@@ -63,7 +63,7 @@ class SubReddit extends React.Component {
       this.reddit === undefined ||
       new Date().getTime() - this.reddit.timestamp > twohour
     ) {
-      fetchReddit(this.props.location.pathname, this.update(false));
+      fetchReddit(this.props.location.pathname).then(this.update(false));
     }
     window.addEventListener('scroll', this.handleScroll, false);
   }
