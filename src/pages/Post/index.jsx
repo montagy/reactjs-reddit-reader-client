@@ -12,14 +12,13 @@ class Post extends React.Component {
     };
   }
   componentDidMount() {
-    fetchReddit(this.props.location.pathname.slice(2)).then(
-      json => {
-        this.setState({
-          loading: false,
-          post: json[0].data.children[0].data,
-          comments: json[1].data.children.map(child => child.data),
-        });
+    fetchReddit(this.props.location.pathname.slice(2)).then(json => {
+      this.setState({
+        loading: false,
+        post: json[0].data.children[0].data,
+        comments: json[1].data.children.map(child => child.data),
       });
+    });
   }
   render() {
     if (this.state.loading) {
