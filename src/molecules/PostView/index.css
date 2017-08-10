@@ -1,0 +1,6 @@
+:global(.md) {
+  background-color: gray;
+}
+:global(.md pre) {
+  overflow: auto;
+}

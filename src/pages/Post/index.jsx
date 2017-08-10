@@ -1,5 +1,6 @@
 import React from 'react';
 import PostView from '../../molecules/PostView';
+import Loading from '../../atoms/Loading';
 import fetchReddit from '../../api';
 
 class Post extends React.Component {
@@ -22,7 +23,7 @@ class Post extends React.Component {
   }
   render() {
     if (this.state.loading) {
-      return <p>loading...</p>;
+      return <Loading />;
     }
     return <PostView post={this.state.post} comments={this.state.comments} />;
   }

@@ -2,7 +2,7 @@ import React from 'react';
 import debounce from 'lodash/debounce';
 import PropTypes from 'prop-types';
 import Summary from '../../molecules/Summary';
-import styles from './index.css';
+import Loading from '../../atoms/Loading';
 import global from '../../global';
 import fetchReddit from '../../api';
 
@@ -26,6 +26,7 @@ class SubReddit extends React.Component {
         this.setState({
           loading: true,
         });
+        // TODO should scroll to end
         fetchReddit(this.props.location.pathname, this.state.nextPageId).then(
           this.update(true),
         );
@@ -81,7 +82,7 @@ class SubReddit extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     console.log('did update');
     if (prevProps.location.pathname !== this.props.location.pathname)
-      this.fetchReddit(this.props.location.pathname, this.update(false));
+      fetchReddit(this.props.location.pathname).then(this.update(false));
     if (prevState.loading)
       this.setState({
         loading: false,
@@ -94,7 +95,7 @@ class SubReddit extends React.Component {
     return (
       <div>
         {summaries}
-        {this.state.loading && <div className={styles.loading} />}
+        {this.state.loading && <Loading />}
       </div>
     );
   }
