@@ -1,5 +1,6 @@
 import React from 'react';
 import PostView from '../../molecules/PostView';
+import fetchReddit from '../../api';
 
 class Post extends React.Component {
   constructor(props) {
@@ -11,21 +12,13 @@ class Post extends React.Component {
     };
   }
   componentDidMount() {
-    this.fetchData(this.props.location.pathname.split('/p')[1]);
-  }
-  fetchData(path) {
-    fetch(`https://www.reddit.com${path}.json`)
-      .then(res => res.json())
-      .then(json => {
-        this.setState({
-          loading: false,
-          post: json[0].data.children[0].data,
-          comments: json[1].data.children.map(child => child.data),
-        });
-      })
-      .catch(err => {
-        console.log(err);
+    fetchReddit(this.props.location.pathname.split('/p')[1], json => {
+      this.setState({
+        loading: false,
+        post: json[0].data.children[0].data,
+        comments: json[1].data.children.map(child => child.data),
       });
+    });
   }
   render() {
     if (this.state.loading) {

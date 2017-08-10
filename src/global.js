@@ -1,21 +1,12 @@
 const global = (() => {
-  let initialized;
-  let storage;
-  const init = () => {
-    return {
-      getStorage: () => storage,
-      setStorage: (x) => {
-        storage = x;
-      },
-    };
-  };
+  let __storage;
   return {
-    getInstance: () => {
-      if (!initialized) {
-        initialized = init();
-      }
-      return initialized;
+    get storage() {
+      return __storage;
+    },
+    set storage(s) {
+      __storage = s;
     },
   };
 })();
-export default global.getInstance();
+export default global;

@@ -8,10 +8,10 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     // read from localstorage
-    global.setStorage({});
-    this.state = {
-      showPannel: false,
-    };
+    global.storage = {};
+  }
+  state = {
+    showPannel: false,
   }
   togglePannel = e => {
     e.preventDefault();

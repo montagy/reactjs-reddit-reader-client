@@ -2,11 +2,11 @@ import global from '../src/global';
 
 describe('Singleton', () => {
   it('only once', () => {
-    global.setSize(3);
-    expect(global.getSize()).toBe(3);
+    global.storage = 3;
+    expect(global.storage).toBe(3);
   });
   it('getSize should be 3', () => {
     const g = require('../src/global').default;
-    expect(g.getSize()).toBe(3);
+    expect(g.storage).toBe(3);
   });
 });

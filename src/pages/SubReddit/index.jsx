@@ -1,66 +1,55 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import debounce from 'lodash/debounce';
 import PropTypes from 'prop-types';
 import Summary from '../../molecules/Summary';
 import styles from './index.css';
 import global from '../../global';
+import fetchReddit from '../../api';
 
 class SubReddit extends React.Component {
-  constructor(props) {
-    super(props);
-    this.reddit = global.getStorage()[props.match.params.sub];
-    this.state = {
-      loading: true,
-      summaries: [],
-      nextPageId: '',
-    };
-    this.handleScroll = debounce(
-      e => {
-        e.preventDefault();
-        if (
-          window.innerHeight ===
-            document.body.scrollHeight - document.body.scrollTop &&
-          document.body.scrollTop > 0 &&
-          !this.state.loading
-        ) {
-          console.log('handle scroll');
-          this.setState({
-            loading: true,
-          });
-          this.fetchReddit(
-            this.props.location.pathname,
-            json => {
-              this.setState(prevState => ({
-                nextPageId: json.data.after,
-                summaries: [
-                  ...prevState.summaries,
-                  ...json.data.children.map(child => child.data),
-                ],
-              }));
-            },
-            this.state.nextPageId,
-          );
-        }
-      },
-      2000,
-      { leading: true },
-    );
-    this.update = json => {
-      console.log('update summaries');
-      this.setState(prevState => ({
-        summaries: json.data.children.map(child => child.data),
-        nextPageId: json.data.after,
-      }));
-    };
-    this.fetchReddit = (path, resolve, after) => {
-      const basic = `https://www.reddit.com${path}.json`;
-      const url = after ? `${basic}?after=${after}` : basic;
-      console.log(url);
-      fetch(url).then(res => res.json()).then(resolve).catch(err => {
-        console.log(err);
-      });
-    };
+  reddit = global.storage[this.props.match.params.sub];
+  state = {
+    loading: true,
+    summaries: [],
+    nextPageId: '',
+  };
+  handleScroll = debounce(
+    e => {
+      e.preventDefault();
+      if (
+        window.innerHeight ===
+          document.body.scrollHeight - document.body.scrollTop &&
+        document.body.scrollTop > 0 &&
+        !this.state.loading
+      ) {
+        console.log('handle scroll');
+        this.setState({
+          loading: true,
+        });
+        fetchReddit(
+          this.props.location.pathname,
+          json => {
+            this.setState(prevState => ({
+              nextPageId: json.data.after,
+              summaries: [
+                ...prevState.summaries,
+                ...json.data.children.map(child => child.data),
+              ],
+            }));
+          },
+          this.state.nextPageId,
+        );
+      }
+    },
+    2000,
+    { leading: true },
+  );
+  update = json => {
+    console.log('update summaries');
+    this.setState({
+      summaries: json.data.children.map(child => child.data),
+      nextPageId: json.data.after,
+    });
   }
   static propTypes = {
     location: PropTypes.object,
@@ -78,7 +67,7 @@ class SubReddit extends React.Component {
       this.reddit === undefined ||
       new Date().getTime() - this.reddit.timestamp > twohour
     ) {
-      this.fetchReddit(this.props.location.pathname, this.update);
+      fetchReddit(this.props.location.pathname, this.update);
     }
     window.addEventListener('scroll', this.handleScroll, false);
   }
@@ -98,8 +87,8 @@ class SubReddit extends React.Component {
     if (prevProps.location.pathname !== this.props.location.pathname)
       this.fetchReddit(this.props.location.pathname, this.update);
     if (prevState.loading)
-      this.setState(prev => {
-        return { loading: false };
+      this.setState({
+        loading: false,
       });
   }
   render() {
