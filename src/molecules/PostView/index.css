@@ -4,3 +4,33 @@
 :global(.md pre) {
   overflow: auto;
 }
+body, p {
+  margin: 0;
+}
+body {
+  background-color: color(var(--baseColor) b(10%));
+}
+* {
+  box-sizing: border-box;
+}
+:root {
+  --baseColor: rgb(255, 255, 255);
+}
+.wrapper {
+  max-width: 90%;
+  margin: 0 auto;
+  line-height: 2;
+}
+.post {
+  padding: 1em;
+  background-color: var(--baseColor);
+}
+.content {
+}
+.comment {
+  padding: 1em;
+  margin: 1em 0;
+  border: 1px solid black;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, .7);
+  background-color: var(--baseColor);
+}
