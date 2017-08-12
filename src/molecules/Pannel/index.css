@@ -2,4 +2,5 @@
    /*color should be change*/
   background-color: yellow;
   transition: width .3s ease-in-out;
+  overflow: hidden;
 }
