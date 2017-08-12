@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter, Route } from 'react-router-dom';
 import { Home, SubReddit, Post } from './pages';
+import Pannel from './molecules/Pannel';
 import global from './global';
 import styles from './index.css';
 
@@ -24,17 +25,10 @@ class App extends React.Component {
     return (
       <HashRouter>
         <div className={styles.wrapper}>
-          <div
-            className={styles.pannel}
-            style={{ width: this.state.showPannel ? '30%' : '2px' }}
-          >
-            <button onClick={this.togglePannel}>
-              Toggle
-            </button>
-            <div style={{ display: this.state.showPannel ? 'block' : 'none' }}>
-              Toggle by Button
-            </div>
-          </div>
+          <Pannel style={{ width: this.state.showPannel ? '30%' : '2px' }} />
+          <button onClick={this.togglePannel} className={styles.toggle}>
+            Toggle
+          </button>
           <div className={styles.container}>
             <Route exact path="/" component={Home} />
             <Route path="/r/:sub" component={SubReddit} />

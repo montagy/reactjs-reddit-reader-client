@@ -11,33 +11,27 @@ html, body, p {
 :root {
   --primary: #108ee9;
 }
-.pannel {
-   /*color should be change*/
-  background-color: yellow;
-  transition: width 1s ease-in-out;
-  & > button {
-    position: fixed;
-    top: 50%;
-    left: 0;
-    font-size: 1.5em;
-    line-height: 1.5;
-    padding: .5em;
-    font-weight: 400;
-    text-align: center;
-    cursor: pointer;
-    border: 1px solid #fff;
-    border-radius: 0.25em;
-    transition: all .3s ease-in-out;
-    background-color: var(--primary);
-    color: #fff;
-    border-color: var(--primary);
-    &:hover {
-      background-color: color(var(--primary) l(+10%));
-      border-color: color(var(--primary) l(+10%));
-    }
+.toggle {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  font-size: 1.5em;
+  line-height: 1.5;
+  padding: .5em;
+  font-weight: 400;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid #fff;
+  border-radius: 0.25em;
+  transition: all .3s ease-in-out;
+  background-color: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  &:hover {
+    background-color: color(var(--primary) l(+10%));
+    border-color: color(var(--primary) l(+10%));
   }
 }
 .container {
-  transition: all 1s ease-in-out;
 }
 
