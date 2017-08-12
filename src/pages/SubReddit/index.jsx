@@ -5,6 +5,7 @@ import Summary from '../../molecules/Summary';
 import Loading from '../../atoms/Loading';
 import global from '../../global';
 import fetchReddit from '../../api';
+import { isScrollAtEnd, scrollToEnd } from '../../utils';
 
 class SubReddit extends React.Component {
   reddit = global.storage[this.props.match.params.sub];
@@ -16,19 +17,13 @@ class SubReddit extends React.Component {
   handleScroll = debounce(
     e => {
       e.preventDefault();
-      if (
-        window.innerHeight ===
-          document.body.scrollHeight - document.body.scrollTop &&
-        document.body.scrollTop > 0 &&
-        !this.state.loading
-      ) {
+      if (isScrollAtEnd() && !this.state.loading) {
         console.log('handle scroll');
         this.setState({
           loading: true,
-        });
-        // TODO should scroll to end
+        }, scrollToEnd);
         fetchReddit(this.props.location.pathname, this.state.nextPageId).then(
-          this.update(true),
+          this.combineOld,
         );
       }
     },
@@ -48,9 +43,8 @@ class SubReddit extends React.Component {
       };
     });
   };
-  static propTypes = {
-    location: PropTypes.object,
-  };
+  replaceOld = this.update(false);
+  combineOld = this.update(true);
 
   componentWillUnmount() {
     console.log('unmount');
@@ -64,7 +58,7 @@ class SubReddit extends React.Component {
       this.reddit === undefined ||
       new Date().getTime() - this.reddit.timestamp > twohour
     ) {
-      fetchReddit(this.props.location.pathname).then(this.update(false));
+      fetchReddit(this.props.location.pathname).then(this.replaceOld);
     }
     window.addEventListener('scroll', this.handleScroll, false);
   }
@@ -82,7 +76,7 @@ class SubReddit extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     console.log('did update');
     if (prevProps.location.pathname !== this.props.location.pathname)
-      fetchReddit(this.props.location.pathname).then(this.update(false));
+      fetchReddit(this.props.location.pathname).then(this.replaceOld);
     if (prevState.loading)
       this.setState({
         loading: false,
