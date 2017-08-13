@@ -17,7 +17,7 @@ export function scrollToEnd() {
 }
 
 export function hoursAgo(timestamp) {
-  const now = new Date();
+  const now = new Date().getTime();
   const hour = 60 * 60 * 1000;
   const lengthDiff = String(now).length - String(timestamp).length;
   if (lengthDiff > 0) {
@@ -28,4 +28,11 @@ export function hoursAgo(timestamp) {
 
 function repeat(str, num) {
   return Array(num + 1).join(str);
+}
+
+export function hoursToDayAndHour(hours) {
+  return {
+    day: Math.floor((hours / 24)),
+    hour: hours % 24,
+  };
 }

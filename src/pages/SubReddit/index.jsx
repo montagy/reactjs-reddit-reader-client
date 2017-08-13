@@ -6,6 +6,7 @@ import Loading from '../../atoms/Loading';
 import global from '../../global';
 import fetchReddit from '../../api';
 import { isScrollAtEnd, scrollToEnd, hoursAgo } from '../../utils';
+import styles from './index.css';
 
 class SubReddit extends React.Component {
   reddit = global.storage[this.props.match.params.sub];
@@ -84,9 +85,11 @@ class SubReddit extends React.Component {
       <Summary key={summary.id} data={summary} />,
     );
     return (
-      <div>
-        {summaries}
-        {this.state.loading && <Loading />}
+      <div className={styles.wrapper}>
+        <div>
+          {summaries}
+          {this.state.loading && <Loading />}
+        </div>
       </div>
     );
   }

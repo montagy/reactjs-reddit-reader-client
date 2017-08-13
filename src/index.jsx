@@ -25,11 +25,13 @@ class App extends React.Component {
     return (
       <HashRouter>
         <div className={styles.wrapper}>
-          <button onClick={this.togglePannel} className={styles.toggle}>
-            Toggle
-          </button>
-          <Pannel style={{ width: this.state.showPannel ? '30%' : '2px' }} />
+          <Pannel style={{ width: this.state.showPannel ? '30%' : '0' }} />
           <div className={styles.container}>
+            <button onClick={this.togglePannel} className={styles.toggle}>
+              <span />
+              <span />
+              <span />
+            </button>
             <Route exact path="/" component={Home} />
             <Route path="/r/:sub" component={SubReddit} />
             <Route path="/p/:permalink" component={Post} />

@@ -1,0 +1,29 @@
+:root {
+  --main: color(blue s(-50%) h(-22));
+  --minor: color(#000 l(+30%));
+}
+.wrapper {
+  padding: 0.8em;
+  font-size: 1.2em;
+  & > header {
+    font-size: 1.2em;
+    & a {
+      color: var(--main);
+    }
+    & span {
+      margin-left: 1em;
+      font-size: 0.5em;
+      color: var(--minor);
+    }
+  }
+  & > div {
+    margin-top: 0.5em;
+    & span {
+      margin-left: 0.5em;
+      color: var(--minor);
+    }
+  }
+  & > footer a {
+    color: var(--main);
+  }
+}
