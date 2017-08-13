@@ -71,8 +71,9 @@ class SubReddit extends React.Component {
   }
   componentDidUpdate(prevProps, prevState) {
     console.log('did update');
-    if (prevProps.location.pathname !== this.props.location.pathname)
-      fetchReddit(this.props.location.pathname).then(this.replaceOld);
+    const path = this.props.location.pathname;
+    if (prevProps.location.pathname !== path)
+      fetchReddit(path).then(this.replaceOld);
     if (prevState.loading)
       this.setState({
         loading: false,
