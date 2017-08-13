@@ -9,11 +9,12 @@ import { isScrollAtEnd, scrollToEnd } from '../../utils';
 
 class SubReddit extends React.Component {
   reddit = global.storage[this.props.match.params.sub];
-  state = {
+  initState = {
     loading: true,
     summaries: [],
     nextPageId: '',
   };
+  state = this.initState;
   handleScroll = debounce(
     e => {
       e.preventDefault();
@@ -66,11 +67,7 @@ class SubReddit extends React.Component {
   componentWillReceiveProps(nextProps) {
     console.log('will receive');
     if (nextProps.location.pathname !== this.props.location.pathname) {
-      this.setState({
-        loading: true,
-        summaries: [],
-        nextPageId: '',
-      });
+      this.setState(this.initState);
     }
   }
   componentDidUpdate(prevProps, prevState) {
