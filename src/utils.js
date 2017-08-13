@@ -15,3 +15,17 @@ export function isScrollAtEnd() {
 export function scrollToEnd() {
   document.body.scrollTop = document.body.scrollHeight;
 }
+
+export function hoursAgo(timestamp) {
+  const now = new Date();
+  const hour = 60 * 60 * 1000;
+  const lengthDiff = String(now).length - String(timestamp).length;
+  if (lengthDiff > 0) {
+    timestamp = Number(String(timestamp) + repeat('0', lengthDiff));
+  }
+  return Math.floor((now - timestamp) / hour);
+}
+
+function repeat(str, num) {
+  return Array(num + 1).join(str);
+}

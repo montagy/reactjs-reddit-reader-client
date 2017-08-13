@@ -5,7 +5,7 @@ import Summary from '../../molecules/Summary';
 import Loading from '../../atoms/Loading';
 import global from '../../global';
 import fetchReddit from '../../api';
-import { isScrollAtEnd, scrollToEnd } from '../../utils';
+import { isScrollAtEnd, scrollToEnd, hoursAgo } from '../../utils';
 
 class SubReddit extends React.Component {
   reddit = global.storage[this.props.match.params.sub];
@@ -20,9 +20,12 @@ class SubReddit extends React.Component {
       e.preventDefault();
       if (isScrollAtEnd() && !this.state.loading) {
         console.log('handle scroll');
-        this.setState({
-          loading: true,
-        }, scrollToEnd);
+        this.setState(
+          {
+            loading: true,
+          },
+          scrollToEnd,
+        );
         fetchReddit(this.props.location.pathname, this.state.nextPageId).then(
           this.combineOld,
         );
@@ -54,11 +57,7 @@ class SubReddit extends React.Component {
   }
   componentDidMount() {
     console.log('did mount');
-    const twohour = 2 * 60 * 60 * 1000;
-    if (
-      this.reddit === undefined ||
-      new Date().getTime() - this.reddit.timestamp > twohour
-    ) {
+    if (this.reddit === undefined || hoursAgo(this.reddit.timestamp) >= 2) {
       fetchReddit(this.props.location.pathname).then(this.replaceOld);
     }
     window.addEventListener('scroll', this.handleScroll, false);
