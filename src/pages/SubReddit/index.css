@@ -1,10 +1,21 @@
 .wrapper {
   flex-grow: 1;
   margin-top: 1em;
-  & > div {
+  & > main {
     max-width: 960px;
     margin: 0 auto;
     background-color: var(--baseColor);
     box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.2);
+  }
+  & > div:first-child {
+    background-color: transparent;
+    text-transform: capitalize;
+    color: #FFF;
+    margin: 1em auto;
+    max-width: 960px;
+    padding-left: 1em;
+    & h1 {
+      font-size: 1.5em;
+    }
   }
 }

@@ -87,9 +87,12 @@ class SubReddit extends React.Component {
     return (
       <div className={styles.wrapper}>
         <div>
+          <h1>{this.props.match.params.sub}</h1>
+        </div>
+        <main>
           {summaries}
           {this.state.loading && <Loading />}
-        </div>
+        </main>
       </div>
     );
   }
