@@ -1,6 +1,7 @@
 import React from 'react';
 import debounce from 'lodash/debounce';
 import PropTypes from 'prop-types';
+import isEmpty from 'lodash/isEmpty';
 import Summary from '../../molecules/Summary';
 import Loading from '../../atoms/Loading';
 import global from '../../global';
@@ -9,7 +10,11 @@ import { isScrollAtEnd, scrollToEnd, hoursAgo } from '../../utils';
 import styles from './index.css';
 
 class SubReddit extends React.Component {
-  reddit = global.storage[this.props.match.params.sub];
+  reddit = global.readReddit(
+    this.props.match &&
+      this.props.match.params &&
+      this.props.match.params.sub,
+  );
   initState = {
     loading: true,
     summaries: [],
@@ -58,7 +63,7 @@ class SubReddit extends React.Component {
   }
   componentDidMount() {
     console.log('did mount');
-    if (this.reddit === undefined || hoursAgo(this.reddit.timestamp) >= 2) {
+    if (isEmpty(this.reddit) || hoursAgo(this.reddit.timestamp) >= 2) {
       fetchReddit(this.props.location.pathname).then(this.replaceOld);
     }
     window.addEventListener('scroll', this.handleScroll, false);
@@ -85,7 +90,7 @@ class SubReddit extends React.Component {
       <Summary key={summary.id} data={summary} />,
     );
     return (
-      <div className={styles.wrapper}>
+      <section className={styles.wrapper}>
         <div>
           <h1>{this.props.match.params.sub}</h1>
         </div>
@@ -93,7 +98,7 @@ class SubReddit extends React.Component {
           {summaries}
           {this.state.loading && <Loading />}
         </main>
-      </div>
+      </section>
     );
   }
 }

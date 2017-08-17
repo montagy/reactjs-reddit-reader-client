@@ -1,10 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import SubReddit from '../SubReddit';
 
-const Home = () =>
-  <section>
-    <Link to="/r/haskell">Haskell</Link>
-    <Link to="/r/reactjs">ReactJs</Link>
-  </section>;
+const Home = ({ match, ...props }) => {
+  match.params.sub = 'Home';
+  return (
+    <SubReddit match={match}  {...props} />
+  );
+};
 
 export default Home;

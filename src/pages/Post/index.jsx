@@ -22,10 +22,13 @@ class Post extends React.Component {
     });
   }
   render() {
-    if (this.state.loading) {
-      return <Loading />;
-    }
-    return <PostView post={this.state.post} comments={this.state.comments} />;
+    return (
+      <section>
+        {this.state.loading
+          ? <Loading />
+          : <PostView post={this.state.post} comments={this.state.comments} />};
+      </section>
+    );
   }
 }
 
