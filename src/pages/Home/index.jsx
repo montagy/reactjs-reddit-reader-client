@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Home = () =>
-  <div>
+  <section>
     <Link to="/r/haskell">Haskell</Link>
     <Link to="/r/reactjs">ReactJs</Link>
-  </div>;
+  </section>;
 
 export default Home;
