@@ -1,20 +1,13 @@
 import React from 'react';
 import debounce from 'lodash/debounce';
-import PropTypes from 'prop-types';
 import isEmpty from 'lodash/isEmpty';
 import Summary from '../../molecules/Summary';
 import Loading from '../../atoms/Loading';
-import global from '../../global';
 import fetchReddit from '../../api';
 import { isScrollAtEnd, scrollToEnd, hoursAgo } from '../../utils';
 import styles from './index.css';
 
 class SubReddit extends React.Component {
-  reddit = global.readReddit(
-    this.props.match &&
-      this.props.match.params &&
-      this.props.match.params.sub,
-  );
   initState = {
     loading: true,
     summaries: [],
@@ -61,11 +54,32 @@ class SubReddit extends React.Component {
     window.removeEventListener('scroll', this.handleScroll);
     // add to localstorage
   }
+  /*
+   *shouldUpdate() {
+   *  const { reddits, match } = this.props;
+   *  const reddit = reddits.readReddit(match.params && match.params.sub);
+   *  return (isEmpty(reddit.data) || hoursAgo(reddit.timestamp) >= 2)
+   *}
+   */
+  doUpdate() {
+    const { reddits, match, location } = this.props;
+    const reddit = reddits.readReddit(match.params && match.params.sub);
+    if (isEmpty(reddit.data) || hoursAgo(reddit.timestamp) >= 2) {
+      fetchReddit(location.pathname).then(json => {
+        this.replaceOld(json);
+        //TODO this is not notify parent, so it will not toggle update
+        reddits.addReddit(match.params.sub, json).store();
+      });
+    } else {
+      this.setState({
+        summaries: reddit.data.data.children.map(child => child.data),
+        nextPageId: reddit.data.data.after,
+      });
+    }
+  }
   componentDidMount() {
     console.log('did mount');
-    if (isEmpty(this.reddit) || hoursAgo(this.reddit.timestamp) >= 2) {
-      fetchReddit(this.props.location.pathname).then(this.replaceOld);
-    }
+    this.doUpdate();
     window.addEventListener('scroll', this.handleScroll, false);
   }
   // 全部初始化了重新fetch
@@ -77,9 +91,9 @@ class SubReddit extends React.Component {
   }
   componentDidUpdate(prevProps, prevState) {
     console.log('did update');
-    const path = this.props.location.pathname;
-    if (prevProps.location.pathname !== path)
-      fetchReddit(path).then(this.replaceOld);
+    if (prevProps.location.pathname !== this.props.location.pathname) {
+      this.doUpdate();
+    }
     if (prevState.loading)
       this.setState({
         loading: false,

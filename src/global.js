@@ -6,29 +6,31 @@ class Reddit {
     this.data = data;
   }
 }
-const global = (() => {
-  let __storage = {};
-  return {
-    get storage() {
-      if(Object.keys(__storage).length === 0) {
-        __storage = JSON.parse(storage.read('reddit'));
-      }
-      return __storage;
-    },
-    get subReddits() {
-      return Object.keys(__storage);
-    },
-    readReddit(name) {
-      return __storage[name] || {};
-    },
-    addReddit(name, data) {
-      const reddit = new Reddit(data);
-      __storage[name] = reddit;
-      return this;
-    },
-    removeReddit(name) {
-      delete __storage[name];
-    },
-  };
-})();
-export default global;
+class RedditInDisk {
+  constructor() {
+    this._reddits = storage.read('reddit') || {};
+  }
+  readReddit(name) {
+    return this._reddits[name] || {};
+  }
+  addReddit(name, data) {
+    const reddit = new Reddit(data);
+    this._reddits[name] = reddit;
+    return this;
+  }
+  removeReddit(name) {
+    delete this._reddits[name];
+    return this;
+  }
+  updateReddit(name, data) {
+    return this.addReddit(name, data);
+  }
+  getKeys() {
+    return Object.keys(this._reddits);
+  }
+  store() {
+    storage.write('reddit', this._reddits);
+  }
+}
+
+export default RedditInDisk;

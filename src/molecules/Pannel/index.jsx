@@ -1,26 +1,38 @@
 import React from 'react';
 import styles from './index.css';
 import classNames from 'classnames';
-import global from '../../global';
+import { Link } from 'react-router-dom';
+import createHistory from 'history/createHashHistory';
 
 class Pannel extends React.Component {
   state = {
     value: '',
   };
-  handleChange = (e) => {
-    this.setState({ value: e.target.value});
-  }
-  handleSubmit = (e) => {
+  handleChange = e => {
+    this.setState({ value: e.target.value });
+  };
+  handleSubmit = e => {
     e.preventDefault();
-  }
+    const history = createHistory();
+    history.push(`/r/${this.state.value}`);
+    this.setState({
+      value: '',
+    });
+  };
   render() {
-    const { className, ...props } = this.props;
+    const {
+      className,
+      reddits,
+      addReddit,
+      deleteReddit,
+      ...props
+    } = this.props;
     const cls = classNames({
       [className]: true,
       [styles.pannel]: true,
     });
-    const list = global.subReddits.map((name, index) =>
-      <div key={index}>name</div>,
+    const list = reddits.map((name, index) =>
+      <Link to={`/r/${name}`} key={index} className={styles.link}>{name}</Link>,
     );
     return (
       <div className={cls} {...props}>
@@ -32,7 +44,7 @@ class Pannel extends React.Component {
               onChange={this.handleChange}
               value={this.state.value}
             />
-            <button>-></button>
+            <button>Add</button>
           </form>
           {list}
         </div>

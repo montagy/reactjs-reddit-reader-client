@@ -10,3 +10,7 @@
   left: 0;
   bottom: 0;
 }
+
+.link {
+  display: block;
+}

@@ -1,12 +1,14 @@
-import global from '../src/global';
+import RedditsInDisk from '../src/global';
 
 describe('Singleton', () => {
-  it('only once', () => {
-    global.storage = 3;
-    expect(global.storage).toBe(3);
-  });
-  it('getSize should be 3', () => {
-    const g = require('../src/global').default;
-    expect(g.storage).toBe(3);
+  beforeEach(() => {
+    global.localStorage = {
+      getItem: jest.fn().mockReturnValue('get item'),
+      setItem: jest.fn().mockReturnValue('set item'),
+    };
+  })
+  it('instance of RedditsInDisk', () => {
+    const r = new RedditsInDisk();
+    expect(r instanceof RedditsInDisk).toBe(true);
   });
 });
