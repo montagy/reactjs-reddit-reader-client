@@ -30,6 +30,7 @@ class Pannel extends React.Component {
               type="text"
               placeholder="reddit"
               onChange={this.handleChange}
+              value={this.state.value}
             />
             <button>-></button>
           </form>
