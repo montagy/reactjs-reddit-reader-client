@@ -1,6 +1,6 @@
 {
   "name": "reddit-reader",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "a simple, quick, composable ui framework",
   "main": "index.js",
   "scripts": {

@@ -2,13 +2,13 @@ import React from 'react';
 import { HashRouter, Route } from 'react-router-dom';
 import { SubReddit, Post } from './pages';
 import Pannel from './molecules/Pannel';
-import RedditsInDisk from './global';
 import styles from './App.css';
+import storage from './storage.js';
 
 class App extends React.Component {
   state = {
     showPannel: false,
-    reddits: new RedditsInDisk(),
+    reddits: storage.read('reddit') || {},
   };
   togglePannel = e => {
     e.preventDefault();
@@ -16,20 +16,31 @@ class App extends React.Component {
       showPannel: !prevState.showPannel,
     }));
   };
-  handleAddReddit = (name, data) =>
-    this.setState(prev => ({
-      reddits: prev.reddits.addReddit(name, data),
-    }));
-  handleDeleteReddit = name =>
-    this.setState(prev => ({
-      reddits: prev.reddits.removeReddit(name),
-    }));
+  handleAddReddit = (name, data) => {
+    const reddits = this.state.reddits;
+    reddits[name] = {
+      timestamp: new Date().getTime(),
+      data,
+    };
+    this.setState({
+      reddits: { ...reddits },
+    });
+    storage.write('reddit', reddits);
+  };
+  handleDeleteReddit = name => {
+    const reddits = this.state.reddits;
+    delete reddits[name];
+    this.setState({
+      reddits: { ...reddits },
+    });
+    storage.write('reddit', reddits);
+  };
   render() {
     return (
       <HashRouter>
         <div className={styles.wrapper}>
           <Pannel
-            reddits={this.state.reddits.getKeys()}
+            reddits={this.state.reddits}
             addReddit={this.handleAddReddit}
             deleteReddit={this.handleDeleteReddit}
             style={{ width: this.state.showPannel ? '30%' : '0' }}
@@ -52,6 +63,7 @@ class App extends React.Component {
                   <SubReddit
                     reddits={this.state.reddits}
                     match={match}
+                    addReddit={this.handleAddReddit}
                     {...rest}
                   />
                 );
@@ -60,7 +72,11 @@ class App extends React.Component {
             <Route
               path="/r/:sub"
               render={props =>
-                <SubReddit reddits={this.state.reddits} {...props} />}
+                <SubReddit
+                  addReddit={this.handleAddReddit}
+                  reddits={this.state.reddits}
+                  {...props}
+                />}
             />
             <Route path="/p/:permalink" component={Post} />
           </div>

@@ -33,42 +33,37 @@ class SubReddit extends React.Component {
     2000,
     { leading: true },
   );
-  update = shouldCombine => json => {
+  updateResolve = shouldCombine => json => {
     console.log('update summaries');
     const newData = json.data.children.map(child => child.data);
-    this.setState(prevState => {
-      const result = shouldCombine
-        ? prevState.summaries.concat(newData)
-        : newData;
-      return {
-        summaries: result,
-        nextPageId: json.data.after,
-      };
-    });
+    this.setState(
+      prevState => {
+        const result = shouldCombine
+          ? prevState.summaries.concat(newData)
+          : newData;
+        return {
+          summaries: result,
+          nextPageId: json.data.after,
+        };
+      },
+      () => {
+        this.setState({
+          loading: false,
+        });
+      },
+    );
   };
-  replaceOld = this.update(false);
-  combineOld = this.update(true);
+  replaceOld = this.updateResolve(false);
+  combineOld = this.updateResolve(true);
 
-  componentWillUnmount() {
-    console.log('unmount');
-    window.removeEventListener('scroll', this.handleScroll);
-    // add to localstorage
-  }
-  /*
-   *shouldUpdate() {
-   *  const { reddits, match } = this.props;
-   *  const reddit = reddits.readReddit(match.params && match.params.sub);
-   *  return (isEmpty(reddit.data) || hoursAgo(reddit.timestamp) >= 2)
-   *}
-   */
   doUpdate() {
-    const { reddits, match, location } = this.props;
-    const reddit = reddits.readReddit(match.params && match.params.sub);
+    const { reddits, match, location, addReddit } = this.props;
+    const name = match.params && match.params.sub;
+    const reddit = reddits[name] || {};
     if (isEmpty(reddit.data) || hoursAgo(reddit.timestamp) >= 2) {
       fetchReddit(location.pathname).then(json => {
         this.replaceOld(json);
-        //TODO this is not notify parent, so it will not toggle update
-        reddits.addReddit(match.params.sub, json).store();
+        addReddit(name, json);
       });
     } else {
       this.setState({
@@ -89,15 +84,15 @@ class SubReddit extends React.Component {
       this.setState(this.initState);
     }
   }
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     console.log('did update');
     if (prevProps.location.pathname !== this.props.location.pathname) {
       this.doUpdate();
     }
-    if (prevState.loading)
-      this.setState({
-        loading: false,
-      });
+  }
+  componentWillUnmount() {
+    console.log('unmount');
+    window.removeEventListener('scroll', this.handleScroll);
   }
   render() {
     const summaries = this.state.summaries.map(summary =>

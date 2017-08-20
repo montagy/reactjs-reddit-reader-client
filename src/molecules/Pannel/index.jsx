@@ -31,7 +31,7 @@ class Pannel extends React.Component {
       [className]: true,
       [styles.pannel]: true,
     });
-    const list = reddits.map((name, index) =>
+    const list = Object.keys(reddits).map((name, index) =>
       <Link to={`/r/${name}`} key={index} className={styles.link}>{name}</Link>,
     );
     return (
