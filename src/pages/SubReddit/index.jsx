@@ -69,6 +69,7 @@ class SubReddit extends React.Component {
       this.setState({
         summaries: reddit.data.data.children.map(child => child.data),
         nextPageId: reddit.data.data.after,
+        loading: false,
       });
     }
   }
