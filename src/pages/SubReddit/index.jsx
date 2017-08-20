@@ -6,6 +6,7 @@ import Loading from '../../atoms/Loading';
 import fetchReddit from '../../api';
 import { isScrollAtEnd, scrollToEnd, hoursAgo } from '../../utils';
 import styles from './index.css';
+import shallowEqual from 'fbjs/lib/shallowEqual';
 
 class SubReddit extends React.Component {
   initState = {
@@ -72,6 +73,12 @@ class SubReddit extends React.Component {
         loading: false,
       });
     }
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    return (
+      !shallowEqual(this.props.location, nextProps.location) ||
+      !shallowEqual(this.state, nextState)
+    );
   }
   componentDidMount() {
     console.log('did mount');
