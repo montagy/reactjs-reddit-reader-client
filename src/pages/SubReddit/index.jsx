@@ -88,14 +88,8 @@ class SubReddit extends React.Component {
   // 全部初始化了重新fetch
   componentWillReceiveProps(nextProps) {
     console.log('will receive');
-    if (nextProps.location.pathname !== this.props.location.pathname) {
-      this.setState(this.initState);
-    }
-  }
-  componentDidUpdate(prevProps) {
-    console.log('did update');
-    if (prevProps.location.pathname !== this.props.location.pathname) {
-      this.doUpdate();
+    if (!shallowEqual(this.props.location, nextProps.location)) {
+      this.setState(this.initState, this.doUpdate);
     }
   }
   componentWillUnmount() {
