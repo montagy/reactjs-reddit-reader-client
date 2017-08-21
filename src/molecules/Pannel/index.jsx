@@ -45,9 +45,12 @@ class Pannel extends React.Component {
               onChange={this.handleChange}
               value={this.state.value}
             />
-            <button>Add</button>
+            <button className={styles.btn}>Add</button>
           </form>
-          {list}
+          <div className={styles.lists}>
+            {list}
+            <p>This is a sentence.</p>
+          </div>
         </main>
         <button onClick={handleToggle} className={styles.toggle}>
           <span className={active ? styles.firstBar : null} />
