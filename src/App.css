@@ -9,7 +9,7 @@
   display: flex;
   justify-content: space-between;
   position: relative;
-  transition: margin-left .3s ease-in-out;
+  transition: all .3s ease-in-out;
   & section {
     flex-grow: 1;
   }

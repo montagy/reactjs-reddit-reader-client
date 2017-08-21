@@ -43,13 +43,11 @@ class App extends React.Component {
             reddits={this.state.reddits}
             addReddit={this.handleAddReddit}
             deleteReddit={this.handleDeleteReddit}
-            style={{ width: this.state.showPannel ? '30%' : '0' }}
             active={this.state.showPannel}
             handleToggle={this.togglePannel}
           />
           <div
             className={styles.container}
-            style={{ marginLeft: this.state.showPannel ? '30%' : '0' }}
           >
             <Route
               exact

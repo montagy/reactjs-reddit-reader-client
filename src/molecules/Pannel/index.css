@@ -2,17 +2,21 @@
   --primary: #108ee9;
 }
 .pannel {
-  width: 0px;
-  background-color: yellow;
-  transition: width .3s ease-in-out;
+  width: 280px;
   overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: fixed;
   top: 0;
-  left: 0;
+  left: -240px;
   bottom: 0;
+  z-index: 1;
+  transition: all .3s ease-in-out;
+  display: flex;
+  justify-content: space-between;
+  & > main {
+    /*width: 240px;*/
+    flex-grow: 1;
+    background-color: yellow;
+  }
 }
 
 .link {
@@ -20,9 +24,10 @@
 }
 .toggle {
   display: block;
-  font-size: 1em;
+  margin-top: 2em;
+  /*font-size: 1em;*/
   padding: 0 .5em;
-  width: 4em;
+  width: 40px;
   height: @width;
   cursor: pointer;
   border: 1px solid var(--primary);
@@ -43,12 +48,15 @@
   }
 }
 .active {
-  width: 30%;
+  left: 0;
 }
 .firstBar {
   transform: translateY(9px) rotate(45deg);
 }
+.sndBar {
+  opacity: 0;
+}
 .lastBar {
-  transform: translateY(-9px) rotate(-45deg);
+  transform: translateY(-15px) rotate(-45deg);
 }
 

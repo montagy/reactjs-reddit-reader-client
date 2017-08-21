@@ -37,7 +37,7 @@ class Pannel extends React.Component {
     });
     return (
       <div className={cls} {...props}>
-        <div>
+        <main>
           <form onSubmit={this.handleSubmit}>
             <input
               type="text"
@@ -48,11 +48,11 @@ class Pannel extends React.Component {
             <button>Add</button>
           </form>
           {list}
-        </div>
+        </main>
         <button onClick={handleToggle} className={styles.toggle}>
-          <span className={active ? styles.firstBar : ''} />
-          <span style={{ opacity: active ? '0' : '1' }} />
-          <span className={active ? styles.lastBar : ''} />
+          <span className={active ? styles.firstBar : null} />
+          <span className={active ? styles.sndBar : null} />
+          <span className={active ? styles.lastBar : null} />
         </button>
       </div>
     );
