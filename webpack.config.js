@@ -5,10 +5,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const config = {
   devtool: 'cheap-module-source-map',
-  entry: [
-    'react-hot-loader/patch',
-    path.resolve(__dirname, 'src/index.jsx'),
-  ],
+  entry: ['react-hot-loader/patch', path.resolve(__dirname, 'src/index.jsx')],
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
@@ -33,10 +30,6 @@ const config = {
       },
     }),
     new ExtractTextPlugin('style.css'),
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: path.join(process.cwd(), 'public/index.html'),
-    }),
   ],
 
   resolve: {
@@ -74,6 +67,12 @@ if (process.env.NODE_ENV !== 'production') {
         screw_ie8: true,
       },
       comment: false,
+    }),
+  );
+  config.plugins.push(
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: path.join(process.cwd(), 'public/index.html'),
     }),
   );
   config.module.rules.push({
