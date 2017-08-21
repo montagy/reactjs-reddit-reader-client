@@ -35,6 +35,30 @@ class App extends React.Component {
     });
     storage.write('reddit', reddits);
   };
+  handleEscClosePannel = event => {
+    if (this.state.showPannel && event.keyCode === 27) {
+      this.setState({
+        showPannel: false,
+      });
+    }
+  };
+  handleClickBlankClosePannel = event => {
+    event.preventDefault();
+    console.log('click blank');
+    if (this.state.showPannel) {
+      this.setState({
+        showPannel: false,
+      });
+    }
+  }
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleEscClosePannel);
+    this.mainPage.addEventListener('click', this.handleClickBlankClosePannel);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleEscClosePannel);
+    this.mainPage.removeEventListener('click', this.handleClickBlankClosePannel);
+  }
   render() {
     return (
       <HashRouter>
@@ -46,9 +70,7 @@ class App extends React.Component {
             active={this.state.showPannel}
             handleToggle={this.togglePannel}
           />
-          <div
-            className={styles.container}
-          >
+          <div className={styles.container} ref={(ref) => this.mainPage = ref}>
             <Route
               exact
               path="/"
