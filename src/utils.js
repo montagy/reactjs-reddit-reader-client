@@ -36,3 +36,21 @@ export function hoursToDayAndHour(hours) {
     hour: hours % 24,
   };
 }
+
+export function scrollTopSmooth(y, time) {
+  const total = document.body.scrollHeight - window.innerHeight;
+  const diff = total - y;
+  const unit = 17 * diff / time;
+  let step = unit, id = null;
+  const animation = () => {
+    if(diff - step <= unit) {
+      document.body.scrollTop = y;
+      cancelAnimationFrame(id);
+    } else {
+      document.body.scrollTop = diff - step;
+      step += unit;
+      requestAnimationFrame(animation);
+    }
+  }
+  id = requestAnimationFrame(animation);
+}

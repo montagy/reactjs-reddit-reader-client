@@ -7,6 +7,7 @@ import fetchReddit from '../../api';
 import { isScrollAtEnd, scrollToEnd, hoursAgo } from '../../utils';
 import styles from './index.css';
 import shallowEqual from 'fbjs/lib/shallowEqual';
+import { scrollTopSmooth } from '../../utils';
 
 class SubReddit extends React.Component {
   initState = {
@@ -58,7 +59,7 @@ class SubReddit extends React.Component {
   combineOld = this.updateResolve(true);
   goTop = (e) => {
     e.preventDefault();
-    window.scroll(0, 0);
+    scrollTopSmooth(0, 500);
   }
 
   doUpdate() {
