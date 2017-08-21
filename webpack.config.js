@@ -5,7 +5,10 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const config = {
   devtool: 'cheap-module-source-map',
-  entry: path.resolve(__dirname, 'src/index.jsx'),
+  entry: [
+    'react-hot-loader/patch',
+    path.resolve(__dirname, 'src/index.jsx'),
+  ],
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
@@ -20,23 +23,6 @@ const config = {
       {
         test: /\.(jpe?g|png|svg|woff2?|ttf|eot|otf)$/,
         loader: 'url-loader?limit=8000',
-      },
-      {
-        test: /\.css$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                modules: true,
-                localIdentName: '[name]__[local]--[hash:base64:5]',
-                importLoaders: 1,
-              },
-            },
-            { loader: 'postcss-loader' },
-          ],
-        }),
       },
     ],
   },
@@ -63,7 +49,25 @@ if (process.env.NODE_ENV !== 'production') {
   config.devServer = {
     contentBase: './public',
     port: '3030',
+    hot: true,
   };
+  config.module.rules.push({
+    test: /\.css$/,
+    use: [
+      { loader: 'style-loader' },
+      {
+        loader: 'css-loader',
+        options: {
+          modules: true,
+          localIdentName: '[path]__[name]__[local]--[hash:base64:5]',
+          importLoaders: 1,
+          sourceMap: true,
+        },
+      },
+      { loader: 'postcss-loader' },
+    ],
+  });
+  config.plugins.push(new webpack.HotModuleReplacementPlugin());
 } else {
   config.plugins.push(
     new webpack.optimize.UglifyJsPlugin({
@@ -74,5 +78,23 @@ if (process.env.NODE_ENV !== 'production') {
       comment: false,
     }),
   );
+  config.module.rules.push({
+    test: /\.css$/,
+    use: ExtractTextPlugin.extract({
+      fallback: 'style-loader',
+      use: [
+        {
+          loader: 'css-loader',
+          options: {
+            modules: true,
+            localIdentName: '[local]--[hash:base64:5]',
+            importLoaders: 1,
+            minimize: true,
+          },
+        },
+        { loader: 'postcss-loader' },
+      ],
+    }),
+  });
 }
 module.exports = config;
