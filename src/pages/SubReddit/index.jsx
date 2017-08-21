@@ -56,6 +56,10 @@ class SubReddit extends React.Component {
   };
   replaceOld = this.updateResolve(false);
   combineOld = this.updateResolve(true);
+  goTop = (e) => {
+    e.preventDefault();
+    window.scroll(0, 0);
+  }
 
   doUpdate() {
     const { reddits, match, location, addReddit } = this.props;
@@ -102,13 +106,17 @@ class SubReddit extends React.Component {
     );
     return (
       <section className={styles.wrapper}>
-        <div>
+        <header name="top">
           <h1>{this.props.match.params.sub}</h1>
-        </div>
+        </header>
         <main>
           {summaries}
           {this.state.loading && <Loading />}
         </main>
+        <footer>
+          <a onClick={this.goTop}>GO TOP</a>
+          继续下拉刷新
+        </footer>
       </section>
     );
   }
