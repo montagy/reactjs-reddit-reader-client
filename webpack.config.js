@@ -18,7 +18,7 @@ const config = {
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
+        use: ['react-hot-loader/webpack', 'babel-loader'],
       },
       {
         test: /\.(jpe?g|png|svg|woff2?|ttf|eot|otf)$/,
@@ -49,7 +49,6 @@ if (process.env.NODE_ENV !== 'production') {
   config.devServer = {
     contentBase: './public',
     port: '3030',
-    hot: true,
   };
   config.module.rules.push({
     test: /\.css$/,
@@ -67,7 +66,6 @@ if (process.env.NODE_ENV !== 'production') {
       { loader: 'postcss-loader' },
     ],
   });
-  config.plugins.push(new webpack.HotModuleReplacementPlugin());
 } else {
   config.plugins.push(
     new webpack.optimize.UglifyJsPlugin({

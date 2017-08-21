@@ -21,19 +21,20 @@ class Pannel extends React.Component {
   };
   render() {
     const {
-      className,
       reddits,
       addReddit,
       deleteReddit,
+      active,
+      handleToggle,
       ...props
     } = this.props;
-    const cls = classNames({
-      [className]: true,
-      [styles.pannel]: true,
-    });
     const list = Object.keys(reddits).map((name, index) =>
       <Link to={`/r/${name}`} key={index} className={styles.link}>{name}</Link>,
     );
+    const cls = classNames({
+      [styles.pannel]: true,
+      [styles.active]: active,
+    });
     return (
       <div className={cls} {...props}>
         <div>
@@ -48,6 +49,11 @@ class Pannel extends React.Component {
           </form>
           {list}
         </div>
+        <button onClick={handleToggle} className={styles.toggle}>
+          <span className={active ? styles.firstBar : ''} />
+          <span style={{ opacity: active ? '0' : '1' }} />
+          <span className={active ? styles.lastBar : ''} />
+        </button>
       </div>
     );
   }

@@ -44,16 +44,13 @@ class App extends React.Component {
             addReddit={this.handleAddReddit}
             deleteReddit={this.handleDeleteReddit}
             style={{ width: this.state.showPannel ? '30%' : '0' }}
+            active={this.state.showPannel}
+            handleToggle={this.togglePannel}
           />
           <div
             className={styles.container}
             style={{ marginLeft: this.state.showPannel ? '30%' : '0' }}
           >
-            <button onClick={this.togglePannel} className={styles.toggle}>
-              <span className={this.state.showPannel ? styles.firstBar : ''} />
-              <span style={{ opacity: this.state.showPannel ? '0' : '1' }} />
-              <span className={this.state.showPannel ? styles.lastBar : ''} />
-            </button>
             <Route
               exact
               path="/"
