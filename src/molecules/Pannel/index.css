@@ -13,7 +13,6 @@
   display: flex;
   justify-content: space-between;
   & > main {
-    /*width: 240px;*/
     flex-grow: 1;
     background-color: yellow;
   }
@@ -25,8 +24,7 @@
 .toggle {
   display: block;
   margin-top: 2em;
-  /*font-size: 1em;*/
-  padding: 0 .5em;
+  padding: 0 0.5em;
   width: 40px;
   height: @width;
   cursor: pointer;
