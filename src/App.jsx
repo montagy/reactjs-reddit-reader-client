@@ -43,7 +43,6 @@ class App extends React.Component {
     }
   };
   handleClickBlankClosePannel = event => {
-    event.preventDefault();
     console.log('click blank');
     if (this.state.showPannel) {
       this.setState({
