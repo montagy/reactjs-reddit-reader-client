@@ -16,7 +16,7 @@ export function scrollToEnd() {
   document.body.scrollTop = document.body.scrollHeight;
 }
 
-function timeAgo(timestamp) {
+export function timeAgo(timestamp) {
   const now = new Date().getTime();
   const lengthDiff = String(now).length - String(timestamp).length;
   if (lengthDiff >= 0) {
