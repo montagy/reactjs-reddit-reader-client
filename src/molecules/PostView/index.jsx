@@ -1,12 +1,26 @@
 import React from 'react';
 import { htmlDecode } from '../../utils';
 import styles from './index.css';
+import isEmpty from 'lodash/isEmpty';
 
-const Comment = ({ comment }) =>
-  <div className={styles.comment}>
-    <p>author:{comment.author}</p>
-    <div dangerouslySetInnerHTML={{ __html: htmlDecode(comment.body_html) }} />
-  </div>;
+const Comment = ({ comment }) => {
+  if (isEmpty(comment)) return null;
+  const nestComments =
+    comment.replies.data &&
+    comment.replies.data.children.map(child => child.data) || [];
+  const nestCommentsView = nestComments.map((cm, i) => {
+    return <Comment key={i} comment={cm} />;
+  });
+  return (
+    <div className={styles.comment}>
+      <p>author:{comment.author}</p>
+      <div
+        dangerouslySetInnerHTML={{ __html: htmlDecode(comment.body_html) }}
+      />
+      {nestCommentsView}
+    </div>
+  );
+};
 
 const PostView = ({ post, comments }) => {
   const cms = comments.map((cm, i) => {
