@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { hoursAgo, hoursToDayAndHour } from '../../utils';
+import { timeAgo } from '../../utils';
 import styles from './index.css';
 
 class Summary extends React.Component {
@@ -20,7 +20,7 @@ class Summary extends React.Component {
       },
       ...rest
     } = this.props;
-    const dayAndHour = hoursToDayAndHour(hoursAgo(created_utc));
+    const dayAndHour = timeAgo(created_utc);
     let realTitle = domain.slice(0, 4) === 'self'
       ? <Link to={`/p${permalink}`}>
           {title}
