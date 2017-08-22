@@ -57,10 +57,10 @@ class SubReddit extends React.Component {
   };
   replaceOld = this.updateResolve(false);
   combineOld = this.updateResolve(true);
-  goTop = (e) => {
+  goTop = e => {
     e.preventDefault();
-    scrollTopSmooth(0, 500);
-  }
+    scrollTopSmooth(0, 300);
+  };
 
   doUpdate() {
     const { reddits, match, location, addReddit } = this.props;
@@ -95,6 +95,11 @@ class SubReddit extends React.Component {
     console.log('will receive');
     if (!shallowEqual(this.props.location, nextProps.location)) {
       this.setState(this.initState, this.doUpdate);
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.location.pathname !== this.props.location.pathname) {
+      scrollTopSmooth(0, 300);
     }
   }
   componentWillUnmount() {

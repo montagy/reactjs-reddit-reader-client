@@ -28,9 +28,18 @@ class Pannel extends React.Component {
       handleToggle,
       ...props
     } = this.props;
-    const list = Object.keys(reddits).map((name, index) =>
-      <Link to={`/r/${name}`} key={index} className={styles.link}>{name}</Link>,
-    );
+    const list = Object.keys(reddits).map((name, index) => {
+      const realName = name === 'Home' ? '/' : `/r/${name}`;
+      return (
+        <Link
+          to={{ pathname: realName }}
+          key={index}
+          className={styles.link}
+        >
+          {name}
+        </Link>
+      );
+    });
     const cls = classNames({
       [styles.pannel]: true,
       [styles.active]: active,
