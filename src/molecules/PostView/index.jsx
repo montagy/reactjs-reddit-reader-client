@@ -13,7 +13,7 @@ const Comment = ({ comment }) => {
   });
   return (
     <div className={styles.comment}>
-      <p>author:{comment.author}</p>
+      <header>{comment.author}</header>
       <div
         dangerouslySetInnerHTML={{ __html: htmlDecode(comment.body_html) }}
       />
@@ -35,7 +35,7 @@ const PostView = ({ post, comments }) => {
         />
       </div>
       <div className={styles.content}>
-        <p>Comment</p>
+        <p style={{fontSize: '1.5em'}}>{comments.length}留言</p>
         {comments.length ? cms : <div>No comment</div>}
       </div>
     </div>
