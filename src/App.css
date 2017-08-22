@@ -1,17 +1,17 @@
 .wrapper {
-  min-height: 100vh;
-  background-color: color(var(--baseColor) b(+10%));
+  /*min-height: 100vh;*/
   position: relative;
   z-index: 1;
+  display: flex;
 }
 .container {
   width: 100%;
-  display: flex;
   position: relative;
   transition: all .3s ease-in-out;
-  & section {
-    flex-grow: 1;
-  }
+  /*
+   *& section {
+   *}
+   */
   &:before {
     content: "";
     display: block;

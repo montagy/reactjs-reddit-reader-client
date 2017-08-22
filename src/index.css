@@ -1,11 +1,15 @@
 * {
   box-sizing: border-box;
 }
+html, body {
+  height: 100%;
+}
 html, body, p, h1 {
   margin: 0;
 }
 body {
   font-family: arial, helvetica, sans-serif;
+  background-color: color(var(--baseColor) b(+10%));
   overflow-x: hidden;
 }
 a {
