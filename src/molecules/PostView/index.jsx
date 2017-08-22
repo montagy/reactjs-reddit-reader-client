@@ -19,8 +19,8 @@ const Comment = ({ comment }) => {
       comment.replies.data &&
       comment.replies.data.children.map(child => child.data)) ||
     [];
-  const nestCommentsView = nestComments.map((cm, i) => {
-    return <Comment key={i} comment={cm} />;
+  const nestCommentsView = nestComments.map((cm) => {
+    return <Comment key={cm.id} comment={cm} />;
   });
   return (
     <div className={styles.comment}>
@@ -35,7 +35,7 @@ const Comment = ({ comment }) => {
 const Post = ({ post }) => {
   return (
     <div className={styles.post}>
-      <h1>{post.title}<span>{post.author}</span></h1>
+      <h1>{post.title}<span>{post.domain}</span></h1>
       <main>
         <Author name={post.author} time={post.created_utc} />
         <div
@@ -53,7 +53,7 @@ const PostView = ({ post, comments }) => {
     <div className={styles.wrapper}>
       <Post post={post} />
       <div className={styles.content}>
-        <p style={{ fontSize: '1.5em' }}>{comments.length}留言</p>
+        <p style={{ fontSize: '1.5em' }}>{post.num_comments}留言</p>
         {comments.length ? cms : <div>No comment</div>}
       </div>
     </div>

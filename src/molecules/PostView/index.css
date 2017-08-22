@@ -40,9 +40,14 @@
   }
 }
 .wrapper {
-  max-width: 80%;
+  max-width: 1368px;
   height: 100%;
   margin: 0 auto;
+  /*
+   *@media (width <= 768px) {
+   *  width: 100%;
+   *}
+   */
 }
 .post {
   padding-top: 2em;
@@ -59,7 +64,7 @@
     background-color: var(--baseColor);
     padding: 1em;
     margin-top: 1em;
-    min-height: 10em;
+    min-height: 6em;
   }
 }
 .author {
