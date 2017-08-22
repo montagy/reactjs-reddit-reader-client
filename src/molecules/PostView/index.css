@@ -1,17 +1,23 @@
-:global(.md) {
-  background-color: gray;
-}
-:global(.md pre) {
-  overflow: auto;
-}
 .wrapper {
   max-width: 90%;
-  margin: 0 auto;
   line-height: 2;
 }
 .post {
-  padding: 1em;
-  background-color: var(--baseColor);
+  margin-top: 2em;
+  & > header {
+    font-size: 2em;
+    color: white;
+    & > span {
+      font-size: 0.5em;
+      margin-left: 2em;
+      color: color(var(--baseColor) b(+20%) alpha(0.5));
+    }
+  }
+  & > main {
+    background-color: var(--baseColor);
+    padding: 1em;
+    margin-top: 1em;
+  }
 }
 .content {
 }
