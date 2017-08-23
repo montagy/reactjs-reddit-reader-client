@@ -71,8 +71,7 @@ if (process.env.NODE_ENV !== 'production') {
   );
   config.plugins.push(
     new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: path.join(process.cwd(), 'public/index.html'),
+      template: path.join(process.cwd(), 'public/template.html'),
     }),
   );
   config.module.rules.push({
