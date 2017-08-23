@@ -20,7 +20,6 @@ class SubReddit extends React.Component {
     e => {
       e.preventDefault();
       if (isScrollAtEnd() && !this.state.loading) {
-        console.log('handle scroll');
         this.setState(
           {
             loading: true,
@@ -56,7 +55,6 @@ class SubReddit extends React.Component {
     );
   };
   updateReject = error => {
-    console.log(error.code);
     this.props.handleUpdateFail(error.toString());
     this.setState({
       loading: false,
@@ -93,24 +91,21 @@ class SubReddit extends React.Component {
     );
   }
   componentDidMount() {
-    console.log('did mount');
     this.doUpdate();
     window.addEventListener('scroll', this.handleScroll, false);
   }
   // 全部初始化了重新fetch
   componentWillReceiveProps(nextProps) {
-    console.log('will receive');
     if (!shallowEqual(this.props.location, nextProps.location)) {
       this.setState(this.initState, this.doUpdate);
     }
   }
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (prevProps.location.pathname !== this.props.location.pathname) {
       window.scroll(0, 0);
     }
   }
   componentWillUnmount() {
-    console.log('unmount');
     window.removeEventListener('scroll', this.handleScroll);
   }
   render() {

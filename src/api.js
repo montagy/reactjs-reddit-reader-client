@@ -2,22 +2,6 @@ const baseUrl = 'https://www.reddit.com';
 const NETERROR = 999;
 const TIMEOUT = 998;
 
-/*
- *const fetcher = axios.create({
- *  baseURL: 'https://www.reddit.com',
- *  timeout: 20000,
- *});
- */
-/*
- *const fetchReddit = (path, after) => {
- *  const basic = `${path}.json`;
- *  const url = after ? `${basic}?after=${after}` : basic;
- *  return fetcher.get(url).then(res => res.data, error => {
- *    console.log(error.code, error.response);
- *    return Promise.reject(new Error('数据不存在或者网络错误。'));
- *  });
- *}
- */
 function createError(msg, code) {
   const error = new Error(msg);
   if(code)
@@ -43,7 +27,7 @@ function fetchReddit({ path, after, timeout = 0, handleProgress }) {
       if (req.status >= 200 && req.status < 300) {
         resolve(JSON.parse(req.responseText));
       }else {
-        reject(createError('资源不存在', req.status))
+        reject(createError('资源不存在或其他网络原因', req.status))
       }
     }
     req.send();
@@ -51,8 +35,11 @@ function fetchReddit({ path, after, timeout = 0, handleProgress }) {
 }
 export default fetchReddit;
 
-/*
- *function fetchAllReddits(arr) {
- *
- *}
- */
+export function fetchAllReddits(arr, timeout = 0, progress) {
+  const handleProgress = progress || function() {};
+  const names = arr.map(name => {
+    const path = arr === 'Home' ? '/' : '/r/' + name
+    return fetchReddit({path, timeout, handleProgress});
+  });
+  return Promise.all(names);
+}
