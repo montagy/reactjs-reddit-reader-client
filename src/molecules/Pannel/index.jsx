@@ -23,23 +23,15 @@ class Pannel extends React.Component {
     router: PropTypes.shape({
       history: PropTypes.shape({
         push: PropTypes.func.isRequired,
-      }).isRequired
-    }).isRequired
-  }
+      }).isRequired,
+    }).isRequired,
+  };
   render() {
-    const {
-      reddits,
-      active,
-      ...props
-    } = this.props;
+    const { reddits, active, ...props } = this.props;
     const list = Object.keys(reddits).map((name, index) => {
       const realName = name === 'Home' ? '/' : `/r/${name}`;
       return (
-        <Link
-          to={{ pathname: realName }}
-          key={index}
-          className={styles.link}
-        >
+        <Link to={{ pathname: realName }} key={index} className={styles.link}>
           {name}
         </Link>
       );
@@ -58,15 +50,15 @@ class Pannel extends React.Component {
               onChange={this.handleChange}
               value={this.state.value}
             />
-            <button
-              type="submit"
-              className={styles.btn}>GO</button>
+            <button type="submit" className={styles.btn}>GO</button>
           </form>
           <div className={styles.lists}>
             {list}
-            <p>This is a sentence.</p>
           </div>
         </main>
+        <footer>
+          This is a sentence.
+        </footer>
       </div>
     );
   }
