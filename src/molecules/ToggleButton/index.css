@@ -14,7 +14,7 @@
   z-index: 1;
   & > span {
     display: block;
-    min-height: 5px;
+    min-height: 2px;
     width: 80%;
     margin: 0.5em auto;
     background-color: #FFF;
@@ -35,5 +35,5 @@
   opacity: 0;
 }
 .lastBar {
-  transform: translateY(-15px) rotate(-45deg);
+  transform: translateY(-9px) rotate(-45deg);
 }

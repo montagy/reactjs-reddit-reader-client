@@ -51,7 +51,9 @@ class Pannel extends React.Component {
               onChange={this.handleChange}
               value={this.state.value}
             />
-            <button className={styles.btn}>Add</button>
+            <button
+              type="submit"
+              className={styles.btn}>GO</button>
           </form>
           <div className={styles.lists}>
             {list}
