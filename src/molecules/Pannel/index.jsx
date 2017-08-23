@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './index.css';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
-import createHistory from 'history/createHashHistory';
+import PropTypes from 'prop-types';
 
 class Pannel extends React.Component {
   state = {
@@ -13,12 +13,19 @@ class Pannel extends React.Component {
   };
   handleSubmit = e => {
     e.preventDefault();
-    const history = createHistory();
+    const { history } = this.context.router;
     history.push(`/r/${this.state.value}`);
     this.setState({
       value: '',
     });
   };
+  static contextTypes = {
+    router: PropTypes.shape({
+      history: PropTypes.shape({
+        push: PropTypes.func.isRequired,
+      }).isRequired
+    }).isRequired
+  }
   render() {
     const {
       reddits,
