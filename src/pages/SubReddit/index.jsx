@@ -116,9 +116,11 @@ class SubReddit extends React.Component {
           <h1>{this.props.match.params.sub}</h1>
         </header>
         <main>
-          {summaries}
-          {this.state.loading && <Loading />}
+          <div>
+            {summaries}
+          </div>
         </main>
+        {this.state.loading && <Loading />}
         <footer>
           <a onClick={this.goTop}>GO TOP</a>
           继续下拉刷新
