@@ -1,7 +1,7 @@
 import React from 'react';
 import { HashRouter, Route } from 'react-router-dom';
 import { SubReddit, Post } from './pages';
-import { Pannel, ToggleButton }  from './molecules';
+import { Pannel, ToggleButton } from './molecules';
 import styles from './App.css';
 import storage from './storage.js';
 
@@ -9,6 +9,7 @@ class App extends React.Component {
   state = {
     showPannel: false,
     reddits: storage.read('reddit') || {},
+    error: '',
   };
   togglePannel = e => {
     e.preventDefault();
@@ -49,27 +50,32 @@ class App extends React.Component {
         showPannel: false,
       });
     }
-  }
+  };
+  handleError = msg => {
+    this.setState({
+      error: msg,
+    });
+  };
   componentDidMount() {
     window.addEventListener('keydown', this.handleEsc);
     this.mainPage.addEventListener('click', this.handleClickBlankClosePannel);
   }
   componentWillUnmount() {
     window.removeEventListener('keydown', this.handleEsc);
-    this.mainPage.removeEventListener('click', this.handleClickBlankClosePannel);
+    this.mainPage.removeEventListener(
+      'click',
+      this.handleClickBlankClosePannel,
+    );
   }
   render() {
+    const { reddits, showPannel, error } = this.state;
     return (
       <HashRouter>
         <div className={styles.wrapper}>
-          <Pannel
-            reddits={this.state.reddits}
-            active={this.state.showPannel}
-          />
-          <ToggleButton active={this.state.showPannel}
-            handleToggle={this.togglePannel}
-          />
-          <div className={styles.container} ref={(ref) => this.mainPage = ref}>
+          {error && <div className={styles.error}>{error}</div>}
+          <Pannel reddits={reddits} active={showPannel} />
+          <ToggleButton active={showPannel} handleToggle={this.togglePannel} />
+          <div className={styles.container} ref={ref => (this.mainPage = ref)}>
             <Route
               exact
               path="/"
@@ -77,9 +83,10 @@ class App extends React.Component {
                 match.params.sub = 'Home';
                 return (
                   <SubReddit
-                    reddits={this.state.reddits}
+                    reddits={reddits}
                     match={match}
                     addReddit={this.handleAddReddit}
+                    handleUpdateFail={this.handleError}
                     {...rest}
                   />
                 );
@@ -90,7 +97,8 @@ class App extends React.Component {
               render={props =>
                 <SubReddit
                   addReddit={this.handleAddReddit}
-                  reddits={this.state.reddits}
+                  reddits={reddits}
+                  handleUpdateFail={this.handleError}
                   {...props}
                 />}
             />

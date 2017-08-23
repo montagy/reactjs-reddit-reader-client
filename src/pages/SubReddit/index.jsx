@@ -27,16 +27,16 @@ class SubReddit extends React.Component {
           },
           scrollToEnd,
         );
-        fetchReddit(this.props.location.pathname, this.state.nextPageId).then(
-          this.combineOld,
-        );
+        fetchReddit({
+          path: this.props.location.pathname,
+          after: this.state.nextPageId,
+        }).then(this.combineOld, this.updateReject);
       }
     },
     2000,
     { leading: true },
   );
   updateResolve = shouldCombine => json => {
-    console.log('update summaries');
     const newData = json.data.children.map(child => child.data);
     this.setState(
       prevState => {
@@ -55,6 +55,13 @@ class SubReddit extends React.Component {
       },
     );
   };
+  updateReject = error => {
+    console.log(error.code);
+    this.props.handleUpdateFail(error.toString());
+    this.setState({
+      loading: false,
+    });
+  };
   replaceOld = this.updateResolve(false);
   combineOld = this.updateResolve(true);
   goTop = e => {
@@ -67,10 +74,10 @@ class SubReddit extends React.Component {
     const name = match.params && match.params.sub;
     const reddit = reddits[name] || {};
     if (isEmpty(reddit.data) || hoursAgo(reddit.timestamp) >= 2) {
-      fetchReddit(location.pathname).then(json => {
+      fetchReddit({ path: location.pathname }).then(json => {
         this.replaceOld(json);
         addReddit(name, json);
-      });
+      }, this.updateReject);
     } else {
       this.setState({
         summaries: reddit.data.data.children.map(child => child.data),

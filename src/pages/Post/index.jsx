@@ -13,7 +13,7 @@ class Post extends React.Component {
     };
   }
   componentDidMount() {
-    fetchReddit(this.props.location.pathname.slice(2)).then(json => {
+    fetchReddit({ path: this.props.location.pathname.slice(2)}).then(json => {
       this.setState({
         loading: false,
         post: json[0].data.children[0].data,
