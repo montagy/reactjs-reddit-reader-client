@@ -1,39 +1,38 @@
+:root {
+  --easing: cubic-bezier(.6, .05, .28, .91);
+}
 .toggle {
   display: block;
   padding: 0 0.5em;
   width: 3em;
   height: @width;
   cursor: pointer;
-  border: 1px solid var(--primary);
   border-radius: 0.25em;
-  transition: all .3s ease-in-out;
-  background-color: var(--primary);
+  transition: left 0.3s ease-in-out;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1;
-  & > span {
-    display: block;
+  & > div {
     min-height: 2px;
     width: 80%;
     margin: 0.5em auto;
-    background-color: #FFF;
-    transition: transform .5s ease, opacity .5s, background-color .5s;
-  }
-  &:hover {
-    background-color: color(var(--primary) l(+10%));
-    border-color: @background-color;
+    background-color: var(--primary);
+    transition: all 0.5s var(--easing);
   }
 }
 .active {
   left: calc(var(--pannelWidth) - 4em);
+  & > div {
+    background-color: color(black l(+20%));
+  }
 }
 .firstBar {
-  transform: translateY(9px) rotate(45deg);
+  transform: translateY(10px) rotate(45deg);
 }
 .sndBar {
   opacity: 0;
 }
 .lastBar {
-  transform: translateY(-9px) rotate(-45deg);
+  transform: translateY(-10px) rotate(-45deg);
 }
