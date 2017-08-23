@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { timeAgo } from '../../utils';
 import styles from './index.css';
+import Author from '../../atoms/Author';
 
 class Summary extends React.Component {
   shouldComponentUpdate(nextProps) {
@@ -20,7 +20,6 @@ class Summary extends React.Component {
       },
       ...rest
     } = this.props;
-    const dayAndHour = timeAgo(created_utc);
     let realTitle = domain.slice(0, 4) === 'self'
       ? <Link to={`/p${permalink}`}>
           {title}
@@ -32,16 +31,7 @@ class Summary extends React.Component {
           {realTitle}
           <span>{domain}</span>
         </header>
-        <div>
-          <p>
-            {author}
-            <span>
-              {`创建于${dayAndHour.day > 0
-                ? dayAndHour.day + '天'
-                : ''} ${dayAndHour.hour}小时前`}
-            </span>
-          </p>
-        </div>
+        <Author time={created_utc} name={author} />
         <footer>
           <Link to={`/p${permalink}`}>{`${num_comments || ''}留言`}</Link>
         </footer>

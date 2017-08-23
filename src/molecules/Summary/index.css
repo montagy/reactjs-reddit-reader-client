@@ -3,10 +3,9 @@
   --minor: color(#000 l(+30%));
 }
 .wrapper {
-  padding: 0.8em;
-  font-size: 1.2em;
+  margin-bottom: 1em;
   & > header {
-    font-size: 1.2em;
+    font-size: 1.5em;
     & a {
       color: var(--main);
     }
@@ -16,14 +15,9 @@
       color: var(--minor);
     }
   }
-  & > div {
-    margin-top: 0.5em;
-    & span {
-      margin-left: 0.5em;
-      color: var(--minor);
+  & > footer {
+    & a{
+      color: var(--main);
     }
-  }
-  & > footer a {
-    color: var(--main);
   }
 }

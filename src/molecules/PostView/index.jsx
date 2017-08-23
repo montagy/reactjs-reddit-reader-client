@@ -1,17 +1,9 @@
 import React from 'react';
-import { htmlDecode, timeAgo } from '../../utils';
+import { htmlDecode } from '../../utils';
 import styles from './index.css';
 import isEmpty from 'lodash/isEmpty';
+import Author from '../../atoms/Author';
 
-const Author = ({ name, time }) => {
-  const ago = timeAgo(time);
-  return (
-    <div className={styles.author}>
-      {name}
-      <span>发表于{ago.day > 1 ? `${ago.day}天` : `${ago.hour}小时`}前</span>
-    </div>
-  );
-};
 const Comment = ({ comment }) => {
   if (isEmpty(comment)) return null;
   const nestComments =

@@ -43,11 +43,6 @@
   max-width: 1368px;
   height: 100%;
   margin: 0 auto;
-  /*
-   *@media (width <= 768px) {
-   *  width: 100%;
-   *}
-   */
 }
 .post {
   padding-top: 2em;
@@ -65,16 +60,6 @@
     padding: 1em;
     margin-top: 1em;
     min-height: 6em;
-  }
-}
-.author {
-  font-size: 1.4em;
-  font-weight: 700;
-  color: color(black l(+40%) blue(+20));
-  & > span {
-    font-size: 0.8em;
-    margin-left: 1em;
-    color: color(var(--baseColor) b(+60%) alpha(0.8));
   }
 }
 .content {

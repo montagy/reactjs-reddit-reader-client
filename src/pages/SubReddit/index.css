@@ -15,7 +15,7 @@
   & > main {
     background-color: var(--baseColor);
     box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.2);
-    padding-left: 3em;
+    padding: 1em 0 1em 3em;
   }
   & > footer {
     margin: 5em 0 15em 0;
