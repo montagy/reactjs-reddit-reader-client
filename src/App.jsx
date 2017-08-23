@@ -35,11 +35,11 @@ class App extends React.Component {
     });
     storage.write('reddit', reddits);
   };
-  handleEscClosePannel = event => {
-    if (this.state.showPannel && event.keyCode === 27) {
-      this.setState({
-        showPannel: false,
-      });
+  handleEsc = event => {
+    if (event.keyCode === 27) {
+      this.setState(prevState => ({
+        showPannel: !prevState.showPannel,
+      }));
     }
   };
   handleClickBlankClosePannel = () => {
@@ -50,11 +50,11 @@ class App extends React.Component {
     }
   }
   componentDidMount() {
-    window.addEventListener('keydown', this.handleEscClosePannel);
+    window.addEventListener('keydown', this.handleEsc);
     this.mainPage.addEventListener('click', this.handleClickBlankClosePannel);
   }
   componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleEscClosePannel);
+    window.removeEventListener('keydown', this.handleEsc);
     this.mainPage.removeEventListener('click', this.handleClickBlankClosePannel);
   }
   render() {
