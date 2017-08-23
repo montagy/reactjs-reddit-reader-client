@@ -14,7 +14,8 @@ class Pannel extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     const { history } = this.context.router;
-    history.push(`/r/${this.state.value}`);
+    const value = this.state.value.replace(/\s/g, '');
+    history.push(`/r/${value}`);
     this.setState({
       value: '',
     });

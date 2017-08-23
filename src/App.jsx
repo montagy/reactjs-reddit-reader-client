@@ -37,6 +37,7 @@ class App extends React.Component {
   };
   handleEsc = event => {
     if (event.keyCode === 27) {
+      event.preventDefault();
       this.setState(prevState => ({
         showPannel: !prevState.showPannel,
       }));
