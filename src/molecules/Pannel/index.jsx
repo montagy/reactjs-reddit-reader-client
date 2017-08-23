@@ -26,6 +26,11 @@ class Pannel extends React.Component {
       }).isRequired,
     }).isRequired,
   };
+  componentDidUpdate() {
+    if (this.props.active) {
+      this.input.focus();
+    }
+  }
   render() {
     const { reddits, active, ...props } = this.props;
     const list = Object.keys(reddits).map((name, index) => {
@@ -49,6 +54,7 @@ class Pannel extends React.Component {
               placeholder="reddit"
               onChange={this.handleChange}
               value={this.state.value}
+              ref={ref => this.input = ref}
             />
             <button type="submit" className={styles.btn}>GO</button>
           </form>
