@@ -99,7 +99,7 @@ class SubReddit extends React.Component {
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.location.pathname !== this.props.location.pathname) {
-      scrollTopSmooth(0, 300);
+      window.scroll(0, 0);
     }
   }
   componentWillUnmount() {
