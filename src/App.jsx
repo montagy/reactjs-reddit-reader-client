@@ -1,7 +1,7 @@
 import React from 'react';
 import { HashRouter, Route } from 'react-router-dom';
 import { SubReddit, Post } from './pages';
-import Pannel from './molecules/Pannel';
+import { Pannel, ToggleButton }  from './molecules';
 import styles from './App.css';
 import storage from './storage.js';
 
@@ -42,8 +42,7 @@ class App extends React.Component {
       });
     }
   };
-  handleClickBlankClosePannel = event => {
-    console.log('click blank');
+  handleClickBlankClosePannel = () => {
     if (this.state.showPannel) {
       this.setState({
         showPannel: false,
@@ -64,9 +63,9 @@ class App extends React.Component {
         <div className={styles.wrapper}>
           <Pannel
             reddits={this.state.reddits}
-            addReddit={this.handleAddReddit}
-            deleteReddit={this.handleDeleteReddit}
             active={this.state.showPannel}
+          />
+          <ToggleButton active={this.state.showPannel}
             handleToggle={this.togglePannel}
           />
           <div className={styles.container} ref={(ref) => this.mainPage = ref}>

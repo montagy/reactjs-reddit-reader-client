@@ -7,6 +7,8 @@ module.exports = {
         customProperties: {
           variables: {
             baseColor: 'rgb(255, 255, 255)',
+            primary: '#108ee9',
+            pannelWidth: '30%',
           },
         },
       },

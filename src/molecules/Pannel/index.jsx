@@ -22,10 +22,7 @@ class Pannel extends React.Component {
   render() {
     const {
       reddits,
-      addReddit,
-      deleteReddit,
       active,
-      handleToggle,
       ...props
     } = this.props;
     const list = Object.keys(reddits).map((name, index) => {
@@ -61,11 +58,6 @@ class Pannel extends React.Component {
             <p>This is a sentence.</p>
           </div>
         </main>
-        <button onClick={handleToggle} className={styles.toggle}>
-          <span className={active ? styles.firstBar : null} />
-          <span className={active ? styles.sndBar : null} />
-          <span className={active ? styles.lastBar : null} />
-        </button>
       </div>
     );
   }
