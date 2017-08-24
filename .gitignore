@@ -4,3 +4,4 @@ dist
 package-lock.json
 .cs_files
 .cs_workspaces
+analysis

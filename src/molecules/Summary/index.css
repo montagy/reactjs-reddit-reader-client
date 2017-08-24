@@ -4,11 +4,11 @@
 }
 .wrapper {
   margin-bottom: 1em;
+  & a:link {
+    color: var(--main);
+  }
   & > header {
     font-size: 1.5em;
-    & a {
-      color: var(--main);
-    }
     & span {
       margin-left: 1em;
       font-size: 0.5em;
@@ -16,8 +16,5 @@
     }
   }
   & > footer {
-    & a{
-      color: var(--main);
-    }
   }
 }
