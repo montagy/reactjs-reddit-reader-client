@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const SizeAnalyzer = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin;
 
 const config = {
   devtool: 'cheap-module-source-map',
@@ -60,6 +61,7 @@ if (process.env.NODE_ENV !== 'production') {
     ],
   });
 } else {
+  config.plugins.push(new SizeAnalyzer('./report.txt')),
   config.plugins.push(
     new webpack.optimize.UglifyJsPlugin({
       beautify: false,
