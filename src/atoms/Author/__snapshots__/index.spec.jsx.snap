@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[` 1`] = `
+<div
+  className="author"
+>
+  test
+  <span>
+    发表于
+    0小时
+    前
+  </span>
+</div>
+`;
+
+exports[`Author mount success 1`] = `
+<div
+  className="author"
+>
+  test
+  <span>
+    发表于
+    0小时
+    前
+  </span>
+</div>
+`;
