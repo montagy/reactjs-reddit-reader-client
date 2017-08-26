@@ -5,13 +5,19 @@ import isEmpty from 'lodash/isEmpty';
 import Author from '../../atoms/Author';
 
 const Comment = ({ comment }) => {
-  if (isEmpty(comment)) return null;
+  if (
+    isEmpty(comment) ||
+    comment.count ||
+    !comment.author ||
+    !comment.created_utc
+  )
+    return null;
   const nestComments =
     (comment.replies &&
       comment.replies.data &&
       comment.replies.data.children.map(child => child.data)) ||
     [];
-  const nestCommentsView = nestComments.map((cm) => {
+  const nestCommentsView = nestComments.map(cm => {
     return <Comment key={cm.id} comment={cm} />;
   });
   return (
