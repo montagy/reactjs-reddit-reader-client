@@ -65,3 +65,9 @@ export function scrollTopSmooth(y, time) {
     id = requestAnimationFrame(animation);
   }
 }
+export function formatInput(str) {
+  if(!str || typeof str !== 'string') return '';
+  str = str.replace(/\s/g, ''); //TODO we can input space, and we can do more
+  str = encodeURIComponent(str);
+  return str;
+}

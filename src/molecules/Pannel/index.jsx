@@ -3,6 +3,7 @@ import styles from './index.css';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { formatInput } from '../../utils';
 
 class Pannel extends React.Component {
   state = {
@@ -14,7 +15,7 @@ class Pannel extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     const { history } = this.context.router;
-    const value = this.state.value.replace(/\s/g, '');
+    const value = formatInput(this.state.value);
     history.push(`/r/${value}`);
     this.setState({
       value: '',
