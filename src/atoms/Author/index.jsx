@@ -7,7 +7,11 @@ const Author = ({ name, time }) => {
   return (
     <div className={styles.author}>
       {name}
-      <span>发表于{ago.day > 1 ? `${ago.day}天` : `${ago.hour}小时`}前</span>
+      <span>
+        发表于{ago.day > 1
+          ? `${ago.day}天`
+          : ago.hour ? `${ago.hour}小时` : `${ago.min}分钟`}前
+      </span>
     </div>
   );
 };
