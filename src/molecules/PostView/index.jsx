@@ -37,9 +37,10 @@ const Post = ({ post }) => {
       <h1>{unescape(post.title)}<span>{post.domain}</span></h1>
       <main>
         <Author name={post.author} time={post.created_utc} />
-        <div
-          dangerouslySetInnerHTML={{ __html: htmlDecode(post.selftext_html) }}
-        />
+        {post.selftext_html &&
+          <div
+            dangerouslySetInnerHTML={{ __html: htmlDecode(post.selftext_html) }}
+          />}
       </main>
     </div>
   );
