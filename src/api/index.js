@@ -10,10 +10,15 @@ function createError(msg, code) {
   return error;
 }
 export function buildParams(params) {
-  if (!isPlainObject(params)) return;
-  return Object.keys(params).map(key => key + '=' + params[key]).join('&');
+  if (!isPlainObject(params)) return '';
+  let result = [];
+  for (let key in params) {
+    if(params.hasOwnProperty(key) && params[key])
+      result.push(key + '=' + params[key]);
+  }
+  return result.join('&');
 }
-function fetchReddit({ path, after, handleProgress, timeout}) {
+function fetchReddit({ path, after, handleProgress, timeout }) {
   return fetch({
     host: baseUrl,
     path: path + '.json',
@@ -35,9 +40,8 @@ export function fetch({
   timeout = 0,
   handleProgress = noop,
 }) {
-  const basic = host + path;
-  const encodedParams = params && buildParams(params);
-  const url = encodedParams ? `${basic}?${encodedParams}` : basic;
+  const encodedParams = buildParams(params);
+  const url = `${host}${path}?${encodedParams}`
   return new Promise(function(resolve, reject) {
     const req = new XMLHttpRequest();
     req.open('GET', url);
