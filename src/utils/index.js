@@ -1,7 +1,10 @@
-export function htmlDecode(input) {
-  const e = document.createElement('div');
-  e.innerHTML = input;
-  return e.childNodes.length === 0 ? '' : e.childNodes[0].nodeValue;
+export function htmlDecode(str) {
+  if (str && typeof str === 'string') {
+    const e = document.createElement('div');
+    e.innerHTML = str;
+    str = e.childNodes.length === 0 ? '' : e.childNodes[0].nodeValue;
+  }
+  return str;
 }
 //TODO no need at end,if there has footer under container,at end is not possible
 export function isScrollAtEnd() {
@@ -47,9 +50,10 @@ export function scrollTopSmooth(y, time) {
   if (total) {
     const diff = document.body.scrollTop - y;
     const unit = 17 * diff / time;
-    let step = unit, id = null;
+    let step = unit,
+      id = null;
     const animation = () => {
-      if(diff - step <= unit) {
+      if (diff - step <= unit) {
         document.body.scrollTop = y;
         cancelAnimationFrame(id);
       } else {
@@ -57,7 +61,7 @@ export function scrollTopSmooth(y, time) {
         step += unit;
         requestAnimationFrame(animation);
       }
-    }
+    };
     id = requestAnimationFrame(animation);
   }
 }
