@@ -1,4 +1,5 @@
 import React from 'react';
+import unescape from 'lodash/unescape';
 import { htmlDecode } from '../../utils';
 import styles from './index.css';
 import isEmpty from 'lodash/isEmpty';
@@ -33,7 +34,7 @@ const Comment = ({ comment }) => {
 const Post = ({ post }) => {
   return (
     <div className={styles.post}>
-      <h1>{post.title}<span>{post.domain}</span></h1>
+      <h1>{unescape(post.title)}<span>{post.domain}</span></h1>
       <main>
         <Author name={post.author} time={post.created_utc} />
         <div

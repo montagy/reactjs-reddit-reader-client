@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import unescape from 'lodash/unescape';
 import styles from './index.css';
 import Author from '../../atoms/Author';
 
@@ -20,11 +21,12 @@ class Summary extends React.Component {
       },
       ...rest
     } = this.props;
+    const escaped = unescape(title);
     let realTitle = domain.slice(0, 4) === 'self'
       ? <Link to={`/p${permalink}`}>
-          {title}
+          {escaped}
         </Link>
-      : <a href={url} target="_blank">{title}</a>;
+      : <a href={url} target="_blank">{escaped}</a>;
     return (
       <div className={styles.wrapper} {...rest}>
         <header>
