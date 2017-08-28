@@ -1,5 +1,6 @@
 import React from 'react';
-import debounce from 'lodash/debounce';
+//import debounce from 'lodash/debounce';
+import throttle from 'lodash/throttle';
 import isEmpty from 'lodash/isEmpty';
 import Summary from '../../molecules/Summary';
 import Loading from '../../atoms/Loading';
@@ -11,13 +12,18 @@ import { scrollTopSmooth } from '../../utils';
 import Header from '../../organisms/Header';
 
 class SubReddit extends React.Component {
-  initState = {
+  state = {
     loading: true,
     summaries: [],
     nextPageId: '',
+    showFixedHeader: false,
   };
-  state = this.initState;
-  handleScroll = debounce(
+  toggleFixedHeader = () => {
+    this.setState(prev => ({
+      showFixedHeader: !prev.showFixedHeader,
+    }));
+  };
+  handleScroll = throttle(
     e => {
       e.preventDefault();
       if (isScrollAtEnd() && !this.state.loading) {
@@ -32,8 +38,20 @@ class SubReddit extends React.Component {
           after: this.state.nextPageId,
         }).then(this.combineOld, this.updateReject);
       }
+      if (
+        e.target.scrollingElement.scrollTop > 200 &&
+        !this.state.showFixedHeader
+      ) {
+        this.setState({ showFixedHeader: true });
+      }
+      if (
+        e.target.scrollingElement.scrollTop <= 200 &&
+        this.state.showFixedHeader
+      ) {
+        this.setState({ showFixedHeader: false });
+      }
     },
-    2000,
+    500,
     { leading: true },
   );
   updateResolve = shouldCombine => json => {
@@ -98,7 +116,10 @@ class SubReddit extends React.Component {
   // 全部初始化了重新fetch
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(this.props.location, nextProps.location)) {
-      this.setState(this.initState, this.doUpdate);
+      this.setState(
+        { loading: false, summaries: [], nextPageId: '' },
+        this.doUpdate,
+      );
     }
   }
   componentDidUpdate(prevProps) {
@@ -113,15 +134,21 @@ class SubReddit extends React.Component {
     const summaries = this.state.summaries.map(summary =>
       <Summary key={summary.id} data={summary} />,
     );
+    const { loading, showFixedHeader } = this.state;
     return (
       <section className={styles.wrapper}>
+        <Header
+          title={this.props.match.params.sub}
+          style={{ opacity: showFixedHeader ? 1 : 0 }}
+          className={styles.fixedTop}
+        />
         <Header title={this.props.match.params.sub} />
         <main>
           <div>
             {summaries}
           </div>
         </main>
-        {this.state.loading && <Loading />}
+        {loading && <Loading />}
         <footer>
           <a onClick={this.goTop}>GO TOP</a>
           继续下拉刷新

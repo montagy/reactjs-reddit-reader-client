@@ -5,6 +5,7 @@
   flex-direction: column;
   min-height: 100vh;
   & > header {
+    transition: opacity .2s ease-in-out;
     text-transform: capitalize;
     color: #FFF;
     padding: 4em 4em 2em 4em;
@@ -36,4 +37,11 @@
       background-color: yellow;
     }
   }
+}
+.fixedTop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-image: linear-gradient(to left, #19111f 0%, #2c1e37 100%);
 }
