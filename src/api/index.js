@@ -13,7 +13,7 @@ export function buildParams(params) {
   if (!isPlainObject(params)) return '';
   let result = [];
   for (let key in params) {
-    if(params.hasOwnProperty(key) && params[key])
+    if (params.hasOwnProperty(key) && params[key])
       result.push(key + '=' + params[key]);
   }
   return result.join('&');
@@ -41,7 +41,7 @@ export function fetch({
   handleProgress = noop,
 }) {
   const encodedParams = buildParams(params);
-  const url = `${host}${path}?${encodedParams}`
+  const url = `${host}${path}?${encodedParams}`;
   return new Promise(function(resolve, reject) {
     const req = new XMLHttpRequest();
     req.open('GET', url);
@@ -65,6 +65,10 @@ export function fetch({
   });
 }
 
+/**
+  *reddits {Array} Array of string,specify reddit list which you want to fetch
+  *timeout {Number} unit is ms
+*/
 export function fetchAllReddits(arr, timeout = 0, handleProgress = noop) {
   const names = arr.map(name => {
     const path = arr === 'Home' ? '/' : '/r/' + name;
@@ -73,3 +77,16 @@ export function fetchAllReddits(arr, timeout = 0, handleProgress = noop) {
   return Promise.all(names);
 }
 export default fetchReddit;
+/**
+  *promises {Array} Array of promise
+  *time {Number} unit is ms
+*/
+export function raceTimeout(promises, timeout) {
+  const timer = new Promise((resolve, reject) => {
+    setTimeout(function() {
+      reject(`timeout: ${timeout}ms`);
+    }, timeout);
+  });
+  promises.push(timer);
+  return Promise.race(promises);
+}
