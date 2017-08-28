@@ -117,7 +117,7 @@ class SubReddit extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(this.props.location, nextProps.location)) {
       this.setState(
-        { loading: false, summaries: [], nextPageId: '' },
+        { loading: true, summaries: [], nextPageId: '' },
         this.doUpdate,
       );
     }
