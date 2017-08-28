@@ -1,4 +1,4 @@
-import fetchReddit, { raceTimeout } from './';
+import fetchReddit, { raceTimeout, fetchAllReddits } from './';
 
 const timeResolve = time =>
   new Promise(resolve => {
@@ -14,7 +14,7 @@ describe('Api', () => {
   beforeEach(() => {
     window.XMLHttpRequest = jest.fn(() => mockXHR);
   });
-  it('fetch success', () => {
+  it('fetch reddit success', () => {
     expect.assertions(1);
     const result = fetchReddit(1);
     mockXHR.status = 200;
@@ -25,12 +25,22 @@ describe('Api', () => {
       expect(res).toBe('hello');
     });
   });
-  it('fetch timeout', () => {
-    expect.assertions(1);
+  it('fetch reddit timeout', () => {
+    expect.assertions(2);
     const result = fetchReddit(1);
     mockXHR.ontimeout();
     return result.catch(e => {
       expect(e.toString()).toMatch('Error: 网络链接超时，请检查网络或者设置更长的超时时间');
+      expect(e.code).toBe(998);
+    });
+  });
+  it('fetch reddit onerror', () => {
+    expect.assertions(2);
+    const result = fetchReddit(1);
+    mockXHR.onerror();
+    return result.catch(e => {
+      expect(e.toString()).toMatch('Error: 网络链接错误');
+      expect(e.code).toBe(999);
     });
   });
   it('race timtout', () => {
@@ -50,4 +60,14 @@ describe('Api', () => {
       expect(e).toBe('timeout: 100ms');
     });
   });
+  it('fetch a list of reddits', () => {
+    fetchAllReddits(['a', 'b', 'c']);
+    expect(window.XMLHttpRequest.mock.calls.length).toBe(3);
+  });
+  it('promise all waiting for all', () => {
+    expect.assertions(1);
+    return Promise.all([Promise.resolve('a'), Promise.resolve('b'), Promise.resolve('c')]).then(res => {
+      expect(res.join('')).toBe('abc');
+    })
+  })
 });

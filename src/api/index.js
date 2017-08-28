@@ -47,7 +47,7 @@ export function fetch({
     req.open('GET', url);
     req.timeout = timeout;
     req.ontimeout = function() {
-      reject(createError('网络链接超时，请检查网络或者设置更长的超时时间'), TIMEOUT);
+      reject(createError('网络链接超时，请检查网络或者设置更长的超时时间', TIMEOUT));
     };
     req.onerror = function networkError() {
       reject(createError('网络链接错误', NETERROR));
