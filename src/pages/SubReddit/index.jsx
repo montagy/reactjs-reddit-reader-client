@@ -8,7 +8,7 @@ import { isScrollAtEnd, scrollToEnd, hoursAgo } from '../../utils';
 import styles from './index.css';
 import shallowEqual from 'fbjs/lib/shallowEqual';
 import { scrollTopSmooth } from '../../utils';
-import InlineForm from '../../molecules/InlineForm';
+import Header from '../../organisms/Header';
 
 class SubReddit extends React.Component {
   initState = {
@@ -115,10 +115,7 @@ class SubReddit extends React.Component {
     );
     return (
       <section className={styles.wrapper}>
-        <header>
-          <h1>{this.props.match.params.sub}</h1>
-          <InlineForm />
-        </header>
+        <Header title={this.props.match.params.sub} />
         <main>
           <div>
             {summaries}
