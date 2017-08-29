@@ -4,6 +4,8 @@
 }
 .wrapper {
   margin-bottom: 1em;
+  white-space: pre-line;
+  word-wrap: break-word;
   & a:link {
     color: var(--main);
   }
