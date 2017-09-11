@@ -4,6 +4,7 @@ import { Post } from './pages';
 import { Pannel, ToggleButton } from './molecules';
 import styles from './App.css';
 import SubRedditContainer from './containers/SubRedditContainer';
+import Home from './pages/Home';
 
 class App extends React.Component {
   state = {
@@ -58,15 +59,12 @@ class App extends React.Component {
             <Route
               exact
               path="/"
-              render={({ match, ...rest }) => {
-                match.params.sub = defaultHome;
+              render={({ ...props }) => {
                 return (
-                  <SubRedditContainer
-                    reddit={reddits[defaultHome] || {}}
-                    match={match}
-                    addReddit={handleAddReddit}
+                  <Home
+                    defaultHome={defaultHome}
                     cachedHour={cachedHour}
-                    {...rest}
+                    {...props}
                   />
                 );
               }}

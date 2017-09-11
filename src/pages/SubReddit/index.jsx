@@ -4,7 +4,7 @@ import Summary from '../../molecules/Summary';
 import Loading from '../../atoms/Loading';
 import styles from './index.css';
 import { scrollTopSmooth } from '../../utils';
-import Header from '../../organisms/Header';
+import InlineForm from '../../molecules/InlineForm';
 
 class SubReddit extends React.Component {
   goTop = e => {
@@ -12,7 +12,14 @@ class SubReddit extends React.Component {
     scrollTopSmooth(0, 300);
   };
   render() {
-    const { summaries, loading, showFixedHeader, title, error, onSubmit } = this.props;
+    const {
+      summaries,
+      loading,
+      showFixedHeader,
+      title,
+      error,
+      onSubmit,
+    } = this.props;
     const summariesView = summaries.map(summary =>
       <Summary key={summary.id} data={summary} />,
     );
@@ -23,16 +30,16 @@ class SubReddit extends React.Component {
     return (
       <section className={styles.wrapper}>
         {error && <div className={styles.error}>{error}</div>}
-        <Header
-          title={title}
-          className={cls}
-          onSubmit={onSubmit}
-        />
-        <Header title={title} onSubmit={onSubmit} />
+        <header className={cls}>
+          <h1>{title}</h1>
+          <InlineForm onSubmit={onSubmit} />
+        </header>
+        <header>
+          <h1>{title}</h1>
+          <InlineForm onSubmit={onSubmit} />
+        </header>
         <main>
-          <div>
-            {summariesView}
-          </div>
+          {summariesView}
         </main>
         {loading && <Loading />}
         <footer>

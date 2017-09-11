@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './index.css';
 import { formatInput } from '../../utils';
+import Button from '../../atoms/Button';
 
 class InlineForm extends React.Component {
   state = {
@@ -28,7 +29,7 @@ class InlineForm extends React.Component {
             value={this.state.value}
             required
           />
-          <button type="submit" className={styles.btn}>GO</button>
+          <Button>Go</Button>
         </div>
         <div />
       </form>
