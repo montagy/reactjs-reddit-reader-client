@@ -1,8 +1,9 @@
 import React from 'react';
 import { HashRouter, Route } from 'react-router-dom';
-import { SubReddit, Post } from './pages';
+import { Post } from './pages';
 import { Pannel, ToggleButton } from './molecules';
 import styles from './App.css';
+import SubRedditContainer from './containers/SubRedditContainer';
 
 class App extends React.Component {
   state = {
@@ -70,7 +71,7 @@ class App extends React.Component {
               render={({ match, ...rest }) => {
                 match.params.sub = defaultHome;
                 return (
-                  <SubReddit
+                  <SubRedditContainer
                     reddits={reddits}
                     match={match}
                     addReddit={handleAddReddit}
@@ -84,7 +85,7 @@ class App extends React.Component {
             <Route
               path="/r/:sub"
               render={props =>
-                <SubReddit
+                <SubRedditContainer
                   addReddit={handleAddReddit}
                   reddits={reddits}
                   handleUpdateFail={this.handleError}
