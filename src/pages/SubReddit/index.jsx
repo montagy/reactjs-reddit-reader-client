@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import Summary from '../../molecules/Summary';
 import Loading from '../../atoms/Loading';
 import styles from './index.css';
@@ -15,13 +16,16 @@ class SubReddit extends React.Component {
     const summariesView = summaries.map(summary =>
       <Summary key={summary.id} data={summary} />,
     );
+    const cls = classNames({
+      [styles.fixedTop]: true,
+      [styles.active]: showFixedHeader,
+    });
     return (
       <section className={styles.wrapper}>
         {error && <div className={styles.error}>{error}</div>}
         <Header
           title={title}
-          style={{ opacity: showFixedHeader ? 1 : 0 }}
-          className={styles.fixedTop}
+          className={cls}
         />
         <Header title={title} />
         <main>

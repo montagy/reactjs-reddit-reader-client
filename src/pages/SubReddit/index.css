@@ -39,6 +39,14 @@
     }
   }
 }
+@keyframes fadeout {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 header.fixedTop {
   position: fixed;
   top: 0;
@@ -47,6 +55,11 @@ header.fixedTop {
   background-image: linear-gradient(to left, #19111f 0%, #2c1e37 100%);
   padding-top: 1em;
   padding-bottom: 1em;
+  display: none;
+}
+header.active {
+  display: block;
+  animation: fadeout 1s ease-out;
 }
 .error {
   text-align: center;
