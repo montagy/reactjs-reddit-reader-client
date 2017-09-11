@@ -51,7 +51,12 @@ class App extends React.Component {
   }
   render() {
     const { showPannel, error } = this.state;
-    const { reddits, defaultHome = 'Home', handleAddReddit } = this.props;
+    const {
+      reddits,
+      defaultHome = 'Home',
+      handleAddReddit,
+      cachedHour,
+    } = this.props;
     return (
       <HashRouter>
         <div className={styles.wrapper}>
@@ -70,6 +75,7 @@ class App extends React.Component {
                     match={match}
                     addReddit={handleAddReddit}
                     handleUpdateFail={this.handleError}
+                    cachedHour={cachedHour}
                     {...rest}
                   />
                 );
@@ -82,6 +88,7 @@ class App extends React.Component {
                   addReddit={handleAddReddit}
                   reddits={reddits}
                   handleUpdateFail={this.handleError}
+                  cachedHour={cachedHour}
                   {...props}
                 />}
             />

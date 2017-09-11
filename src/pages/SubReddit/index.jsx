@@ -87,10 +87,10 @@ class SubReddit extends React.Component {
   };
 
   doUpdate() {
-    const { reddits, match, location, addReddit } = this.props;
+    const { reddits, match, location, addReddit, cachedHour } = this.props;
     const name = match.params && match.params.sub;
     const reddit = reddits[name] || {};
-    if (isEmpty(reddit.data) || hoursAgo(reddit.timestamp) >= 2) {
+    if (isEmpty(reddit.data) || hoursAgo(reddit.timestamp) >= cachedHour) {
       fetchReddit({ path: location.pathname }).then(json => {
         this.replaceOld(json);
         addReddit(name, json);

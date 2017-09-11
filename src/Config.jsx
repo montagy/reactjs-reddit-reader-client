@@ -29,13 +29,14 @@ class Config extends React.Component {
   };
 
   render() {
-    const { reddits, defaultHome } = this.state;
+    const { reddits, defaultHome, cachedHour } = this.state;
     return (
       <App
         reddits={reddits}
         defaultHome={defaultHome}
         handleAddReddit={this.handleAddReddit}
         handleDeleteReddit={this.handleDeleteReddit}
+        cachedHour={cachedHour}
       />
     );
   }
