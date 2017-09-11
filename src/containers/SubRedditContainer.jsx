@@ -78,9 +78,8 @@ class SubRedditContainer extends React.Component {
   combineOld = this.updateResolve(true);
 
   doUpdate() {
-    const { reddits, match, location, addReddit, cachedHour } = this.props;
+    const { reddit, match, location, addReddit, cachedHour } = this.props;
     const name = match.params && match.params.sub;
-    const reddit = reddits[name] || {};
     if (isEmpty(reddit.data) || hoursAgo(reddit.timestamp) >= cachedHour) {
       fetchReddit({ path: location.pathname }).then(json => {
         this.replaceOld(json);

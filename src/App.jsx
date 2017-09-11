@@ -72,7 +72,7 @@ class App extends React.Component {
                 match.params.sub = defaultHome;
                 return (
                   <SubRedditContainer
-                    reddits={reddits}
+                    reddit={reddits[defaultHome] || {}}
                     match={match}
                     addReddit={handleAddReddit}
                     handleUpdateFail={this.handleError}
@@ -86,8 +86,8 @@ class App extends React.Component {
               path="/r/:sub"
               render={props =>
                 <SubRedditContainer
+                  reddit={reddits[props.match.params.sub] || {}}
                   addReddit={handleAddReddit}
-                  reddits={reddits}
                   handleUpdateFail={this.handleError}
                   cachedHour={cachedHour}
                   {...props}
