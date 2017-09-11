@@ -3,12 +3,10 @@ import { HashRouter, Route } from 'react-router-dom';
 import { SubReddit, Post } from './pages';
 import { Pannel, ToggleButton } from './molecules';
 import styles from './App.css';
-import storage from './storage.js';
 
 class App extends React.Component {
   state = {
     showPannel: false,
-    reddits: storage.read('reddit') || {},
     error: '',
   };
   togglePannel = e => {
@@ -16,25 +14,6 @@ class App extends React.Component {
     this.setState(prevState => ({
       showPannel: !prevState.showPannel,
     }));
-  };
-  handleAddReddit = (name, data) => {
-    const reddits = this.state.reddits;
-    reddits[name] = {
-      timestamp: new Date().getTime(),
-      data,
-    };
-    this.setState({
-      reddits: { ...reddits },
-    });
-    storage.write('reddit', reddits);
-  };
-  handleDeleteReddit = name => {
-    const reddits = this.state.reddits;
-    delete reddits[name];
-    this.setState({
-      reddits: { ...reddits },
-    });
-    storage.write('reddit', reddits);
   };
   handleEsc = event => {
     if (event.keyCode === 27) {
@@ -56,6 +35,9 @@ class App extends React.Component {
       error: msg,
     });
   };
+  clearError = () => {
+    this.setState({ error: '' });
+  };
   componentDidMount() {
     window.addEventListener('keydown', this.handleEsc);
     this.mainPage.addEventListener('click', this.handleClickBlankClosePannel);
@@ -68,7 +50,8 @@ class App extends React.Component {
     );
   }
   render() {
-    const { reddits, showPannel, error } = this.state;
+    const { showPannel, error } = this.state;
+    const { reddits, defaultHome = 'Home', handleAddReddit } = this.props;
     return (
       <HashRouter>
         <div className={styles.wrapper}>
@@ -80,12 +63,12 @@ class App extends React.Component {
               exact
               path="/"
               render={({ match, ...rest }) => {
-                match.params.sub = 'Home';
+                match.params.sub = defaultHome;
                 return (
                   <SubReddit
                     reddits={reddits}
                     match={match}
-                    addReddit={this.handleAddReddit}
+                    addReddit={handleAddReddit}
                     handleUpdateFail={this.handleError}
                     {...rest}
                   />
@@ -96,7 +79,7 @@ class App extends React.Component {
               path="/r/:sub"
               render={props =>
                 <SubReddit
-                  addReddit={this.handleAddReddit}
+                  addReddit={handleAddReddit}
                   reddits={reddits}
                   handleUpdateFail={this.handleError}
                   {...props}
