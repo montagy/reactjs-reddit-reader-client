@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styles from './index.css';
 import { formatInput } from '../../utils';
 
@@ -12,19 +11,11 @@ class InlineForm extends React.Component {
   };
   handleSubmit = e => {
     e.preventDefault();
-    const { history } = this.context.router;
     const value = formatInput(this.state.value);
-    history.push(`/r/${value}`);
+    this.props.onSubmit(value);
     this.setState({
       value: '',
     });
-  };
-  static contextTypes = {
-    router: PropTypes.shape({
-      history: PropTypes.shape({
-        push: PropTypes.func.isRequired,
-      }).isRequired,
-    }).isRequired,
   };
   render() {
     return (
@@ -39,7 +30,7 @@ class InlineForm extends React.Component {
           />
           <button type="submit" className={styles.btn}>GO</button>
         </div>
-        <div></div>
+        <div />
       </form>
     );
   }

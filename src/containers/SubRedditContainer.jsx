@@ -91,6 +91,9 @@ class SubRedditContainer extends React.Component {
       },
     );
   };
+  directTo = reddit => {
+    this.props.history.push(`/r/${reddit}`);
+  }
   doUpdate() {
     const { reddit, match, location, addReddit, cachedHour } = this.props;
     const name = match.params && match.params.sub;
@@ -143,6 +146,7 @@ class SubRedditContainer extends React.Component {
         showFixedHeader={showFixedHeader}
         title={this.props.match.params.sub}
         error={error}
+        onSubmit={this.directTo}
       />
     );
   }

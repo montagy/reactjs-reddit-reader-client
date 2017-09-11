@@ -1,11 +1,11 @@
 import React from 'react';
 import InlineForm from '../../molecules/InlineForm';
 
-const Header = ({ title, ...rest }) => {
+const Header = ({ title, onSubmit, ...rest }) => {
   return (
     <header {...rest}>
       <h1>{title}</h1>
-      <InlineForm />
+      <InlineForm onSubmit={onSubmit} />
     </header>
   );
 };

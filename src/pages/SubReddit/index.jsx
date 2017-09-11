@@ -12,7 +12,7 @@ class SubReddit extends React.Component {
     scrollTopSmooth(0, 300);
   };
   render() {
-    const { summaries, loading, showFixedHeader, title, error } = this.props;
+    const { summaries, loading, showFixedHeader, title, error, onSubmit } = this.props;
     const summariesView = summaries.map(summary =>
       <Summary key={summary.id} data={summary} />,
     );
@@ -26,8 +26,9 @@ class SubReddit extends React.Component {
         <Header
           title={title}
           className={cls}
+          onSubmit={onSubmit}
         />
-        <Header title={title} />
+        <Header title={title} onSubmit={onSubmit} />
         <main>
           <div>
             {summariesView}
