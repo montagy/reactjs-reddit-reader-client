@@ -11,12 +11,13 @@ class SubReddit extends React.Component {
     scrollTopSmooth(0, 300);
   };
   render() {
-    const { summaries, loading, showFixedHeader, title } = this.props;
+    const { summaries, loading, showFixedHeader, title, error } = this.props;
     const summariesView = summaries.map(summary =>
       <Summary key={summary.id} data={summary} />,
     );
     return (
       <section className={styles.wrapper}>
+        {error && <div className={styles.error}>{error}</div>}
         <Header
           title={title}
           style={{ opacity: showFixedHeader ? 1 : 0 }}

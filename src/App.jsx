@@ -8,7 +8,6 @@ import SubRedditContainer from './containers/SubRedditContainer';
 class App extends React.Component {
   state = {
     showPannel: false,
-    error: '',
   };
   togglePannel = e => {
     e.preventDefault();
@@ -31,14 +30,6 @@ class App extends React.Component {
       });
     }
   };
-  handleError = msg => {
-    this.setState({
-      error: msg,
-    });
-  };
-  clearError = () => {
-    this.setState({ error: '' });
-  };
   componentDidMount() {
     window.addEventListener('keydown', this.handleEsc);
     this.mainPage.addEventListener('click', this.handleClickBlankClosePannel);
@@ -51,7 +42,7 @@ class App extends React.Component {
     );
   }
   render() {
-    const { showPannel, error } = this.state;
+    const { showPannel } = this.state;
     const {
       reddits,
       defaultHome = 'Home',
@@ -61,7 +52,6 @@ class App extends React.Component {
     return (
       <HashRouter>
         <div className={styles.wrapper}>
-          {error && <div className={styles.error}>{error}</div>}
           <Pannel reddits={reddits} active={showPannel} />
           <ToggleButton active={showPannel} handleToggle={this.togglePannel} />
           <div className={styles.container} ref={ref => (this.mainPage = ref)}>
@@ -75,7 +65,6 @@ class App extends React.Component {
                     reddit={reddits[defaultHome] || {}}
                     match={match}
                     addReddit={handleAddReddit}
-                    handleUpdateFail={this.handleError}
                     cachedHour={cachedHour}
                     {...rest}
                   />
@@ -88,8 +77,8 @@ class App extends React.Component {
                 <SubRedditContainer
                   reddit={reddits[props.match.params.sub] || {}}
                   addReddit={handleAddReddit}
-                  handleUpdateFail={this.handleError}
                   cachedHour={cachedHour}
+                  defaultHome={defaultHome}
                   {...props}
                 />}
             />

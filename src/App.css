@@ -20,13 +20,3 @@
     right: 0;
   }
 }
-.error {
-  text-align: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  color: white;
-  background-color: red;
-  font-weight: 600;
-}

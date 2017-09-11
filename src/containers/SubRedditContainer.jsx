@@ -12,6 +12,7 @@ class SubRedditContainer extends React.Component {
     summaries: [],
     nextPageId: '',
     showFixedHeader: false,
+    error: '',
   };
   toggleFixedHeader = () => {
     this.setState(prev => ({
@@ -69,7 +70,7 @@ class SubRedditContainer extends React.Component {
     );
   };
   updateReject = error => {
-    this.props.handleUpdateFail(error.toString());
+    this.handleError(error.toString());
     this.setState({
       loading: false,
     });
@@ -77,6 +78,19 @@ class SubRedditContainer extends React.Component {
   replaceOld = this.updateResolve(false);
   combineOld = this.updateResolve(true);
 
+  handleError = msg => {
+    this.setState(
+      {
+        error: msg,
+      },
+      () => {
+        setTimeout(() => {
+          this.setState({ error: '' });
+          this.props.history.replace(this.props.defaultHome);
+        }, 2000);
+      },
+    );
+  };
   doUpdate() {
     const { reddit, match, location, addReddit, cachedHour } = this.props;
     const name = match.params && match.params.sub;
@@ -121,13 +135,14 @@ class SubRedditContainer extends React.Component {
     window.removeEventListener('scroll', this.handleScroll);
   }
   render() {
-    const { summaries, loading, showFixedHeader } = this.state;
+    const { summaries, loading, showFixedHeader, error } = this.state;
     return (
       <SubReddit
         summaries={summaries}
         loading={loading}
         showFixedHeader={showFixedHeader}
         title={this.props.match.params.sub}
+        error={error}
       />
     );
   }
