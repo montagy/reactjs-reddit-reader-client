@@ -21,9 +21,8 @@ class Post extends React.Component {
   render() {
     return (
       <section>
-        {this.state.loading
-          ? <Loading />
-          : <PostView post={this.state.post} comments={this.state.comments} />};
+        <Loading active={this.state.loading} />
+        <PostView post={this.state.post} comments={this.state.comments} />
       </section>
     );
   }

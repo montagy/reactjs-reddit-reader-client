@@ -41,7 +41,7 @@ class SubReddit extends React.Component {
         <main>
           {summariesView}
         </main>
-        {loading && <Loading />}
+        <Loading active={loading}/>
         <footer>
           <a onClick={this.goTop}>GO TOP</a>
           继续下拉刷新
