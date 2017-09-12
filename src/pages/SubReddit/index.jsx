@@ -6,7 +6,7 @@ import styles from './index.css';
 import { scrollTopSmooth } from '../../utils';
 import InlineForm from '../../molecules/InlineForm';
 
-class SubReddit extends React.Component {
+class RedditMain extends React.Component {
   goTop = e => {
     e.preventDefault();
     scrollTopSmooth(0, 300);
@@ -51,4 +51,4 @@ class SubReddit extends React.Component {
   }
 }
 
-export default SubReddit;
+export default RedditMain;

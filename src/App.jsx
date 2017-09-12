@@ -3,7 +3,7 @@ import { HashRouter, Route } from 'react-router-dom';
 import { Post } from './pages';
 import { Pannel, ToggleButton } from './molecules';
 import styles from './App.css';
-import SubRedditContainer from './containers/SubRedditContainer';
+import RedditContainer from './containers/RedditContainer';
 import Home from './pages/Home';
 
 class App extends React.Component {
@@ -74,7 +74,7 @@ class App extends React.Component {
             <Route
               path="/r/:sub"
               render={props =>
-                <SubRedditContainer
+                <RedditContainer
                   reddit={reddits[props.match.params.sub] || {}}
                   addReddit={handleAddReddit}
                   cachedHour={cachedHour}

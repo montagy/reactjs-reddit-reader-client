@@ -3,7 +3,7 @@ import PostView from '../../molecules/PostView';
 import Loading from '../../atoms/Loading';
 import fetchReddit from '../../api';
 
-class Post extends React.Component {
+class RedditPost extends React.Component {
   state = {
     loading: true,
     post: {},
@@ -28,4 +28,4 @@ class Post extends React.Component {
   }
 }
 
-export default Post;
+export default RedditPost;

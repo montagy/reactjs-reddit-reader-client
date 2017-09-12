@@ -6,7 +6,7 @@ import fetchReddit from '../api';
 import SubReddit from '../pages/SubReddit';
 import { isScrollAtEnd, scrollToEnd, hoursAgo } from '../utils';
 
-class SubRedditContainer extends React.Component {
+class RedditContainer extends React.Component {
   state = {
     loading: true,
     summaries: [],
@@ -152,4 +152,4 @@ class SubRedditContainer extends React.Component {
   }
 }
 
-export default SubRedditContainer;
+export default RedditContainer;

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-import Config from './Config';
+import App from './containers/AppContainer';
 import './index.css';
 
 const render = Comp => {
@@ -12,11 +12,11 @@ const render = Comp => {
     document.getElementById('root'),
   );
 };
-render(Config);
+render(App);
 if (module.hot) {
   module.hot.accept('./App.jsx', () => {
     console.log('hot');
-    const NextApp = require('./Config').default;
+    const NextApp = require('./containers/AppContainer.jsx').default;
     render(NextApp);
   });
 }
