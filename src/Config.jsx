@@ -27,6 +27,11 @@ class Config extends React.Component {
     });
     storage.write('reddit', reddits);
   };
+  setDefaultHome = (value) => {
+    this.setState({
+      defaultHome: value,
+    });
+  }
 
   render() {
     const { reddits, defaultHome, cachedHour } = this.state;
@@ -37,6 +42,7 @@ class Config extends React.Component {
         handleAddReddit={this.handleAddReddit}
         handleDeleteReddit={this.handleDeleteReddit}
         cachedHour={cachedHour}
+        setDefaultHome={this.setDefaultHome}
       />
     );
   }

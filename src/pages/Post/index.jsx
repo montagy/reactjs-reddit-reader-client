@@ -4,14 +4,11 @@ import Loading from '../../atoms/Loading';
 import fetchReddit from '../../api';
 
 class Post extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: true,
-      post: {},
-      comments: [],
-    };
-  }
+  state = {
+    loading: true,
+    post: {},
+    comments: [],
+  };
   componentDidMount() {
     fetchReddit({ path: this.props.location.pathname.slice(2)}).then(json => {
       this.setState({

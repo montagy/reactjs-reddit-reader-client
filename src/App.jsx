@@ -49,6 +49,7 @@ class App extends React.Component {
       defaultHome = 'Home',
       handleAddReddit,
       cachedHour,
+      setDefaultHome
     } = this.props;
     return (
       <HashRouter>
@@ -64,6 +65,7 @@ class App extends React.Component {
                   <Home
                     defaultHome={defaultHome}
                     cachedHour={cachedHour}
+                    setDefaultHome={setDefaultHome}
                     {...props}
                   />
                 );

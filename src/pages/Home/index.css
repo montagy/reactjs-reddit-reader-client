@@ -5,6 +5,10 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  & span {
+    background-color: #FFF;
+    display: inline-block;
+  }
 }
 .container {
 }

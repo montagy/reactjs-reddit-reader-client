@@ -1,15 +1,15 @@
 import React from 'react';
 import styles from './index.css';
 
-const Home = ({defaultHome, cachedHour }) => {
+function Home({ defaultHome, cachedHour, setDefaultHome }) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
-        <p>设置你的首页: {defaultHome}</p>
+        <div>设置你的首页: <span>{defaultHome}</span></div>
         <p>缓存的有效时间: {cachedHour}</p>
       </div>
     </div>
   );
-};
+}
 
 export default Home;
