@@ -1,15 +1,13 @@
 import React from 'react';
 import { bool } from 'prop-types';
 import styles from './index.css';
+import toggle from '../../hocs/toggle';
 
 Loading.propTypes = {
   active: bool,
 };
 
-function Loading({ active = false }) {
-  if (!active) {
-    return null;
-  }
+function Loading() {
   return (
     <div className={styles.loading}>
       <div />
@@ -17,4 +15,4 @@ function Loading({ active = false }) {
   );
 }
 
-export default Loading;
+export default toggle(Loading);
