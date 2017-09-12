@@ -1,10 +1,9 @@
 import React from 'react';
-import { HashRouter, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { Post } from './pages';
 import { Pannel, ToggleButton } from './molecules';
 import styles from './App.css';
 import RedditContainer from './containers/RedditContainer';
-import Home from './pages/Home';
 
 class App extends React.Component {
   state = {
@@ -49,43 +48,28 @@ class App extends React.Component {
       defaultHome = 'Home',
       handleAddReddit,
       cachedHour,
-      setDefaultHome
+      match
     } = this.props;
     return (
-      <HashRouter>
-        <div className={styles.wrapper}>
-          <Pannel reddits={reddits} active={showPannel} />
-          <ToggleButton active={showPannel} handleToggle={this.togglePannel} />
-          <div className={styles.container} ref={ref => (this.mainPage = ref)}>
-            <Route
-              exact
-              path="/"
-              render={({ ...props }) => {
-                return (
-                  <Home
-                    defaultHome={defaultHome}
-                    cachedHour={cachedHour}
-                    setDefaultHome={setDefaultHome}
-                    {...props}
-                  />
-                );
-              }}
-            />
-            <Route
-              path="/r/:sub"
-              render={props =>
-                <RedditContainer
-                  reddit={reddits[props.match.params.sub] || {}}
-                  addReddit={handleAddReddit}
-                  cachedHour={cachedHour}
-                  defaultHome={defaultHome}
-                  {...props}
-                />}
-            />
-            <Route path="/p/:permalink" component={Post} />
-          </div>
+      <div className={styles.wrapper}>
+        <Pannel reddits={reddits} active={showPannel} />
+        <ToggleButton active={showPannel} handleToggle={this.togglePannel} />
+        <div className={styles.container} ref={ref => (this.mainPage = ref)}>
+          <Route
+            path={`${match.url}`}
+            exact
+            render={props =>
+              <RedditContainer
+                reddit={reddits[match.params.sub] || {}}
+                addReddit={handleAddReddit}
+                cachedHour={cachedHour}
+                defaultHome={defaultHome}
+                {...props}
+              />}
+          />
+          <Route path={`${match.url}/:comment`} component={Post} />
         </div>
-      </HashRouter>
+      </div>
     );
   }
 }

@@ -7,7 +7,7 @@ class Pannel extends React.Component {
   render() {
     const { reddits, active, ...props } = this.props;
     const list = Object.keys(reddits).map((name, index) => {
-      const realName = name === 'Home' ? '/' : `/r/${name}`;
+      const realName = name === 'Home' ? '/' : `/${name}`;
       return (
         <Link to={{ pathname: realName }} key={index} className={styles.link}>
           {name}

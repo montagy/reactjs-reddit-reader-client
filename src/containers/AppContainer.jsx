@@ -39,7 +39,20 @@ class AppContainer extends React.Component {
     return (
       <HashRouter>
         <div>
-          <Route exact path="/" component={Home} />
+          <Route
+            exact
+            path="/"
+            render={props => {
+              return (
+                <Home
+                  defaultHome={defaultHome}
+                  cachedHour={cachedHour}
+                  setDefaultHome={this.setDefaultHome}
+                  {...props}
+                />
+              );
+            }}
+          />
           <Route
             path="/:sub"
             render={props => {

@@ -1,6 +1,6 @@
 import noop from 'lodash/noop';
 import isPlainObject from 'lodash/isPlainObject';
-const baseUrl = 'https://www.reddit.com';
+const baseUrl = 'https://www.reddit.com/';
 const NETERROR = 999;
 const TIMEOUT = 998;
 
@@ -18,10 +18,10 @@ export function buildParams(params) {
   }
   return result.join('&');
 }
-function fetchReddit({ path, after, handleProgress, timeout }) {
+function fetchReddit({ pathPiece, after, handleProgress, timeout }) {
   return fetch({
     host: baseUrl,
-    path: path + '.json',
+    path: pathPiece.filter(r => r.trim).join('/') + '.json',
     params: { after },
     handleProgress,
     timeout,

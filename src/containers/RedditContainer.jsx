@@ -30,7 +30,7 @@ class RedditContainer extends React.Component {
           scrollToEnd,
         );
         fetchReddit({
-          path: this.props.location.pathname,
+          pathPiece: ['r', this.props.match.url.slice(1)],
           after: this.state.nextPageId,
         }).then(this.combineOld, this.updateReject);
       }
@@ -84,21 +84,21 @@ class RedditContainer extends React.Component {
         error: msg,
       },
       () => {
-        setTimeout(() => {
-          this.setState({ error: '' });
-          this.props.history.replace(this.props.defaultHome);
-        }, 2000);
+        //setTimeout(() => {
+          //this.setState({ error: '' });
+          //this.props.history.replace(this.props.defaultHome);
+        //}, 2000);
       },
     );
   };
   directTo = reddit => {
-    this.props.history.push(`/r/${reddit}`);
-  }
+    this.props.history.push(`/${reddit}`);
+  };
   doUpdate() {
-    const { reddit, match, location, addReddit, cachedHour } = this.props;
-    const name = match.params && match.params.sub;
+    const { reddit, match, addReddit, cachedHour } = this.props;
+    const name = match.url.slice(1);
     if (isEmpty(reddit.data) || hoursAgo(reddit.timestamp) >= cachedHour) {
-      fetchReddit({ path: location.pathname }).then(json => {
+      fetchReddit({ pathPiece: ['r', name] }).then(json => {
         this.replaceOld(json);
         addReddit(name, json);
       }, this.updateReject);

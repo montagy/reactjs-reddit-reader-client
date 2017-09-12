@@ -11,19 +11,21 @@ class Summary extends React.Component {
   render() {
     const {
       data: {
-        permalink,
         domain,
         title,
         author,
         created_utc,
         num_comments,
         url,
+        subreddit,
+        id,
       },
       ...rest
     } = this.props;
     const escaped = unescape(title);
+    const localUrl = `/${subreddit}/${id}`;
     let realTitle = domain.slice(0, 4) === 'self'
-      ? <Link to={`/p${permalink}`}>
+      ? <Link to={localUrl}>
           {escaped}
         </Link>
       : <a href={url} target="_blank">{escaped}</a>;
@@ -35,7 +37,7 @@ class Summary extends React.Component {
         </header>
         <Author time={created_utc} name={author} />
         <footer>
-          <Link to={`/p${permalink}`}>{`${num_comments || ''}留言`}</Link>
+          <Link to={localUrl}>{`${num_comments || ''}留言`}</Link>
         </footer>
       </div>
     );

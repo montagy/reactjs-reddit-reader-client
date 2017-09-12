@@ -10,7 +10,7 @@ class RedditPost extends React.Component {
     comments: [],
   };
   componentDidMount() {
-    fetchReddit({ path: this.props.location.pathname.slice(2)}).then(json => {
+    fetchReddit({ pathPiece: [this.props.match.params.comment] }).then(json => {
       this.setState({
         loading: false,
         post: json[0].data.children[0].data,
