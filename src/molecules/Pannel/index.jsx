@@ -3,6 +3,7 @@ import { arrayOf, string } from 'prop-types';
 import styles from './index.css';
 import { Link } from 'react-router-dom';
 import { toggleWith } from '../../hocs/toggle';
+import FixedBottom from '../../templates/FixedBottom';
 
 Pannel.propTypes = {
   reddits: arrayOf(string),
@@ -17,16 +18,15 @@ function Pannel({ reddits, ...props }) {
     );
   });
   return (
-    <div className={styles.pannel} {...props}>
-      <main>
-        <div className={styles.lists}>
-          {list}
-        </div>
-      </main>
-      <footer>
-        This is a sentence.
-      </footer>
-    </div>
+    <FixedBottom
+      className={styles.pannel}
+      footer={<div>@copyright montagy</div>}
+      {...props}
+    >
+      <div className={styles.lists}>
+        {list}
+      </div>
+    </FixedBottom>
   );
 }
 

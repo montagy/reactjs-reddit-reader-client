@@ -11,11 +11,6 @@
   z-index: 1;
   transition: all .3s ease-in-out;
   background-color: var(--bgc);
-  display: flex;
-  flex-direction: column;
-  & > main {
-    flex-grow: 1;
-  }
   & > footer {
     padding: 3em 0;
     text-align: center;

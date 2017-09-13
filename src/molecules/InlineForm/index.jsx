@@ -1,4 +1,5 @@
 import React from 'react';
+import { func } from 'prop-types';
 import styles from './index.css';
 import { formatInput } from '../../utils';
 import Button from '../../atoms/Button';
@@ -7,6 +8,9 @@ import Input from '../../atoms/Input';
 class InlineForm extends React.Component {
   state = {
     value: '',
+  };
+  static propTypes = {
+    onSubmit: func,
   };
   handleChange = e => {
     this.setState({ value: e.target.value });
@@ -25,7 +29,6 @@ class InlineForm extends React.Component {
         <div className={styles.formControl}>
           <Input
             type="text"
-            placeholder="sub reddit"
             onChange={this.handleChange}
             value={this.state.value}
             required

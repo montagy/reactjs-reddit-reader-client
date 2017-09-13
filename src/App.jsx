@@ -1,48 +1,12 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import { Post } from './pages';
-import { Pannel, ToggleButton } from './molecules';
 import styles from './App.css';
 import RedditContainer from './containers/RedditContainer';
+import PannelContainer from './containers/PannelContainer';
 
 class App extends React.Component {
-  state = {
-    showPannel: false,
-  };
-  togglePannel = e => {
-    e.preventDefault();
-    this.setState(prevState => ({
-      showPannel: !prevState.showPannel,
-    }));
-  };
-  handleEsc = event => {
-    if (event.keyCode === 27) {
-      event.preventDefault();
-      this.setState(prevState => ({
-        showPannel: !prevState.showPannel,
-      }));
-    }
-  };
-  handleClickBlankClosePannel = () => {
-    if (this.state.showPannel) {
-      this.setState({
-        showPannel: false,
-      });
-    }
-  };
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleEsc);
-    this.mainPage.addEventListener('click', this.handleClickBlankClosePannel);
-  }
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleEsc);
-    this.mainPage.removeEventListener(
-      'click',
-      this.handleClickBlankClosePannel,
-    );
-  }
   render() {
-    const { showPannel } = this.state;
     const {
       reddits,
       defaultHome = 'Home',
@@ -53,9 +17,8 @@ class App extends React.Component {
     const sub = match.params.sub;
     return (
       <div className={styles.wrapper}>
-        <Pannel reddits={Object.keys(reddits)} active={showPannel} />
-        <ToggleButton active={showPannel} handleToggle={this.togglePannel} />
-        <div className={styles.container} ref={ref => (this.mainPage = ref)}>
+        <PannelContainer reddits={Object.keys(reddits)} />
+        <div className={styles.container}>
           <Route
             path={match.url}
             exact

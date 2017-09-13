@@ -1,13 +1,15 @@
 import React from 'react';
-import { Route, HashRouter } from 'react-router-dom';
+import { Route, HashRouter, Redirect, Switch } from 'react-router-dom';
 import Home from '../pages/Home';
 import App from '../App';
 import storage from '../storage';
 
 class AppContainer extends React.Component {
   state = {
-    defaultHome: '',
-    cachedHour: 2,
+    config: storage.read('reddit_config') || {
+      defaultHome: '',
+      cachedHour: 2,
+    },
     reddits: storage.read('reddit') || {},
   };
   handleAddReddit = (name, data) => {
@@ -30,45 +32,56 @@ class AppContainer extends React.Component {
     storage.write('reddit', reddits);
   };
   setDefaultHome = value => {
-    this.setState({
-      defaultHome: value,
-    });
+    const config = { ...this.state.config, defaultHome: value };
+    this.setState({ config });
+    storage.write('reddit_config', config);
   };
   render() {
-    const { reddits, defaultHome, cachedHour } = this.state;
+    const { reddits, config } = this.state;
+    const { defaultHome, cachedHour } = config;
     return (
       <HashRouter>
         <div>
-          <Route
-            exact
-            path="/"
-            render={props => {
-              return (
-                <Home
-                  defaultHome={defaultHome}
-                  cachedHour={cachedHour}
-                  setDefaultHome={this.setDefaultHome}
-                  {...props}
-                />
-              );
-            }}
-          />
-          <Route
-            path="/:sub"
-            render={props => {
-              return (
-                <App
-                  reddits={reddits}
-                  defaultHome={defaultHome}
-                  handleAddReddit={this.handleAddReddit}
-                  handleDeleteReddit={this.handleDeleteReddit}
-                  cachedHour={cachedHour}
-                  setDefaultHome={this.setDefaultHome}
-                  {...props}
-                />
-              );
-            }}
-          />
+          <Switch>
+            <Route
+              exact
+              path="/"
+              render={() => {
+                return defaultHome
+                  ? <Redirect to={`/${defaultHome}`} />
+                  : <Redirect to="/site/config" />;
+              }}
+            />
+            <Route
+              path="/site/config"
+              render={props => {
+                return (
+                  <Home
+                    defaultHome={defaultHome}
+                    cachedHour={cachedHour}
+                    setDefaultHome={this.setDefaultHome}
+                    {...props}
+                  />
+                );
+              }}
+            />
+            <Route
+              path="/:sub"
+              render={props => {
+                return (
+                  <App
+                    reddits={reddits}
+                    defaultHome={defaultHome}
+                    handleAddReddit={this.handleAddReddit}
+                    handleDeleteReddit={this.handleDeleteReddit}
+                    cachedHour={cachedHour}
+                    setDefaultHome={this.setDefaultHome}
+                    {...props}
+                  />
+                );
+              }}
+            />
+          </Switch>
         </div>
       </HashRouter>
     );
