@@ -1,15 +1,14 @@
 import React from 'react';
-import { arrayOf, string, bool } from 'prop-types';
+import { arrayOf, string } from 'prop-types';
 import styles from './index.css';
-import classNames from 'classnames';
 import { Link } from 'react-router-dom';
+import { toggleWith } from '../../hocs/toggle';
 
 Pannel.propTypes = {
   reddits: arrayOf(string),
-  active: bool,
 };
-function Pannel ({ reddits, active, ...props }) {
-  const list = reddits.map((name) => {
+function Pannel({ reddits, ...props }) {
+  const list = reddits.map(name => {
     const realName = name === 'Home' ? '/' : `/${name}`;
     return (
       <Link to={{ pathname: realName }} key={name} className={styles.link}>
@@ -17,12 +16,8 @@ function Pannel ({ reddits, active, ...props }) {
       </Link>
     );
   });
-  const cls = classNames({
-    [styles.pannel]: true,
-    [styles.active]: active,
-  });
   return (
-    <div className={cls} {...props}>
+    <div className={styles.pannel} {...props}>
       <main>
         <div className={styles.lists}>
           {list}
@@ -35,4 +30,6 @@ function Pannel ({ reddits, active, ...props }) {
   );
 }
 
-export default Pannel;
+export default toggleWith(Pannel, {
+  className: styles.pannel + ' ' + styles.active,
+});
