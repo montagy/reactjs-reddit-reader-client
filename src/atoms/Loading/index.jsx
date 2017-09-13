@@ -1,7 +1,7 @@
 import React from 'react';
 import { bool } from 'prop-types';
 import styles from './index.css';
-import toggle from '../../hocs/toggle';
+import { toggle } from '../../hocs/toggle';
 
 Loading.propTypes = {
   active: bool,

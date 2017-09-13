@@ -1,6 +1,9 @@
 import React from 'react';
 
-export default function toggle(Comp) {
+/*
+mount a component if active, or null
+*/
+export function toggle(Comp) {
   function Toggle({ active }) {
     if (!active) {
       return null;
@@ -8,4 +11,16 @@ export default function toggle(Comp) {
     return <Comp />
   }
   return Toggle;
+}
+
+/*
+mount a component with some extra props, or mount primary
+*/
+export function toggleWith(Comp, props) {
+  return function ToggleWith({ active, ...rest }) {
+    if (!active) {
+      return <Comp {...rest} />;
+    }
+    return <Comp {...rest} {...props} />;
+  };
 }
