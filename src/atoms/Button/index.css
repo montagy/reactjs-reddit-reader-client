@@ -1,8 +1,10 @@
 .btn {
+  display: inline-block;
   color: #333;
   font-size: 1em;
-  padding: .5em;
+  padding: 6px;
   font-weight: 400;
+  line-height: inherit;
   text-align: center;
   cursor: pointer;
   border: 1px solid #fff;

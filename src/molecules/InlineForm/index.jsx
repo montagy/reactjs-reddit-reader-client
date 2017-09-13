@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './index.css';
 import { formatInput } from '../../utils';
 import Button from '../../atoms/Button';
+import Input from '../../atoms/Input';
 
 class InlineForm extends React.Component {
   state = {
@@ -20,18 +21,17 @@ class InlineForm extends React.Component {
   };
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSubmit} className={styles.inlineForm}>
         <div className={styles.formControl}>
-          <input
+          <Input
             type="text"
             placeholder="sub reddit"
             onChange={this.handleChange}
             value={this.state.value}
             required
           />
-          <Button>Go</Button>
         </div>
-        <div />
+        <Button>Go</Button>
       </form>
     );
   }
