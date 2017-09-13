@@ -26,13 +26,13 @@
   & > div {
     background-color: color(black l(+20%));
   }
-}
-.firstBar {
-  transform: translateY(10px) rotate(45deg);
-}
-.sndBar {
-  opacity: 0;
-}
-.lastBar {
-  transform: translateY(-10px) rotate(-45deg);
+  & div:nth-child(1) {
+    transform: translateY(10px) rotate(45deg);
+  }
+  & div:nth-child(2) {
+    opacity: 0;
+  }
+  & div:nth-child(3) {
+    transform: translateY(-10px) rotate(-45deg);
+  }
 }

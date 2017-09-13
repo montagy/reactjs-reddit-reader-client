@@ -3,7 +3,7 @@ import throttle from 'lodash/throttle';
 import isEmpty from 'lodash/isEmpty';
 import shallowEqual from 'fbjs/lib/shallowEqual';
 import fetchReddit from '../api';
-import SubReddit from '../pages/SubReddit';
+import RedditMain from '../pages/SubReddit';
 import { isScrollAtEnd, scrollToEnd, hoursAgo } from '../utils';
 
 class RedditContainer extends React.Component {
@@ -139,14 +139,15 @@ class RedditContainer extends React.Component {
   }
   render() {
     const { summaries, loading, showFixedHeader, error } = this.state;
+    const { sub } = this.props;
     return (
-      <SubReddit
+      <RedditMain
         summaries={summaries}
         loading={loading}
         showFixedHeader={showFixedHeader}
-        title={this.props.match.params.sub}
         error={error}
         onSubmit={this.directTo}
+        sub={sub}
       />
     );
   }

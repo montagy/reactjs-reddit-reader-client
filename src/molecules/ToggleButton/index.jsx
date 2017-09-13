@@ -10,9 +10,9 @@ const ToggleButton = ({ active, handleToggle }) => {
   });
   return (
     <div onClick={handleToggle} className={cls}>
-      <div className={active ? styles.firstBar : null} />
-      <div className={active ? styles.sndBar : null} />
-      <div className={active ? styles.lastBar : null} />
+      <div />
+      <div />
+      <div />
     </div>
   );
 };

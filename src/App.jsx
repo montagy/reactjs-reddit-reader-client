@@ -50,17 +50,19 @@ class App extends React.Component {
       cachedHour,
       match
     } = this.props;
+    const sub = match.params.sub;
     return (
       <div className={styles.wrapper}>
-        <Pannel reddits={reddits} active={showPannel} />
+        <Pannel reddits={Object.keys(reddits)} active={showPannel} />
         <ToggleButton active={showPannel} handleToggle={this.togglePannel} />
         <div className={styles.container} ref={ref => (this.mainPage = ref)}>
           <Route
-            path={`${match.url}`}
+            path={match.url}
             exact
             render={props =>
               <RedditContainer
-                reddit={reddits[match.params.sub] || {}}
+                reddit={reddits[sub] || {}}
+                sub={sub}
                 addReddit={handleAddReddit}
                 cachedHour={cachedHour}
                 defaultHome={defaultHome}

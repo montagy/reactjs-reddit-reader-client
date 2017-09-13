@@ -16,9 +16,9 @@ class RedditMain extends React.Component {
       summaries,
       loading,
       showFixedHeader,
-      title,
       error,
       onSubmit,
+      sub,
     } = this.props;
     const summariesView = summaries.map(summary =>
       <Summary key={summary.id} data={summary} />,
@@ -30,12 +30,8 @@ class RedditMain extends React.Component {
     return (
       <section className={styles.wrapper}>
         {error && <div className={styles.error}>{error}</div>}
-        <header className={cls}>
-          <h1>{title}</h1>
-          <InlineForm onSubmit={onSubmit} />
-        </header>
         <header>
-          <h1>{title}</h1>
+          <h1>{sub}</h1>
           <InlineForm onSubmit={onSubmit} />
         </header>
         <main>
@@ -46,6 +42,10 @@ class RedditMain extends React.Component {
           <a onClick={this.goTop}>GO TOP</a>
           继续下拉刷新
         </footer>
+        <header className={cls}>
+          <h1>{sub}</h1>
+          <InlineForm onSubmit={onSubmit} />
+        </header>
       </section>
     );
   }
