@@ -1,14 +1,31 @@
 .wrapper {
-  background-color: gray;
+  /*background-color: gray;*/
+  max-width: 960px;
+  margin: 0 auto;
   & header:first-child {
     background-color: rgba(229, 138, 18);
     text-align: center;
     color: #FFF;
   }
-  & span {
-    background-color: #FFF;
-    display: inline-block;
-  }
 }
 .container {
+  & > div {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 1em;
+  }
+}
+.lineForm{
+  & input {
+    outline: none;
+    border: 0 none transparent;
+    border-bottom: 1px solid black;
+  }
+  & button {
+    outline: none;
+    border: 0 none transparent;
+    background-color: transparent;
+    cursor: pointer;
+  }
 }

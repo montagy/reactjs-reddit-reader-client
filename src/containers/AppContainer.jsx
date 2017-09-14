@@ -9,6 +9,7 @@ class AppContainer extends React.Component {
     config: storage.read('reddit_config') || {
       defaultHome: '',
       cachedHour: 2,
+      fontSize: 1,
     },
     reddits: storage.read('reddit') || {},
   };
@@ -32,13 +33,19 @@ class AppContainer extends React.Component {
     storage.write('reddit', reddits);
   };
   setDefaultHome = value => {
-    const config = { ...this.state.config, defaultHome: value };
-    this.setState({ config });
-    storage.write('reddit_config', config);
+    this.setConfig({ defaultHome: value})
   };
+  setFontSize = value => {
+    this.setConfig({ fontSize: value});
+  }
+  setConfig = (patch) => {
+    const config = { ...this.state.config, ...patch};
+    this.setState({ config });
+    storage.write('reddit_config', config)
+  }
   render() {
     const { reddits, config } = this.state;
-    const { defaultHome, cachedHour } = config;
+    const { defaultHome, cachedHour, fontSize } = config;
     return (
       <HashRouter>
         <div>
@@ -60,6 +67,8 @@ class AppContainer extends React.Component {
                     defaultHome={defaultHome}
                     cachedHour={cachedHour}
                     setDefaultHome={this.setDefaultHome}
+                    fontSize={fontSize}
+                    setFontSize={this.setFontSize}
                     {...props}
                   />
                 );

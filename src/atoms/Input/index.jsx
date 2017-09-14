@@ -11,7 +11,7 @@ export default function Input({ value, onChange, ...props }) {
     <input
       onChange={onChange}
       value={value}
-      className={styles.input}
+      className={styles.formInput}
       {...props}
     />
   );
