@@ -23,7 +23,11 @@ function Comment({ comment }) {
   });
   return (
     <div className={styles.comment}>
-      <Author name={comment.author} time={comment.created_utc} />
+      <Author
+        name={comment.author}
+        time={comment.created_utc}
+        isSubmitter={comment.is_submitter}
+      />
       <div
         dangerouslySetInnerHTML={{ __html: htmlDecode(comment.body_html) }}
       />
@@ -39,7 +43,11 @@ function Post({ post }) {
         <span>{post.domain}</span>
       </h1>
       <main>
-        <Author name={post.author} time={post.created_utc} />
+        <Author
+          name={post.author}
+          time={post.created_utc}
+          isSubmitter={post.is_submitter}
+        />
         {post.selftext_html &&
           <div
             dangerouslySetInnerHTML={{ __html: htmlDecode(post.selftext_html) }}
