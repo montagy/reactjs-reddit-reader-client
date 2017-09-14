@@ -1,8 +1,17 @@
 import React from 'react';
+import { number, string} from 'prop-types';
 import styles from './index.css';
 import { timeAgo } from '../../utils';
 
-const Author = ({ name, time }) => {
+Author.propTypes = {
+  name: string.isRequired,
+  time: number.isRequired,
+};
+Author.defaultProps = {
+  name: '未知',
+  time: new Date().getTime(),
+};
+function Author ({ name = '', time }) {
   const ago = timeAgo(time);
   return (
     <div className={styles.author}>

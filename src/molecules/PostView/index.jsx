@@ -5,7 +5,7 @@ import styles from './index.css';
 import isEmpty from 'lodash/isEmpty';
 import Author from '../../atoms/Author';
 
-const Comment = ({ comment }) => {
+function Comment({ comment }) {
   if (
     isEmpty(comment) ||
     comment.count ||
@@ -30,11 +30,14 @@ const Comment = ({ comment }) => {
       {nestCommentsView}
     </div>
   );
-};
-const Post = ({ post }) => {
+}
+function Post({ post }) {
   return (
     <div className={styles.post}>
-      <h1>{unescape(post.title)}<span>{post.domain}</span></h1>
+      <h1>
+        <a href={post.url} target="_blank">{unescape(post.title)}</a>
+        <span>{post.domain}</span>
+      </h1>
       <main>
         <Author name={post.author} time={post.created_utc} />
         {post.selftext_html &&
@@ -44,8 +47,9 @@ const Post = ({ post }) => {
       </main>
     </div>
   );
-};
-const PostView = ({ post, comments }) => {
+}
+
+function PostView({ post, comments }) {
   const cms = comments.map((cm, i) => {
     return <Comment key={i} comment={cm} />;
   });
@@ -53,11 +57,11 @@ const PostView = ({ post, comments }) => {
     <div className={styles.wrapper}>
       <Post post={post} />
       <div className={styles.content}>
-        <p style={{ fontSize: '1.5em' }}>{post.num_comments}留言</p>
+        <p style={{ fontSize: '1.5em' }}>{post.num_comments || 0}留言</p>
         {comments.length ? cms : <div>No comment</div>}
       </div>
     </div>
   );
-};
+}
 
 export default PostView;
