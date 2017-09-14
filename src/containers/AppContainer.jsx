@@ -85,6 +85,7 @@ class AppContainer extends React.Component {
                     handleDeleteReddit={this.handleDeleteReddit}
                     cachedHour={cachedHour}
                     setDefaultHome={this.setDefaultHome}
+                    fontSize={fontSize}
                     {...props}
                   />
                 );

@@ -12,11 +12,14 @@ class App extends React.Component {
       defaultHome = 'Home',
       handleAddReddit,
       cachedHour,
+      fontSize,
       match
     } = this.props;
     const sub = match.params.sub;
     return (
-      <div className={styles.wrapper}>
+      <div
+        style={{fontSize: `${fontSize * 0.25}em`}}
+        className={styles.wrapper}>
         <PannelContainer reddits={Object.keys(reddits)} />
         <div className={styles.container}>
           <Route
