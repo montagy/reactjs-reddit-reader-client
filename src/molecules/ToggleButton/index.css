@@ -3,11 +3,11 @@
 }
 .toggle {
   display: block;
-  padding: 0 0.5em;
-  width: 3em;
+  padding: 0 8px;
+  width: 48px;
   height: @width;
   cursor: pointer;
-  border-radius: 0.25em;
+  border-radius: 4px;
   transition: left 0.3s ease-in-out;
   position: fixed;
   top: 0;
@@ -16,13 +16,13 @@
   & > div {
     min-height: 2px;
     width: 80%;
-    margin: 0.5em auto;
+    margin: 8px auto;
     background-color: var(--primary);
     transition: all 0.5s var(--easing);
   }
 }
 .active {
-  left: calc(var(--pannelWidth) - 4em);
+  left: calc(var(--pannelWidth) - 64px);
   & > div {
     background-color: color(black l(+20%));
   }
