@@ -1,4 +1,4 @@
-import fetchReddit, { raceTimeout, fetchAllReddits } from './';
+import fetchReddit, { raceTimeout, fetchAllReddits, isValidReddit } from './';
 
 const timeResolve = time =>
   new Promise(resolve => {
@@ -16,7 +16,7 @@ describe('Api', () => {
   });
   it('fetch reddit success', () => {
     expect.assertions(1);
-    const result = fetchReddit(1);
+    const result = fetchReddit({});
     mockXHR.status = 200;
     mockXHR.readyState = 4;
     mockXHR.responseText = JSON.stringify('hello');
@@ -66,8 +66,22 @@ describe('Api', () => {
   });
   it('promise all waiting for all', () => {
     expect.assertions(1);
-    return Promise.all([Promise.resolve('a'), Promise.resolve('b'), Promise.resolve('c')]).then(res => {
+    return Promise.all([
+      Promise.resolve('a'),
+      Promise.resolve('b'),
+      Promise.resolve('c'),
+    ]).then(res => {
       expect(res.join('')).toBe('abc');
-    })
-  })
+    });
+  });
+  it('is valid sub reddit', () => {
+    expect.assertions(1);
+    const result = isValidReddit('valid');
+    mockXHR.readyState = 4;
+    mockXHR.status = 302;
+    mockXHR.onreadystatechange();
+    return result.catch(res => {
+      expect(res).toBe(false);
+    });
+  });
 });

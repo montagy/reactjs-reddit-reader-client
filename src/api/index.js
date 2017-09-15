@@ -1,5 +1,6 @@
 import noop from 'lodash/noop';
 import isPlainObject from 'lodash/isPlainObject';
+import isString from 'lodash/isString';
 const baseUrl = 'https://www.reddit.com/';
 const NETERROR = 999;
 const TIMEOUT = 998;
@@ -18,13 +19,32 @@ export function buildParams(params) {
   }
   return result.join('&');
 }
-function fetchReddit({ pathPiece, after, handleProgress, timeout }) {
+function fetchReddit({ pathPiece = [], after , handleProgress, timeout }) {
   return fetch({
     host: baseUrl,
     path: pathPiece.filter(r => r.trim).join('/') + '.json',
     params: { after },
     handleProgress,
     timeout,
+  });
+}
+export function isValidReddit(reddit) {
+  if (!isString(reddit)) return false;
+  return new Promise(function(resolve, reject) {
+    const req = new XMLHttpRequest();
+    req.open('HEAD', baseUrl + 'r/' + reddit + '.json');
+    req.timeout = 5000;
+    req.ontimeout = function() {
+      reject(createError('链接超时'), TIMEOUT);
+    };
+    req.onerror = function() {
+      reject(createError('网络链接错误'), NETERROR);
+    };
+    req.onreadystatechange = function handleStateChange() {
+      if (req.status === 200) return resolve(true);
+      return reject(false);
+    };
+    req.send();
   });
 }
 /**
@@ -37,6 +57,7 @@ export function fetch({
   host = '',
   path = '',
   params,
+  method = 'GET',
   timeout = 0,
   handleProgress = noop,
 }) {
@@ -44,7 +65,7 @@ export function fetch({
   const url = `${host}${path}?${encodedParams}`;
   return new Promise(function(resolve, reject) {
     const req = new XMLHttpRequest();
-    req.open('GET', url);
+    req.open(method, url);
     req.timeout = timeout;
     req.ontimeout = function() {
       reject(createError('网络链接超时，请检查网络或者设置更长的超时时间', TIMEOUT));
