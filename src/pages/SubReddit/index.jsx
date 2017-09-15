@@ -34,10 +34,15 @@ class RedditMain extends React.Component {
           <h1>{sub}</h1>
           <InlineForm onSubmit={onSubmit} />
         </header>
+        <div style={{ position: 'fixed', left: '50%', top: '50%' }}>
+          <Loading
+            active={loading}
+            style={{ width: '5em', height: '5em', borderWidth: '5px' }}
+          />
+        </div>
         <main>
           {summariesView}
         </main>
-        <Loading active={loading}/>
         <footer>
           <a onClick={this.goTop}>GO TOP</a>
           继续下拉刷新

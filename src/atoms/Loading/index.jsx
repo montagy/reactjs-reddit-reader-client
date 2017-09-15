@@ -1,18 +1,9 @@
 import React from 'react';
-import { bool } from 'prop-types';
 import styles from './index.css';
 import { toggle } from '../../hocs/toggle';
 
-Loading.propTypes = {
-  active: bool,
-};
-
-function Loading() {
-  return (
-    <div className={styles.loading}>
-      <div />
-    </div>
-  );
+function Loading({ ...props }) {
+  return <div className={styles.loading} {...props} />;
 }
 
 export default toggle(Loading);

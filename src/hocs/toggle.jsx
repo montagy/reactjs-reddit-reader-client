@@ -4,11 +4,11 @@ import React from 'react';
 mount a component if active, or null
 */
 export function toggle(Comp) {
-  function Toggle({ active }) {
+  function Toggle({ active, ...props }) {
     if (!active) {
       return null;
     }
-    return <Comp />
+    return <Comp {...props} />;
   }
   return Toggle;
 }

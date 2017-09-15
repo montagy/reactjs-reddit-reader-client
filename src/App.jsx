@@ -1,10 +1,10 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import { object, objectOf, string, number } from 'prop-types';
-import { Post } from './pages';
 import styles from './App.css';
 import RedditContainer from './containers/RedditContainer';
 import PannelContainer from './containers/PannelContainer';
+import PostContainer from './containers/PostContainer';
 
 App.propTyeps = {
   config: objectOf({
@@ -37,7 +37,7 @@ function App({ reddits, handleAddReddit, config, sub }) {
               {...props}
             />}
         />
-        <Route path={`/${sub}/:comment`} component={Post} />
+        <Route path={`/${sub}/:comment`} component={PostContainer} />
       </div>
     </div>
   );
