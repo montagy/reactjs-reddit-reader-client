@@ -22,7 +22,11 @@ function App({ reddits, handleAddReddit, config, sub }) {
       style={{ fontSize: `${fontSize * 0.25}em` }}
       className={styles.wrapper}
     >
-      <PannelContainer reddits={Object.keys(reddits)} />
+      <PannelContainer
+        reddits={reddits}
+        addReddit={handleAddReddit}
+        cachedHour={cachedHour}
+      />
       <div className={styles.container}>
         <Route
           path={'/' + sub}

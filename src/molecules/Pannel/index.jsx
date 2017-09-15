@@ -1,20 +1,27 @@
 import React from 'react';
-import { arrayOf, string } from 'prop-types';
+import { arrayOf, string, func, object } from 'prop-types';
 import styles from './index.css';
 import { Link } from 'react-router-dom';
 import { toggleWith } from '../../hocs/toggle';
 import FixedBottom from '../../templates/FixedBottom';
+import StatusButton from '../../atoms/StatusButton';
 
 Pannel.propTypes = {
-  reddits: arrayOf(string),
+  reddits: object,
+  addReddit: func,
 };
-function Pannel({ reddits, ...props }) {
-  const list = reddits.map(name => {
-    const realName = name === 'Home' ? '/' : `/${name}`;
+function Pannel({ reddits = {}, addReddit, cachedHour, ...props }) {
+  const list = Object.keys(reddits).map(name => {
+    const url = `/${name}`;
     return (
-      <Link to={{ pathname: realName }} key={name} className={styles.link}>
-        {name}
-      </Link>
+      <div className={styles.link} key={name}>
+        <Link to={{ pathname: url }}>
+          {name}
+        </Link>
+        <StatusButton reddit={reddits[name]} sub={name}
+          cachedHour={cachedHour}
+          addReddit={addReddit} />
+      </div>
     );
   });
   return (

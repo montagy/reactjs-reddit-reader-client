@@ -1,28 +1,45 @@
 import React from 'react';
+import { func, string, number, object } from 'prop-types';
+import fetchReddit from '../../api';
+import isEmpty from 'lodash/isEmpty';
+import { hoursAgo } from '../../utils';
 
-export const NORMAL = 1;
+export const NEED = 1;
 export const LOAD = 2;
 export const SUCCESS = 3;
 export const PAUSE = 4;
 export const FAIL = 5;
+export const ALREADY = 6;
 
 class StatusButton extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentStatus: this.props.status,
-    };
-  }
+  state = {
+    status: NEED,
+  };
+  static propTypes = {
+    sub: string.isRequired,
+    addReddit: func,
+    reddit: object,
+    cachedHour: number,
+  };
   handleStatus = () => {
-    const currentStatus = this.state.currentStatus;
-    if (currentStatus === SUCCESS) {
-      this.setState({ currentStatus: NORMAL });
-    }
-    if (currentStatus === PAUSE) {
-      this.setState({ currentStatus: NORMAL });
+    const status = this.state.status;
+    if (status === SUCCESS) {
+      this.setState({ status: ALREADY });
     }
   };
+  isNeedFetch = () => {
+    const { reddit, cachedHour } = this.props;
+    if (isEmpty(reddit.data) || hoursAgo(reddit.timestamp) > cachedHour) {
+      return true;
+    }
+    return false;
+  };
   componentDidMount() {
+    if (this.isNeedFetch()) {
+      this.setState({ status: NEED });
+    } else {
+      this.setState({ status: ALREADY });
+    }
     setTimeout(this.handleStatus, 2000);
   }
 
@@ -30,31 +47,44 @@ class StatusButton extends React.PureComponent {
     setTimeout(this.handleStatus, 2000);
   }
   handleClick = () => {
-    this.setState(prev => ({
-      currentStatus: Math.min(prev.currentStatus + 1, FAIL),
-    }));
+    if (this.state.status === NEED) {
+      const { sub, addReddit } = this.props;
+      this.setState({ status: LOAD });
+      fetchReddit({ pathPiece: ['r', sub] }).then(
+        json => {
+          addReddit(sub, json);
+          this.setState({ status: SUCCESS });
+        },
+        () => {
+          this.setState({ status: FAIL });
+        },
+      );
+    }
   };
   render() {
-    const { currentStatus } = this.state;
+    const { status } = this.state;
     let child;
-    switch (currentStatus) {
-      case NORMAL:
-        child = 'NORMAL';
+    switch (status) {
+      case ALREADY:
+        child = '已经缓存';
+        break;
+      case NEED:
+        child = '需要获取';
         break;
       case LOAD:
-        child = 'LOAD';
+        child = '获取中';
         break;
       case SUCCESS:
-        child = 'SUCCESS';
+        child = '获取成功';
         break;
       case PAUSE:
-        child = 'PAUSE';
+        child = '暂停中';
         break;
       case FAIL:
-        child = 'FAIL';
+        child = '获取失败';
         break;
       default:
-        child = 'NORMAL';
+        child = '需要获取';
         break;
     }
     return <button onClick={this.handleClick}>{child}</button>;
