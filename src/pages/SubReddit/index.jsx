@@ -6,54 +6,51 @@ import styles from './index.css';
 import { scrollTopSmooth } from '../../utils';
 import InlineForm from '../../molecules/InlineForm';
 
-class RedditMain extends React.Component {
-  goTop = e => {
-    e.preventDefault();
-    scrollTopSmooth(0, 300);
-  };
-  render() {
-    const {
-      summaries,
-      loading,
-      showFixedHeader,
-      error,
-      onSubmit,
-      sub,
-    } = this.props;
-    const summariesView = summaries.map(summary =>
-      <Summary key={summary.id} data={summary} />,
-    );
-    const cls = classNames({
-      [styles.fixedTop]: true,
-      [styles.active]: showFixedHeader,
-    });
-    return (
-      <section className={styles.wrapper}>
-        {error && <div className={styles.error}>{error}</div>}
-        <header>
-          <h1>{sub}</h1>
-          <InlineForm onSubmit={onSubmit} />
-        </header>
-        <div style={{ position: 'fixed', left: '50%', top: '50%' }}>
-          <Loading
-            active={loading}
-            style={{ width: '5em', height: '5em', borderWidth: '5px' }}
-          />
-        </div>
-        <main>
-          {summariesView}
-        </main>
-        <footer>
-          <a onClick={this.goTop}>GO TOP</a>
-          继续下拉刷新
-        </footer>
-        <header className={cls}>
-          <h1>{sub}</h1>
-          <InlineForm onSubmit={onSubmit} />
-        </header>
-      </section>
-    );
-  }
+function goTop(e) {
+  e.preventDefault();
+  scrollTopSmooth(0, 300);
+}
+function RedditMain({
+  summaries,
+  loading,
+  showFixedHeader,
+  error,
+  onSubmit,
+  sub,
+}) {
+  const summariesView = summaries.map(summary =>
+    <Summary key={summary.id} data={summary} />,
+  );
+  const cls = classNames({
+    [styles.fixedTop]: true,
+    [styles.active]: showFixedHeader,
+  });
+  return (
+    <section className={styles.wrapper}>
+      {error && <div className={styles.error}>{error}</div>}
+      <header>
+        <h1>{sub}</h1>
+        <InlineForm onSubmit={onSubmit} />
+      </header>
+      <main>
+        {summariesView}
+      </main>
+      <div style={{margin: '0 auto'}}>
+        <Loading
+          active={loading}
+          style={{ width: '5em', height: '5em', borderWidth: '5px' }}
+        />
+      </div>
+      <footer>
+        <a onClick={goTop}>GO TOP</a>
+        继续下拉刷新
+      </footer>
+      <header className={cls}>
+        <h1>{sub}</h1>
+        <InlineForm onSubmit={onSubmit} />
+      </header>
+    </section>
+  );
 }
 
 export default RedditMain;
