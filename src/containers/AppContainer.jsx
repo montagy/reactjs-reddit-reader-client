@@ -86,13 +86,9 @@ class AppContainer extends React.Component {
                 return (
                   <App
                     reddits={reddits}
-                    defaultHome={defaultHome}
                     handleAddReddit={this.handleAddReddit}
-                    handleDeleteReddit={this.handleDeleteReddit}
-                    cachedHour={cachedHour}
-                    setDefaultHome={this.setDefaultHome}
-                    fontSize={fontSize}
-                    {...props}
+                    config={config}
+                    sub={props.match.params.sub}
                   />
                 );
               }}

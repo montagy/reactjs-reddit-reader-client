@@ -31,6 +31,7 @@ const config = {
       },
     }),
     new ExtractTextPlugin('style.css'),
+    new webpack.NamedModulesPlugin(),
   ],
 
   resolve: {

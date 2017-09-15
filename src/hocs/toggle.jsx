@@ -14,7 +14,7 @@ export function toggle(Comp) {
 }
 
 /*
-mount a component with some extra props, or mount primary
+mount a component with some active props, or mount primary
 */
 export function toggleWith(Comp, props) {
   return function ToggleWith({ active, ...rest }) {
