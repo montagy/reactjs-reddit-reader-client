@@ -32,11 +32,16 @@ class AppContainer extends React.Component {
     });
     storage.write('reddit', reddits);
   };
+  cleanCache = () => {
+    this.setState({ reddits: {}});
+    storage.remove('reddit');
+  }
   setDefaultHome = value => {
     this.setConfig({ defaultHome: value})
   };
-  setFontSize = value => {
-    this.setConfig({ fontSize: value});
+  setFontSize = e => {
+    e.preventDefault();
+    this.setConfig({ fontSize: e.target.value});
   }
   setConfig = (patch) => {
     const config = { ...this.state.config, ...patch};
@@ -69,6 +74,7 @@ class AppContainer extends React.Component {
                     setDefaultHome={this.setDefaultHome}
                     fontSize={fontSize}
                     setFontSize={this.setFontSize}
+                    cleanCache={this.cleanCache}
                     {...props}
                   />
                 );

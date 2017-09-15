@@ -1,9 +1,8 @@
 import React from 'react';
 import { string, number, func } from 'prop-types';
-import InputRange from 'react-input-range';
 import styles from './index.css';
 import InlineForm from '../../molecules/InlineForm';
-import '!style-loader!css-loader!react-input-range/lib/css/index.css';
+import Button from '../../atoms/Button';
 
 Home.propTypes = {
   defaultHome: string,
@@ -18,6 +17,7 @@ function Home({
   setDefaultHome,
   fontSize,
   setFontSize,
+  cleanCache
 }) {
   return (
     <div className={styles.wrapper}>
@@ -45,14 +45,20 @@ function Home({
         </div>
         <div>
           <p>字体大小</p>
-          <div style={{ width: '50%' }}>
-            <InputRange
-              maxValue={5}
-              minValue={1}
+          <div>
+            <label>{fontSize}</label>
+            <input
+              type="range"
+              max={5}
+              min={1}
+              step={1}
               value={fontSize}
               onChange={setFontSize}
             />
           </div>
+        </div>
+        <div>
+          <Button onClick={cleanCache}>清空缓存</Button>
         </div>
       </div>
     </div>
