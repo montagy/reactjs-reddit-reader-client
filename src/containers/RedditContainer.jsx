@@ -84,10 +84,10 @@ class RedditContainer extends React.Component {
         error: msg,
       },
       () => {
-        //setTimeout(() => {
-          //this.setState({ error: '' });
-          //this.props.history.replace(this.props.defaultHome);
-        //}, 2000);
+        setTimeout(() => {
+          this.setState({ error: '' });
+          this.props.history.replace(this.props.defaultHome);
+        }, 2000);
       },
     );
   };

@@ -1,6 +1,7 @@
 import noop from 'lodash/noop';
 import isPlainObject from 'lodash/isPlainObject';
 import isString from 'lodash/isString';
+import isArray from 'lodash/isArray';
 const baseUrl = 'https://www.reddit.com/';
 const NETERROR = 999;
 const TIMEOUT = 998;
@@ -30,22 +31,12 @@ function fetchReddit({ pathPiece = [], after , handleProgress, timeout }) {
 }
 export function isValidReddit(reddit) {
   if (!isString(reddit)) return false;
-  return new Promise(function(resolve, reject) {
-    const req = new XMLHttpRequest();
-    req.open('HEAD', baseUrl + 'r/' + reddit + '.json');
-    req.timeout = 5000;
-    req.ontimeout = function() {
-      reject(createError('链接超时'), TIMEOUT);
-    };
-    req.onerror = function() {
-      reject(createError('网络链接错误'), NETERROR);
-    };
-    req.onreadystatechange = function handleStateChange() {
-      if (req.status === 200) return resolve(true);
-      return reject(false);
-    };
-    req.send();
-  });
+  return fetch({
+    host: baseUrl,
+    path: 'r/' + reddit,
+    method: 'HEAD',
+    timeout: 5000,
+  }).then(() => Promise.resolve(true), () => Promise.reject(false));
 }
 /**
   *Convenient fetch build on XMLHttpRequest
@@ -103,6 +94,9 @@ export default fetchReddit;
   *time {Number} unit is ms
 */
 export function raceTimeout(promises, timeout) {
+  if (!isArray(promises)) {
+    throw new Error('need array of Promise!');
+  }
   const timer = new Promise((resolve, reject) => {
     setTimeout(function() {
       reject(`timeout: ${timeout}ms`);
