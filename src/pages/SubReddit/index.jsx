@@ -5,6 +5,7 @@ import Loading from '../../atoms/Loading';
 import styles from './index.css';
 import { scrollTopSmooth } from '../../utils';
 import InlineForm from '../../molecules/InlineForm';
+import Affix from '../../molecules/Affix';
 
 function goTop(e) {
   e.preventDefault();
@@ -41,10 +42,9 @@ function RedditMain({
           style={{ width: '5em', height: '5em', borderWidth: '5px' }}
         />
       </div>
-      <footer>
+      <Affix>
         <a onClick={goTop}>GO TOP</a>
-        继续下拉刷新
-      </footer>
+      </Affix>
       <header className={cls}>
         <h1>{sub}</h1>
         <InlineForm onSubmit={onSubmit} />
