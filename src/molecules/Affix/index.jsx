@@ -19,7 +19,7 @@ class Affix extends Component {
     window.removeEventListener('scroll', this.onScroll);
   }
   render() {
-    const { children } = this.props;
+    const { children, ...props } = this.props;
     const { active } = this.state;
     const style = {
       active: {
@@ -33,7 +33,7 @@ class Affix extends Component {
       },
     };
     return (
-      <div style={active ? style.active : style.notActive}>
+      <div style={active ? style.active : style.notActive} {...props}>
         {children}
       </div>
     );

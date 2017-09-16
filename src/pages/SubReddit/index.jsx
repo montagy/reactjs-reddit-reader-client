@@ -24,7 +24,7 @@ function RedditMain({
   );
   const cls = classNames({
     [styles.fixedTop]: true,
-    [styles.active]: showFixedHeader,
+    [styles.hidden]: !showFixedHeader,
   });
   return (
     <section className={styles.wrapper}>
@@ -42,7 +42,7 @@ function RedditMain({
           style={{ width: '5em', height: '5em', borderWidth: '5px' }}
         />
       </div>
-      <Affix>
+      <Affix className={styles.affix}>
         <a onClick={goTop}>GO TOP</a>
       </Affix>
       <header className={cls}>
