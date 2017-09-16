@@ -28,6 +28,7 @@
     font-size: 1.5em;
     padding: 0.5em;
     transition: all 0.3s linear;
+    max-width: 50%;
     &:not(:last-of-type) {
       margin-bottom: 0.5em;
     }

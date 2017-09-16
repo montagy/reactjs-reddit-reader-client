@@ -41,7 +41,7 @@ export default class PannelContainer extends React.Component {
           reddits={reddits}
           active={showPannel}
         />
-        <ToggleButton active={showPannel} handleToggle={this.togglePannel} />
+        <ToggleButton active={showPannel} onClick={this.togglePannel} />
       </div>
     );
   }

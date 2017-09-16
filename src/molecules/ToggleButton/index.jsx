@@ -7,9 +7,9 @@ ToggleButton.propTypes = {
   handleToggle: func,
 };
 //TODO use svg icon instead
-function ToggleButton({ handleToggle, ...props }) {
+function ToggleButton(props) {
   return (
-    <div onClick={handleToggle} className={styles.toggle} {...props}>
+    <div className={styles.toggle} {...props}>
       <div />
       <div />
       <div />

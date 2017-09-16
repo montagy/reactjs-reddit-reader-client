@@ -1,5 +1,5 @@
 import React from 'react';
-import { arrayOf, string, func, object } from 'prop-types';
+import { number, func, object } from 'prop-types';
 import styles from './index.css';
 import { Link } from 'react-router-dom';
 import { toggleWith } from '../../hocs/toggle';
@@ -9,6 +9,7 @@ import StatusButton from '../../atoms/StatusButton';
 Pannel.propTypes = {
   reddits: object,
   addReddit: func,
+  cachedHour: number,
 };
 function Pannel({ reddits = {}, addReddit, cachedHour, ...props }) {
   const list = Object.keys(reddits).map(name => {

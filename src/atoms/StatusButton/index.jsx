@@ -27,22 +27,22 @@ class StatusButton extends React.PureComponent {
       this.setState({ status: ALREADY });
     }
   };
-  isNeedFetch = () => {
-    const { reddit, cachedHour } = this.props;
+  isNeedFetch = (props) => {
+    const { reddit, cachedHour } = props;
     if (isEmpty(reddit.data) || hoursAgo(reddit.timestamp) > cachedHour) {
-      return true;
-    }
-    return false;
-  };
-  componentDidMount() {
-    if (this.isNeedFetch()) {
       this.setState({ status: NEED });
     } else {
       this.setState({ status: ALREADY });
     }
+  };
+  componentDidMount() {
+    this.isNeedFetch(this.props);
     setTimeout(this.handleStatus, 2000);
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.isNeedFetch(nextProps);
+  }
   componentDidUpdate() {
     setTimeout(this.handleStatus, 2000);
   }
