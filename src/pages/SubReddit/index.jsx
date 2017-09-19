@@ -36,10 +36,15 @@ function RedditMain({
       <main>
         {summariesView}
       </main>
-      <div style={{margin: '0 auto'}}>
+      <div>
         <Loading
           active={loading}
-          style={{ width: '5em', height: '5em', borderWidth: '5px' }}
+          style={{
+            width: '5em',
+            height: '5em',
+            borderWidth: '5px',
+            margin: '0 auto',
+          }}
         />
       </div>
       <Affix className={styles.affix}>

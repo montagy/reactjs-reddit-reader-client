@@ -1,8 +1,6 @@
 .wrapper {
   max-width: 1368px;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
   min-height: 100vh;
   & > header {
     text-transform: capitalize;
@@ -20,7 +18,7 @@
     }
   }
   & > main {
-    flex-grow: 1;
+    min-height: 10em;
     background-color: var(--baseColor);
     box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.2);
     padding: 1em 0 1em 3em;

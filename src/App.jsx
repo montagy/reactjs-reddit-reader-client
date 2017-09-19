@@ -5,7 +5,9 @@ import RedditContainer from './containers/RedditContainer';
 import PannelContainer from './containers/PannelContainer';
 import PostContainer from './containers/PostContainer';
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'react-router-dom';
 
+@withRouter
 @inject('config')
 @observer
 class App extends React.Component {
