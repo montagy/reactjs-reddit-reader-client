@@ -1,9 +1,9 @@
 import { observable, reaction, action } from 'mobx';
 import storage from '../storage';
 class Config {
-  @observable defaultHome;
-  @observable cachedHour;
-  @observable fontSize;
+  @observable defaultHome = '';
+  @observable cachedHour = 2;
+  @observable fontSize = 3;
   constructor() {
     const config = storage.read('reddit_config');
     if (config) {

@@ -5,7 +5,10 @@ import shallowEqual from 'fbjs/lib/shallowEqual';
 import fetchReddit from '../api';
 import RedditMain from '../pages/SubReddit';
 import { isScrollAtEnd, scrollToEnd, hoursAgo } from '../utils';
+import { inject, observer} from 'mobx-react';
 
+@inject('config')
+@observer
 class RedditContainer extends React.Component {
   state = {
     loading: true,
@@ -86,7 +89,7 @@ class RedditContainer extends React.Component {
       () => {
         setTimeout(() => {
           this.setState({ error: '' });
-          this.props.history.replace(this.props.defaultHome);
+          this.props.history.replace(this.props.config.defaultHome);
         }, 2000);
       },
     );
@@ -95,7 +98,8 @@ class RedditContainer extends React.Component {
     this.props.history.push(`/${reddit}`);
   };
   doUpdate() {
-    const { reddit, match, addReddit, cachedHour } = this.props;
+    const { reddit, match, addReddit } = this.props;
+    const { cachedHour } = this.props.config
     const name = match.url.slice(1);
     if (isEmpty(reddit.data) || hoursAgo(reddit.timestamp) >= cachedHour) {
       fetchReddit({ pathPiece: ['r', name] }).then(json => {
