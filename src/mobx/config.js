@@ -20,15 +20,15 @@ class Config {
       data => storage.write('reddit_config', data),
     );
   }
-  @action
+  @action.bound
   setDefaultHome(value) {
     this.defaultHome = value;
   }
-  @action
+  @action.bound
   setCachedHour(value) {
     this.cachedHour = value;
   }
-  @action
+  @action.bound
   setFontSize(value) {
     this.fontSize = value;
   }

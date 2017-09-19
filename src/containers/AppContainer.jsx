@@ -3,14 +3,12 @@ import { Route, HashRouter, Redirect, Switch } from 'react-router-dom';
 import Home from '../pages/Home';
 import App from '../App';
 import storage from '../storage';
+import { inject, observer } from 'mobx-react';
 
+@inject('config')
+@observer
 class AppContainer extends React.Component {
   state = {
-    config: storage.read('reddit_config') || {
-      defaultHome: '',
-      cachedHour: 2,
-      fontSize: 1,
-    },
     reddits: storage.read('reddit') || {},
   };
   handleAddReddit = (name, data) => {
@@ -33,24 +31,12 @@ class AppContainer extends React.Component {
     storage.write('reddit', reddits);
   };
   cleanCache = () => {
-    this.setState({ reddits: {}});
+    this.setState({ reddits: {} });
     storage.remove('reddit');
-  }
-  setDefaultHome = value => {
-    this.setConfig({ defaultHome: value})
   };
-  setFontSize = e => {
-    e.preventDefault();
-    this.setConfig({ fontSize: e.target.value});
-  }
-  setConfig = (patch) => {
-    const config = { ...this.state.config, ...patch};
-    this.setState({ config });
-    storage.write('reddit_config', config)
-  }
   render() {
-    const { reddits, config } = this.state;
-    const { defaultHome, cachedHour, fontSize } = config;
+    const { reddits } = this.state;
+    const { defaultHome } = this.props.config;
     return (
       <HashRouter>
         <div>
@@ -67,17 +53,7 @@ class AppContainer extends React.Component {
             <Route
               path="/site/config"
               render={props => {
-                return (
-                  <Home
-                    defaultHome={defaultHome}
-                    cachedHour={cachedHour}
-                    setDefaultHome={this.setDefaultHome}
-                    fontSize={fontSize}
-                    setFontSize={this.setFontSize}
-                    cleanCache={this.cleanCache}
-                    {...props}
-                  />
-                );
+                return <Home cleanCache={this.cleanCache} {...props} />;
               }}
             />
             <Route
@@ -87,7 +63,6 @@ class AppContainer extends React.Component {
                   <App
                     reddits={reddits}
                     handleAddReddit={this.handleAddReddit}
-                    config={config}
                     sub={props.match.params.sub}
                   />
                 );
