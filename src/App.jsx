@@ -8,22 +8,19 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 
 @withRouter
-@inject('config')
+@inject('config', 'reddits')
 @observer
 class App extends React.Component {
   render() {
     const { defaultHome = 'Home', cachedHour, fontSize } = this.props.config;
-    const { reddits, handleAddReddit, sub } = this.props;
+    const { reddits, add } = this.props.reddits;
+    const sub = this.props.match.params.sub;
     return (
       <div
         style={{ fontSize: `${fontSize * 0.25}em` }}
         className={styles.wrapper}
       >
-        <PannelContainer
-          reddits={reddits}
-          addReddit={handleAddReddit}
-          cachedHour={cachedHour}
-        />
+        <PannelContainer />
         <div className={styles.container}>
           <Route
             path={'/' + sub}
@@ -32,7 +29,7 @@ class App extends React.Component {
               <RedditContainer
                 reddit={reddits[sub] || {}}
                 sub={sub}
-                addReddit={handleAddReddit}
+                addReddit={add}
                 cachedHour={cachedHour}
                 defaultHome={defaultHome}
                 {...props}

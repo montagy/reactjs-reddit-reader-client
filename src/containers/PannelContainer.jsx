@@ -1,14 +1,13 @@
 import React from 'react';
-import { arrayOf, string, object } from 'prop-types';
 import Pannel from '../molecules/Pannel';
 import ToggleButton from '../molecules/ToggleButton';
+import { inject, observer} from 'mobx-react';
 
+@inject('config', 'reddits')
+@observer
 export default class PannelContainer extends React.Component {
   state = {
     showPannel: false,
-  };
-  static propTypes = {
-    reddits: object,
   };
   togglePannel = e => {
     e.preventDefault();
@@ -31,12 +30,13 @@ export default class PannelContainer extends React.Component {
     window.removeEventListener('keydown', this.handleEsc);
   }
   render() {
-    const { reddits, addReddit, cachedHour } = this.props;
+    const { reddits, add} = this.props.reddits;
+    const { cachedHour } = this.props.config;
     const { showPannel } = this.state;
     return (
       <div>
         <Pannel
-          addReddit={addReddit}
+          addReddit={add}
           cachedHour={cachedHour}
           reddits={reddits}
           active={showPannel}
