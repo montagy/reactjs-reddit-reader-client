@@ -50,12 +50,7 @@ class AppContainer extends React.Component {
                   : <Redirect to="/site/config" />;
               }}
             />
-            <Route
-              path="/site/config"
-              render={props => {
-                return <Home cleanCache={this.cleanCache} {...props} />;
-              }}
-            />
+            <Route path="/site/config" component={Home} />
             <Route
               path="/:sub"
               render={props => {

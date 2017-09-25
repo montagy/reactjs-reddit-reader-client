@@ -1,12 +1,11 @@
 import React from 'react';
-import { string, number, func } from 'prop-types';
 import styles from './index.css';
 import InlineForm from '../../molecules/InlineForm';
 import Button from '../../atoms/Button';
 import { observer, inject } from 'mobx-react';
 
 //TODO defaultHome 的有效性检测
-@inject('config')
+@inject('config', 'reddits')
 @observer
 class Home extends React.Component {
   state = {
@@ -24,7 +23,7 @@ class Home extends React.Component {
       fontSize,
       setFontSize,
     } = this.props.config;
-    const { cleanCache } = this.props;
+    const { cleanCache } = this.props.reddits;
     return (
       <div className={styles.wrapper}>
         <header>
