@@ -1,18 +1,12 @@
 import React from 'react';
-import { number, func, object } from 'prop-types';
 import styles from './index.css';
 import { Link } from 'react-router-dom';
 import { toggleWith } from '../../hocs/toggle';
 import FixedBottom from '../../templates/FixedBottom';
 import StatusButton from '../../atoms/StatusButton';
 
-Pannel.propTypes = {
-  reddits: object,
-  addReddit: func,
-  cachedHour: number,
-};
-function Pannel({ reddits = {}, addReddit, cachedHour, ...props }) {
-  const list = Object.keys(reddits).map(name => {
+function Pannel({ reddits, addReddit, cachedHour, ...props }) {
+  const list = reddits.keys().map(name => {
     const url = `/${name}`;
     return (
       <div className={styles.link} key={name}>

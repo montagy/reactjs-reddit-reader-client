@@ -9,7 +9,6 @@ import {
 import isEmpty from 'lodash/isEmpty';
 import config from './config';
 import fetchReddit from '../api';
-import throttle from 'lodash/throttle';
 import { isScrollAtEnd, hoursAgo } from '../utils';
 import reddits from './reddits';
 
@@ -23,19 +22,17 @@ class RedditStore {
     when(
       () => this.error,
       () => {
-        setTimeout(() => {
+        setTimeout(action(() => {
           this.error = '';
-        }, 2000);
+        }), 2000);
       },
     );
-    /*
-     *when(
-     *  () => this.currentReddit,
-     *  () => {
-     *    this.update();
-     *  },
-     *);
-     */
+    when(
+      () => isEmpty(this.reddit) && this.currentReddit,
+      () => {
+        this.update();
+      },
+    );
   }
   @computed
   get reddit() {
@@ -43,12 +40,15 @@ class RedditStore {
   }
   @computed
   get nextPageId() {
-    return (this.reddit && this.reddit.data.data.after) || '';
+    return (
+      (this.reddit && this.reddit.data && this.reddit.data.data.after) || ''
+    );
   }
   @computed
   get summaries() {
     return (
       (this.reddit &&
+        this.reddit.data &&
         this.reddit.data.data.children.map(child => child.data)) ||
       []
     );
@@ -66,76 +66,64 @@ class RedditStore {
     ) {
       fetchReddit({ pathPiece: ['r', this.currentReddit] })
         .then(
-          json => {
-            runInAction(() => {
-              this.addReddit(this.currentReddit, json);
-            });
-          },
-          err => {
-            runInAction(() => {
-              this.error = err.toString();
-            });
-          },
+          action(json => {
+            reddits.add(this.currentReddit, json);
+          }),
         )
-        .finally(() => {
-          runInAction(() => {
+        .catch(
+          action(err => {
+            this.error = err.toString();
+          }),
+        )
+        .finally(
+          action(() => {
             this.loading = false;
-          });
-        });
+          }),
+        );
     } else {
       this.loading = false;
     }
   }
   @action.bound
-  handleScroll() {
-    return throttle(
-      e => {
-        const { loading, nextPageId, currentReddit, showFixedHeader } = this;
-        e.preventDefault();
-        if (isScrollAtEnd() && !loading) {
+  handleScroll(e) {
+    const { loading, nextPageId, currentReddit, showFixedHeader } = this;
+    e.preventDefault();
+    if (isScrollAtEnd() && !loading) {
+      this.loading = true;
+      fetchReddit({
+        pathPiece: ['r', currentReddit],
+        after: nextPageId,
+      })
+        .then(json => {
+          this.shouldCombine = true;
+          const newChildren = json.data.children;
+          const oldChildren = this.reddit.data.data.children;
+          const newReddit = { ...this.reddit };
+          newReddit.data.children = { ...oldChildren, ...newChildren };
+          newReddit.data.data.after = json.data.after;
+          console.log(newChildren, oldChildren, newReddit);
           runInAction(() => {
-            this.loading = true;
+            reddits.reddits.set(currentReddit, newReddit);
           });
-          fetchReddit({
-            pathPiece: ['r', currentReddit],
-            after: nextPageId,
-          })
-            .then(
-              json => {
-                runInAction(() => {
-                  this.shouldCombine = true;
-                  const newChildren = json.data.children;
-                  const oldChildren = this.reddit.data.data.children;
-                  const newReddit = { ...this.reddit };
-                  newReddit.data.children = oldChildren.concat(newChildren);
-                  reddits.reddits.set(currentReddit, newReddit);
-                });
-              },
-              err => {
-                runInAction(() => {
-                  this.error = err.toString();
-                });
-              },
-            )
-            .finally(() => {
-              runInAction(() => {
-                this.loading = false;
-                this.shouldCombine = false;
-              });
-            });
-        }
-        if (
-          (e.target.scrollingElement.scrollTop > 200 && !showFixedHeader) ||
-          (e.target.scrollingElement.scrollTop <= 200 && showFixedHeader)
-        ) {
+        })
+        .catch(
+          action(err => {
+            this.error = err.toString();
+          }),
+        )
+        .finally(() => {
+          this.shouldCombine = false;
           runInAction(() => {
-            this.showFixedHeader = !showFixedHeader;
+            this.loading = false;
           });
-        }
-      },
-      500,
-      { leading: true },
-    );
+        });
+    }
+    if (
+      (e.target.scrollingElement.scrollTop > 200 && !showFixedHeader) ||
+      (e.target.scrollingElement.scrollTop <= 200 && showFixedHeader)
+    ) {
+      this.showFixedHeader = !showFixedHeader;
+    }
   }
 }
 

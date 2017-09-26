@@ -1,8 +1,8 @@
 import React from 'react';
-import { func, string, number, object } from 'prop-types';
 import fetchReddit from '../../api';
 import isEmpty from 'lodash/isEmpty';
 import { hoursAgo } from '../../utils';
+import { observer, inject} from 'mobx-react';
 
 export const NEED = 1;
 export const LOAD = 2;
@@ -11,15 +11,11 @@ export const PAUSE = 4;
 export const FAIL = 5;
 export const ALREADY = 6;
 
+@inject('config', 'reddits', 'redditStore')
+@observer
 class StatusButton extends React.PureComponent {
   state = {
     status: NEED,
-  };
-  static propTypes = {
-    sub: string.isRequired,
-    addReddit: func,
-    reddit: object,
-    cachedHour: number,
   };
   handleStatus = () => {
     const status = this.state.status;
@@ -27,8 +23,9 @@ class StatusButton extends React.PureComponent {
       this.setState({ status: ALREADY });
     }
   };
-  isNeedFetch = (props) => {
-    const { reddit, cachedHour } = props;
+  isNeedFetch = () => {
+    const { cachedHour } = this.props.config;
+    const { reddit } = this.props.redditStore;
     if (isEmpty(reddit.data) || hoursAgo(reddit.timestamp) > cachedHour) {
       this.setState({ status: NEED });
     } else {
@@ -36,12 +33,12 @@ class StatusButton extends React.PureComponent {
     }
   };
   componentDidMount() {
-    this.isNeedFetch(this.props);
+    this.isNeedFetch();
     setTimeout(this.handleStatus, 2000);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.isNeedFetch(nextProps);
+    this.isNeedFetch();
   }
   componentDidUpdate() {
     setTimeout(this.handleStatus, 2000);

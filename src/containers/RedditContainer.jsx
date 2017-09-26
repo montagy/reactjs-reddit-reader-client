@@ -1,137 +1,25 @@
 import React from 'react';
-import throttle from 'lodash/throttle';
-import isEmpty from 'lodash/isEmpty';
-import shallowEqual from 'fbjs/lib/shallowEqual';
-import fetchReddit from '../api';
 import RedditMain from '../pages/SubReddit';
-import { isScrollAtEnd, scrollToEnd, hoursAgo } from '../utils';
-import { inject, observer} from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 
-@inject('config')
+@inject('config', 'redditStore', 'reddits')
 @observer
 class RedditContainer extends React.Component {
-  state = {
-    loading: true,
-    summaries: [],
-    nextPageId: '',
-    showFixedHeader: false,
-    error: '',
-  };
-  toggleFixedHeader = () => {
-    this.setState(prev => ({
-      showFixedHeader: !prev.showFixedHeader,
-    }));
-  };
-  handleScroll = throttle(
-    e => {
-      e.preventDefault();
-      if (isScrollAtEnd() && !this.state.loading) {
-        this.setState(
-          {
-            loading: true,
-          },
-          scrollToEnd,
-        );
-        fetchReddit({
-          pathPiece: ['r', this.props.match.url.slice(1)],
-          after: this.state.nextPageId,
-        }).then(this.combineOld, this.updateReject);
-      }
-      if (
-        e.target.scrollingElement.scrollTop > 200 &&
-        !this.state.showFixedHeader
-      ) {
-        this.setState({ showFixedHeader: true });
-      }
-      if (
-        e.target.scrollingElement.scrollTop <= 200 &&
-        this.state.showFixedHeader
-      ) {
-        this.setState({ showFixedHeader: false });
-      }
-    },
-    500,
-    { leading: true },
-  );
-  updateResolve = shouldCombine => json => {
-    const newData = json.data.children.map(child => child.data);
-    this.setState(
-      prevState => {
-        const result = shouldCombine
-          ? prevState.summaries.concat(newData)
-          : newData;
-        return {
-          summaries: result,
-          nextPageId: json.data.after,
-        };
-      },
-      () => {
-        this.setState({
-          loading: false,
-        });
-      },
-    );
-  };
-  updateReject = error => {
-    this.handleError(error.toString());
-    this.setState({
-      loading: false,
-    });
-  };
-  replaceOld = this.updateResolve(false);
-  combineOld = this.updateResolve(true);
-
-  handleError = msg => {
-    this.setState(
-      {
-        error: msg,
-      },
-      () => {
-        setTimeout(() => {
-          this.setState({ error: '' });
-          this.props.history.replace(this.props.config.defaultHome);
-        }, 2000);
-      },
-    );
-  };
   directTo = reddit => {
     this.props.history.push(`/${reddit}`);
   };
-  doUpdate() {
-    const { reddit, match, addReddit } = this.props;
-    const { cachedHour } = this.props.config
-    const name = match.url.slice(1);
-    if (isEmpty(reddit.data) || hoursAgo(reddit.timestamp) >= cachedHour) {
-      fetchReddit({ pathPiece: ['r', name] }).then(json => {
-        this.replaceOld(json);
-        addReddit(name, json);
-      }, this.updateReject);
-    } else {
-      this.setState({
-        summaries: reddit.data.data.children.map(child => child.data),
-        nextPageId: reddit.data.data.after,
-        loading: false,
-      });
-    }
+  componentWillMount() {
+    this.props.redditStore.setCurrentReddit(this.props.sub);
   }
-  shouldComponentUpdate(nextProps, nextState) {
-    return (
-      !shallowEqual(this.props.location, nextProps.location) ||
-      !shallowEqual(this.state, nextState)
-    );
+  componentWillReceiveProps(nextProps) {
+    this.props.redditStore.setCurrentReddit(nextProps.sub);
   }
   componentDidMount() {
-    this.doUpdate();
-    window.addEventListener('scroll', this.handleScroll, false);
-  }
-  // 全部初始化了重新fetch
-  componentWillReceiveProps(nextProps) {
-    if (!shallowEqual(this.props.location, nextProps.location)) {
-      this.setState(
-        { loading: true, summaries: [], nextPageId: '' },
-        this.doUpdate,
-      );
-    }
+    window.addEventListener(
+      'scroll',
+      this.props.redditStore.handleScroll,
+      false,
+    );
   }
   componentDidUpdate(prevProps) {
     if (prevProps.location.pathname !== this.props.location.pathname) {
@@ -139,10 +27,15 @@ class RedditContainer extends React.Component {
     }
   }
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('scroll', this.props.redditStore.handleScroll);
   }
   render() {
-    const { summaries, loading, showFixedHeader, error } = this.state;
+    const {
+      summaries,
+      loading,
+      showFixedHeader,
+      error,
+    } = this.props.redditStore;
     const { sub } = this.props;
     return (
       <RedditMain

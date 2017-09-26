@@ -1,22 +1,24 @@
-import { observable, action } from 'mobx';
+import { observable, action, toJS } from 'mobx';
 import storage from '../storage';
 
 class Reddits {
-  @observable reddits = new Map();
+  @observable reddits = observable.map();
   constructor() {
     const reddits = storage.read('reddit');
     if (reddits) this.reddits.merge(reddits);
   }
   @action.bound
   add(name, data) {
-    this.reddtis.set(name, {
+    this.reddits.set(name, {
       timestamp: new Date().getTime(),
       data,
     });
+    this.save();
   }
   @action.bound
   delete(name){
     this.reddtis.delete(name);
+    this.save()
   }
   @action.bound
   cleanCache() {
@@ -27,14 +29,8 @@ class Reddits {
     return this.reddits.get(name);
   }
   save() {
-    storage.write('reddit', this.reddits);
+    storage.write('reddit', toJS(this.reddits));
   }
-  /*
-   *@action.bound
-   *update(name, data) {
-   *  const old = this.reddits.get(name);
-   *}
-   */
 }
 
 export default new Reddits();

@@ -6,6 +6,13 @@ const baseUrl = 'https://www.reddit.com/';
 const NETERROR = 999;
 const TIMEOUT = 998;
 
+Promise.prototype.finally = function (callback) {
+  let P = this.constructor;
+  return this.then(
+    value  => P.resolve(callback()).then(() => value),
+    reason => P.resolve(callback()).then(() => { throw reason })
+  );
+};
 function createError(msg, code) {
   const error = new Error(msg);
   if (code) error.code = code;
