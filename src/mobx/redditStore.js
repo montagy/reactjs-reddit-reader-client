@@ -22,13 +22,17 @@ class RedditStore {
     when(
       () => this.error,
       () => {
-        setTimeout(action(() => {
-          this.error = '';
-        }), 2000);
+        setTimeout(
+          action(() => {
+            this.error = '';
+          }),
+          2000,
+        );
       },
     );
     when(
-      () => isEmpty(this.reddit) && this.currentReddit,
+      () =>
+        isEmpty(this.reddit) && isEmpty(this.reddit.data) && this.currentReddit,
       () => {
         this.update();
       },
