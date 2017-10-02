@@ -8,20 +8,18 @@ import { observer, inject } from 'mobx-react';
 @inject('config', 'reddits')
 @observer
 class Home extends React.Component {
-  state = {
-    hour: '',
+  hourSubmit = e => {
+    this.props.config.setCachedHour(e.target.value);
   };
-  handleHour = e => {
-    this.setState({ hour: +e.target.value });
-  };
+  fontSizeSubmit = e => {
+    this.props.config.setFontSize(e.target.value);
+  }
   render() {
     const {
       defaultHome,
       setDefaultHome,
       cachedHour,
-      setCachedHour,
       fontSize,
-      setFontSize,
     } = this.props.config;
     const { cleanCache } = this.props.reddits;
     return (
@@ -37,20 +35,14 @@ class Home extends React.Component {
           <div>
             <p>缓存{cachedHour}小时</p>
             <div>
-              <form
-                onSubmit={e => {
-                  e.preventDefault();
-                  setCachedHour(this.state.hour);
-                }}
-                className={styles.lineForm}
-              >
-                <input
-                  type="text"
-                  onChange={this.handleHour}
-                  value={this.state.hour}
-                />
-                <button type="submit">提交</button>
-              </form>
+              <input
+                type="range"
+                max={12}
+                min={0}
+                step={1}
+                value={cachedHour}
+                onChange={this.hourSubmit}
+              />
             </div>
           </div>
           <div>
@@ -63,9 +55,7 @@ class Home extends React.Component {
                 min={1}
                 step={1}
                 value={fontSize}
-                onChange={e => {
-                  setFontSize(e.target.value);
-                }}
+                onChange={this.fontSizeSubmit}
               />
             </div>
           </div>
