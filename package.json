@@ -34,6 +34,7 @@
     "identity-obj-proxy": "^3.0.0",
     "immutable": "^3.8.1",
     "jest-cli": "^20.0.4",
+    "mobx-react-devtools": "^4.2.15",
     "postcss": "^6.0.8",
     "postcss-cssnext": "^3.0.2",
     "postcss-loader": "^2.0.6",

@@ -1,6 +1,7 @@
 import React from 'react';
 import RedditMain from '../pages/SubReddit';
 import { inject, observer } from 'mobx-react';
+import debounce from 'lodash/debounce';
 
 @inject('config', 'redditStore', 'reddits')
 @observer
@@ -8,18 +9,29 @@ class RedditContainer extends React.Component {
   directTo = reddit => {
     this.props.history.push(`/${reddit}`);
   };
+  handleScroll = debounce(
+    e => {
+      const showFixedHeader = this.props.redditStore.showFixedHeader;
+      e.preventDefault();
+      this.props.redditStore.mergeSummaries();
+      if (
+        (e.target.scrollingElement.scrollTop > 200 && !showFixedHeader) ||
+        (e.target.scrollingElement.scrollTop <= 200 && showFixedHeader)
+      ) {
+        this.props.redditStore.toggleHeader();
+      }
+    },
+    200,
+    { leading: true },
+  );
   componentWillMount() {
-    this.props.redditStore.setCurrentReddit(this.props.sub);
+    this.props.redditStore.update(this.props.sub);
   }
   componentWillReceiveProps(nextProps) {
-    this.props.redditStore.setCurrentReddit(nextProps.sub);
+    this.props.redditStore.update(nextProps.sub);
   }
   componentDidMount() {
-    window.addEventListener(
-      'scroll',
-      this.props.redditStore.handleScroll,
-      false,
-    );
+    window.addEventListener('scroll', this.handleScroll, false);
   }
   componentDidUpdate(prevProps) {
     if (prevProps.location.pathname !== this.props.location.pathname) {
@@ -27,14 +39,18 @@ class RedditContainer extends React.Component {
     }
   }
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.props.redditStore.handleScroll);
+    window.removeEventListener('scroll', this.handleScroll);
+  }
+  handleScroll(e) {
+    e.preventDefault();
+    throttle();
   }
   render() {
     const {
-      summaries,
       loading,
       showFixedHeader,
       error,
+      summaries,
     } = this.props.redditStore;
     const { sub } = this.props;
     return (

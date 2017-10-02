@@ -1,11 +1,11 @@
-import { observable, action, toJS } from 'mobx';
+import { observable, action, toJS, } from 'mobx';
 import storage from '../storage';
 
 class Reddits {
-  @observable reddits = observable.map();
+  @observable reddits;
   constructor() {
-    const reddits = storage.read('reddit');
-    if (reddits) this.reddits.merge(reddits);
+    const reddits = storage.read('reddit') || {};
+    this.reddits = observable.shallowMap(reddits);
   }
   @action.bound
   add(name, data) {
@@ -16,9 +16,9 @@ class Reddits {
     this.save();
   }
   @action.bound
-  delete(name){
+  delete(name) {
     this.reddtis.delete(name);
-    this.save()
+    this.save();
   }
   @action.bound
   cleanCache() {

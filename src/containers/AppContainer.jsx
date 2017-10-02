@@ -3,6 +3,7 @@ import { Route, HashRouter, Redirect, Switch } from 'react-router-dom';
 import Home from '../pages/Home';
 import App from '../App';
 import { inject, observer } from 'mobx-react';
+import DevTools from 'mobx-react-devtools';
 
 @inject('config')
 @observer
@@ -12,6 +13,7 @@ class AppContainer extends React.Component {
     return (
       <HashRouter>
         <div>
+          <DevTools />
           <Switch>
             <Route
               exact

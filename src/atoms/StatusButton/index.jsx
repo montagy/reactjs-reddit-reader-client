@@ -25,7 +25,7 @@ class StatusButton extends React.PureComponent {
   };
   isNeedFetch = () => {
     const { cachedHour } = this.props.config;
-    const { reddit } = this.props.redditStore;
+    const { reddit } = this.props;
     if (isEmpty(reddit.data) || hoursAgo(reddit.timestamp) > cachedHour) {
       this.setState({ status: NEED });
     } else {

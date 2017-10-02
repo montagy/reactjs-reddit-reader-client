@@ -3,7 +3,7 @@ import styles from './index.css';
 import { Link } from 'react-router-dom';
 import { toggleWith } from '../../hocs/toggle';
 import FixedBottom from '../../templates/FixedBottom';
-import StatusButton from '../../atoms/StatusButton';
+import { Button, StatusButton } from '../../atoms';
 
 function Pannel({ reddits, addReddit, cachedHour, ...props }) {
   const list = reddits.keys().map(name => {
@@ -13,16 +13,24 @@ function Pannel({ reddits, addReddit, cachedHour, ...props }) {
         <Link to={{ pathname: url }}>
           {name}
         </Link>
-        <StatusButton reddit={reddits[name]} sub={name}
+        <StatusButton
+          reddit={reddits.get(name)}
+          sub={name}
           cachedHour={cachedHour}
-          addReddit={addReddit} />
+          addReddit={addReddit}
+        />
       </div>
     );
   });
+  const footer = (
+    <div>
+      <Button><Link to="/site/config">设置</Link></Button>
+    </div>
+  );
   return (
     <FixedBottom
       className={styles.pannel}
-      footer={<div>@copyright montagy</div>}
+      footer={footer}
       {...props}
     >
       <div className={styles.lists}>

@@ -4,7 +4,7 @@ import {
   when,
   computed,
   runInAction,
-  //reaction,
+  reaction,
 } from 'mobx';
 import isEmpty from 'lodash/isEmpty';
 import config from './config';
@@ -13,121 +13,91 @@ import { isScrollAtEnd, hoursAgo } from '../utils';
 import reddits from './reddits';
 
 class RedditStore {
-  shouldCombine = false;
+  currentReddit = '';
+  nextPageId = '';
+  @observable.shallow summaries = [];
   @observable loading = false;
   @observable error = '';
-  @observable currentReddit = '';
   @observable showFixedHeader = false;
   constructor() {
     when(
       () => this.error,
       () => {
         setTimeout(
-          action(() => {
+          action('error timeout', () => {
             this.error = '';
           }),
           2000,
         );
       },
     );
-    when(
-      () =>
-        isEmpty(this.reddit) && isEmpty(this.reddit.data) && this.currentReddit,
-      () => {
-        this.update();
-      },
-    );
-  }
-  @computed
-  get reddit() {
-    return reddits.get(this.currentReddit) || {};
-  }
-  @computed
-  get nextPageId() {
-    return (
-      (this.reddit && this.reddit.data && this.reddit.data.data.after) || ''
-    );
-  }
-  @computed
-  get summaries() {
-    return (
-      (this.reddit &&
-        this.reddit.data &&
-        this.reddit.data.data.children.map(child => child.data)) ||
-      []
-    );
-  }
-  @action
-  setCurrentReddit(value) {
-    this.currentReddit = value;
   }
   @action.bound
-  update() {
+  update(currentReddit) {
     this.loading = true;
+    const reddit = reddits.get(currentReddit) || {};
+    this.currentReddit = currentReddit;
+    this.summaries = [];
     if (
-      isEmpty(this.reddit.data) ||
-      hoursAgo(this.reddit.timestamp) >= config.cachedHour
+      isEmpty(reddit.data) ||
+      hoursAgo(reddit.timestamp) >= config.cachedHour
     ) {
-      fetchReddit({ pathPiece: ['r', this.currentReddit] })
+      fetchReddit({ pathPiece: ['r', currentReddit] })
         .then(
-          action(json => {
-            reddits.add(this.currentReddit, json);
+          action('update fetch', json => {
+            this.nextPageId = json.data.after;
+            this.summaries = json.data.children.map(child => child.data);
+            reddits.add(currentReddit, json);
           }),
         )
         .catch(
-          action(err => {
+          action('update error', err => {
             this.error = err.toString();
           }),
         )
         .finally(
-          action(() => {
+          action('update finally', () => {
             this.loading = false;
           }),
         );
     } else {
       this.loading = false;
+      this.summaries = reddit.data.data.children.map(child => child.data);
+      this.nextPageId = reddit.data.data.after;
     }
   }
   @action.bound
-  handleScroll(e) {
-    const { loading, nextPageId, currentReddit, showFixedHeader } = this;
-    e.preventDefault();
-    if (isScrollAtEnd() && !loading) {
+  mergeSummaries() {
+    const { loading, currentReddit, nextPageId } = this;
+    if (isScrollAtEnd() && !loading && currentReddit && nextPageId) {
       this.loading = true;
       fetchReddit({
         pathPiece: ['r', currentReddit],
         after: nextPageId,
       })
-        .then(json => {
-          this.shouldCombine = true;
-          const newChildren = json.data.children;
-          const oldChildren = this.reddit.data.data.children;
-          const newReddit = { ...this.reddit };
-          newReddit.data.children = { ...oldChildren, ...newChildren };
-          newReddit.data.data.after = json.data.after;
-          console.log(newChildren, oldChildren, newReddit);
-          runInAction(() => {
-            reddits.reddits.set(currentReddit, newReddit);
-          });
-        })
+        .then(
+          action('handle scroll fetch', json => {
+            this.nextPageId = json.data.after;
+            const newChildren = json.data.children.map(child => child.data);
+            const old = this.summaries;
+            this.summaries = old.concat(newChildren);
+          }),
+        )
         .catch(
-          action(err => {
+          action('handle scroll error', err => {
             this.error = err.toString();
           }),
         )
-        .finally(() => {
-          this.shouldCombine = false;
-          runInAction(() => {
+        .finally(
+          action('handle scroll finally', () => {
             this.loading = false;
-          });
-        });
+          }),
+        );
     }
-    if (
-      (e.target.scrollingElement.scrollTop > 200 && !showFixedHeader) ||
-      (e.target.scrollingElement.scrollTop <= 200 && showFixedHeader)
-    ) {
-      this.showFixedHeader = !showFixedHeader;
-    }
+  }
+  @action.bound
+  toggleHeader() {
+    this.showFixedHeader = !this.showFixedHeader;
   }
 }
 
