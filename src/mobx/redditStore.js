@@ -1,11 +1,4 @@
-import {
-  observable,
-  action,
-  when,
-  computed,
-  runInAction,
-  reaction,
-} from 'mobx';
+import { observable, action, autorun } from 'mobx';
 import isEmpty from 'lodash/isEmpty';
 import config from './config';
 import fetchReddit from '../api';
@@ -20,17 +13,16 @@ class RedditStore {
   @observable error = '';
   @observable showFixedHeader = false;
   constructor() {
-    when(
-      () => this.error,
-      () => {
+    autorun(() => {
+      if (this.error) {
         setTimeout(
           action('error timeout', () => {
             this.error = '';
           }),
           2000,
         );
-      },
-    );
+      }
+    });
   }
   @action.bound
   update(currentReddit) {

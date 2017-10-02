@@ -41,10 +41,6 @@ class RedditContainer extends React.Component {
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
   }
-  handleScroll(e) {
-    e.preventDefault();
-    throttle();
-  }
   render() {
     const {
       loading,

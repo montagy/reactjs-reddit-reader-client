@@ -1,11 +1,17 @@
-import { observable, action, toJS, } from 'mobx';
+import { observable, action, toJS, reaction } from 'mobx';
 import storage from '../storage';
 
 class Reddits {
-  @observable reddits;
+  @observable.shallow reddits = new Map();
   constructor() {
     const reddits = storage.read('reddit') || {};
-    this.reddits = observable.shallowMap(reddits);
+    this.reddits.merge(reddits);
+    reaction(
+      () => this.reddits,
+      () => {
+        this.save();
+      },
+    );
   }
   @action.bound
   add(name, data) {
@@ -13,12 +19,10 @@ class Reddits {
       timestamp: new Date().getTime(),
       data,
     });
-    this.save();
   }
   @action.bound
   delete(name) {
     this.reddtis.delete(name);
-    this.save();
   }
   @action.bound
   cleanCache() {
