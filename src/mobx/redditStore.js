@@ -11,7 +11,6 @@ class RedditStore {
   @observable.shallow summaries = [];
   @observable loading = false;
   @observable error = '';
-  @observable showFixedHeader = false;
   constructor() {
     autorun(() => {
       if (this.error) {
@@ -86,10 +85,6 @@ class RedditStore {
           }),
         );
     }
-  }
-  @action.bound
-  toggleHeader() {
-    this.showFixedHeader = !this.showFixedHeader;
   }
 }
 
