@@ -8,6 +8,7 @@ import { useStrict } from 'mobx';
 import config from './mobx/config';
 import redditStore from './mobx/redditStore';
 import reddits from './mobx/reddits';
+import post from './mobx/post';
 
 useStrict(true);
 
@@ -15,6 +16,7 @@ const store = {
   config,
   reddits,
   redditStore,
+  post,
 };
 const render = Comp => {
   ReactDOM.render(

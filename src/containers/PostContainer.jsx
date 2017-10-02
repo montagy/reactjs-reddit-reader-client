@@ -1,26 +1,26 @@
 import React, { Component } from 'react';
-import Post from '../pages/Post';
-import fetchReddit from '../api';
+import { observer, inject } from 'mobx-react';
+import PostView from '../molecules/PostView';
+import Loading from '../atoms/Loading';
 
+@inject('post')
+@observer
 class PostContainer extends Component {
-  state = {
-    loading: true,
-    post: {},
-    comments: [],
-  };
-  componentDidMount() {
-    fetchReddit({ pathPiece: [this.props.match.params.comment] }).then(json => {
-      this.setState({
-        loading: false,
-        post: json[0].data.children[0].data,
-        comments: json[1].data.children.map(child => child.data),
-      });
-    });
+  componentWillMount() {
+    this.props.post.setId(this.props.match.params.comment);
   }
   render() {
-    const {...rest} = this.state;
+    const { loading, post, comments } = this.props.post;
     return (
-      <Post {...rest} />
+      <section>
+        <div style={{ position: 'fixed', left: '50%', top: '50%' }}>
+          <Loading
+            active={loading}
+            style={{ width: '5em', height: '5em', borderWidth: '5px' }}
+          />
+        </div>
+        <PostView post={post} comments={comments} />
+      </section>
     );
   }
 }

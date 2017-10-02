@@ -9,6 +9,7 @@ class Reddits {
     reaction(
       () => this.reddits,
       () => {
+        console.log('local storage write');
         this.save();
       },
     );
