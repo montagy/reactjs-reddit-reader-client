@@ -1,26 +1,25 @@
 import React from 'react';
 import Pannel from '../molecules/Pannel';
 import ToggleButton from '../molecules/ToggleButton';
-import { inject, observer} from 'mobx-react';
+import { inject, observer } from 'mobx-react';
+import { observable, action } from 'mobx';
 
 @inject('config', 'reddits')
 @observer
 export default class PannelContainer extends React.Component {
-  state = {
-    showPannel: false,
-  };
-  togglePannel = e => {
+  @observable showPannel = false;
+  @action
+  togglePannel() {
+    this.showPannel = !this.showPannel;
+  }
+  handleClick = e => {
     e.preventDefault();
-    this.setState(prevState => ({
-      showPannel: !prevState.showPannel,
-    }));
+    this.togglePannel();
   };
-  handleEsc = event => {
-    if (event.keyCode === 27) {
-      event.preventDefault();
-      this.setState(prevState => ({
-        showPannel: !prevState.showPannel,
-      }));
+  handleEsc = e => {
+    if (e.keyCode === 27) {
+      e.preventDefault();
+      this.togglePannel();
     }
   };
   componentDidMount() {
@@ -30,18 +29,17 @@ export default class PannelContainer extends React.Component {
     window.removeEventListener('keydown', this.handleEsc);
   }
   render() {
-    const { reddits, add} = this.props.reddits;
+    const { reddits, add } = this.props.reddits;
     const { cachedHour } = this.props.config;
-    const { showPannel } = this.state;
     return (
       <div>
         <Pannel
           addReddit={add}
           cachedHour={cachedHour}
           reddits={reddits}
-          active={showPannel}
+          active={this.showPannel}
         />
-        <ToggleButton active={showPannel} onClick={this.togglePannel} />
+        <ToggleButton active={this.showPannel} onClick={this.handleClick} />
       </div>
     );
   }

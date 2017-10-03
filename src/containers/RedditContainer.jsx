@@ -1,8 +1,12 @@
 import React from 'react';
-import RedditMain from '../pages/SubReddit';
 import { inject, observer } from 'mobx-react';
 import throttle from 'lodash/throttle';
 import { observable, action } from 'mobx';
+import classNames from 'classnames';
+import { scrollTopSmooth } from '../utils';
+import { Summary, InlineForm, Affix } from '../molecules';
+import Loading from '../atoms/Loading';
+import styles from '../styles/subReddit.css';
 
 @inject('config', 'redditStore', 'reddits')
 @observer
@@ -14,6 +18,10 @@ class RedditContainer extends React.Component {
   }
   directTo = reddit => {
     this.props.history.push(`/${reddit}`);
+  };
+  goTop = e => {
+    e.preventDefault();
+    scrollTopSmooth(0, 300);
   };
   handleScroll = throttle(
     e => {
@@ -50,15 +58,42 @@ class RedditContainer extends React.Component {
   render() {
     const { loading, error, summaries } = this.props.redditStore;
     const { sub } = this.props;
+    const summariesView = summaries.map(summary =>
+      <Summary key={summary.id} data={summary} />,
+    );
+    const cls = classNames({
+      [styles.fixedTop]: true,
+      [styles.hidden]: !this.showFixedHeader,
+    });
     return (
-      <RedditMain
-        summaries={summaries}
-        loading={loading}
-        showFixedHeader={this.showFixedHeader}
-        error={error}
-        onSubmit={this.directTo}
-        sub={sub}
-      />
+      <section className={styles.wrapper}>
+        {error && <div className={styles.error}>{error}</div>}
+        <header>
+          <h1>{sub}</h1>
+          <InlineForm onSubmit={this.directT} />
+        </header>
+        <main>
+          {summariesView}
+        </main>
+        <div>
+          <Loading
+            active={loading}
+            style={{
+              width: '5em',
+              height: '5em',
+              borderWidth: '5px',
+              margin: '0 auto',
+            }}
+          />
+        </div>
+        <Affix className={styles.affix}>
+          <a onClick={this.goTop}>GO TOP</a>
+        </Affix>
+        <header className={cls}>
+          <h1>{sub}</h1>
+          <InlineForm onSubmit={this.directTo} />
+        </header>
+      </section>
     );
   }
 }
