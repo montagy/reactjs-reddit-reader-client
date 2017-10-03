@@ -1,5 +1,7 @@
 import { observable, action, toJS, reaction } from 'mobx';
 import storage from '../storage';
+import config from './config';
+import { hoursAgo } from '../utils';
 
 class Reddits {
   @observable.shallow reddits = new Map();
@@ -30,7 +32,11 @@ class Reddits {
     storage.remove('reddit');
   }
   get(name) {
-    return this.reddits.get(name);
+    return this.reddits.get(name) || {};
+  }
+  isNeedFetch(name) {
+    const reddit = this.get(name);
+    return (!reddit.data || hoursAgo(reddit.timestamp) > config.cachedHour)
   }
 }
 

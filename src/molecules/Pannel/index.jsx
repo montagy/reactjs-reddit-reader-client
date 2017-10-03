@@ -13,12 +13,7 @@ function Pannel({ reddits, addReddit, cachedHour, ...props }) {
         <Link to={{ pathname: url }}>
           {name}
         </Link>
-        <StatusButton
-          reddit={reddits.get(name)}
-          sub={name}
-          cachedHour={cachedHour}
-          addReddit={addReddit}
-        />
+        <StatusButton name={name} />
       </div>
     );
   });
@@ -28,11 +23,7 @@ function Pannel({ reddits, addReddit, cachedHour, ...props }) {
     </div>
   );
   return (
-    <FixedBottom
-      className={styles.pannel}
-      footer={footer}
-      {...props}
-    >
+    <FixedBottom className={styles.pannel} footer={footer} {...props}>
       <div className={styles.lists}>
         {list}
       </div>

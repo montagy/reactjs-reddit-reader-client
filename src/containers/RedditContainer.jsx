@@ -70,7 +70,7 @@ class RedditContainer extends React.Component {
         {error && <div className={styles.error}>{error}</div>}
         <header>
           <h1>{sub}</h1>
-          <InlineForm onSubmit={this.directT} />
+          <InlineForm onSubmit={this.directTo} />
         </header>
         <main>
           {summariesView}

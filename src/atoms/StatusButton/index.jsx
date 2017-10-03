@@ -1,8 +1,7 @@
 import React from 'react';
 import fetchReddit from '../../api';
-import isEmpty from 'lodash/isEmpty';
-import { hoursAgo } from '../../utils';
-import { observer, inject} from 'mobx-react';
+import { observer, inject } from 'mobx-react';
+import { observable, action, reaction } from 'mobx';
 
 export const NEED = 1;
 export const LOAD = 2;
@@ -14,54 +13,50 @@ export const ALREADY = 6;
 @inject('config', 'reddits', 'redditStore')
 @observer
 class StatusButton extends React.PureComponent {
-  state = {
-    status: NEED,
-  };
-  handleStatus = () => {
-    const status = this.state.status;
-    if (status === SUCCESS) {
-      this.setState({ status: ALREADY });
-    }
-  };
-  isNeedFetch = () => {
-    const { cachedHour } = this.props.config;
-    const { reddit } = this.props;
-    if (isEmpty(reddit.data) || hoursAgo(reddit.timestamp) > cachedHour) {
-      this.setState({ status: NEED });
+  @observable status = NEED;
+  constructor(props) {
+    super(props);
+    const { name } = props;
+    if (props.reddits.isNeedFetch(name)) {
+      this.setStatus(NEED);
     } else {
-      this.setState({ status: ALREADY });
+      this.setStatus(ALREADY);
     }
-  };
-  componentDidMount() {
-    this.isNeedFetch();
-    setTimeout(this.handleStatus, 2000);
+    reaction(
+      () => this.status,
+      () => {
+        if (this.status === SUCCESS) {
+          setTimeout(() => {
+            this.setStatus(ALREADY);
+          }, 2000);
+        }
+      },
+    );
   }
-
-  componentWillReceiveProps(nextProps) {
-    this.isNeedFetch();
+  @action
+  setStatus(value) {
+    this.status = value;
   }
-  componentDidUpdate() {
-    setTimeout(this.handleStatus, 2000);
-  }
-  handleClick = () => {
-    if (this.state.status === NEED) {
-      const { sub, addReddit } = this.props;
-      this.setState({ status: LOAD });
-      fetchReddit({ pathPiece: ['r', sub] }).then(
-        json => {
-          addReddit(sub, json);
-          this.setState({ status: SUCCESS });
-        },
-        () => {
-          this.setState({ status: FAIL });
-        },
+  @action.bound
+  update() {
+    if (this.status === NEED) {
+      const { name } = this.props;
+      const { add } = this.props.reddits;
+      this.setStatus(LOAD);
+      fetchReddit({ pathPiece: ['r', name] }).then(
+        action('status button fetch success', json => {
+          add(name, json);
+          this.setStatus(SUCCESS);
+        }),
+        action('status button fetch fail', () => {
+          this.setStatus(FAIL);
+        }),
       );
     }
-  };
+  }
   render() {
-    const { status } = this.state;
     let child;
-    switch (status) {
+    switch (this.status) {
       case ALREADY:
         child = '已经缓存';
         break;
@@ -84,7 +79,7 @@ class StatusButton extends React.PureComponent {
         child = '需要获取';
         break;
     }
-    return <button onClick={this.handleClick}>{child}</button>;
+    return <button onClick={this.update}>{child}</button>;
   }
 }
 
