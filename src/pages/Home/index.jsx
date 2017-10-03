@@ -4,7 +4,6 @@ import InlineForm from '../../molecules/InlineForm';
 import Button from '../../atoms/Button';
 import { observer, inject } from 'mobx-react';
 
-//TODO defaultHome 的有效性检测
 @inject('config', 'reddits')
 @observer
 class Home extends React.Component {
@@ -13,7 +12,7 @@ class Home extends React.Component {
   };
   fontSizeSubmit = e => {
     this.props.config.setFontSize(e.target.value);
-  }
+  };
   render() {
     const {
       defaultHome,

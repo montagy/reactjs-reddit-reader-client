@@ -1,5 +1,6 @@
 import { observable, reaction, action } from 'mobx';
 import storage from '../storage';
+import { isValidReddit } from '../api';
 class Config {
   @observable defaultHome = '';
   @observable cachedHour = 2;
@@ -22,7 +23,13 @@ class Config {
   }
   @action.bound
   setDefaultHome(value) {
-    this.defaultHome = value;
+    isValidReddit(value).then(
+      action('valid reddit', () => {
+        this.defaultHome = value;
+      }),
+    ).catch(() => {
+      console.log('error');
+    });
   }
   @action.bound
   setCachedHour(value) {

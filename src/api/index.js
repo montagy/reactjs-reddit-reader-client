@@ -40,10 +40,10 @@ export function isValidReddit(reddit) {
   if (!isString(reddit)) return false;
   return fetch({
     host: baseUrl,
-    path: 'r/' + reddit,
-    method: 'HEAD',
+    path: 'r/' + reddit + '.json',
+    method: 'GET',
     timeout: 5000,
-  }).then(() => Promise.resolve(true), () => Promise.reject(false));
+  }).then(() => Promise.resolve(), () => Promise.reject());
 }
 /**
   *Convenient fetch build on XMLHttpRequest
