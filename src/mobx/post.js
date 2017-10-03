@@ -9,21 +9,26 @@ class Post {
     autorun(() => {
       if (this.id) {
         this.update();
-        this.setId('');
       }
     });
   }
   @action
-  update() {
+  reset() {
     this.loading = true;
     this.article = [];
-    fetchReddit({ pathPiece: [this.id] })
+    this.id = '';
+  }
+  @action
+  update() {
+    const id = this.id;
+    this.reset();
+    fetchReddit({ pathPiece: [id] })
       .then(
         action('fetch success', json => {
           this.article = json;
         }),
       )
-      .catch(action('fetch error', err => {}))
+      .catch(action('fetch error', () => {}))
       .finally(
         action('fetch complete', () => {
           this.loading = false;
