@@ -1,8 +1,5 @@
 import { observable, action, autorun } from 'mobx';
-import isEmpty from 'lodash/isEmpty';
-import config from './config';
 import fetchReddit from '../api';
-import { hoursAgo } from '../utils';
 import reddits from './reddits';
 
 class RedditStore {
@@ -29,10 +26,7 @@ class RedditStore {
     const reddit = reddits.get(currentReddit) || {};
     this.currentReddit = currentReddit;
     this.summaries = [];
-    if (
-      isEmpty(reddit.data) ||
-      hoursAgo(reddit.timestamp) >= config.cachedHour
-    ) {
+    if (reddits.isNeedFetch(currentReddit)) {
       fetchReddit({ pathPiece: ['r', currentReddit] })
         .then(
           action('update fetch', json => {
