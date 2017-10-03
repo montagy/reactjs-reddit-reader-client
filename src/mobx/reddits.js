@@ -1,4 +1,4 @@
-import { observable, action, toJS } from 'mobx';
+import { observable, action, toJS, reaction } from 'mobx';
 import storage from '../storage';
 
 class Reddits {
@@ -6,9 +6,12 @@ class Reddits {
   constructor() {
     const reddits = storage.read('reddit') || {};
     this.reddits.merge(reddits);
-    this.reddits.observe(() => {
-      this.save();
-    });
+    reaction(
+      () => toJS(this.reddits),
+      data => {
+        storage.write('reddit', data);
+      },
+    );
   }
   @action.bound
   add(name, data) {
@@ -28,9 +31,6 @@ class Reddits {
   }
   get(name) {
     return this.reddits.get(name);
-  }
-  save() {
-    storage.write('reddit', toJS(this.reddits));
   }
 }
 
