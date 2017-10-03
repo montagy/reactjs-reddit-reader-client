@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import throttle from 'lodash/throttle';
 import { observable, action } from 'mobx';
 import classNames from 'classnames';
-import { scrollTopSmooth } from '../utils';
+import { scrollTopSmooth, isScrollAtEnd } from '../utils';
 import { Summary, InlineForm, Affix } from '../molecules';
 import Loading from '../atoms/Loading';
 import styles from '../styles/subReddit.css';
@@ -27,7 +27,9 @@ class RedditContainer extends React.Component {
     e => {
       const showFixedHeader = this.showFixedHeader;
       e.preventDefault();
-      this.props.redditStore.mergeSummaries();
+      if (isScrollAtEnd()) {
+        this.props.redditStore.mergeSummaries();
+      }
       if (
         (e.target.scrollingElement.scrollTop > 200 && !showFixedHeader) ||
         (e.target.scrollingElement.scrollTop <= 200 && showFixedHeader)

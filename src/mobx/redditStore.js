@@ -2,7 +2,7 @@ import { observable, action, autorun } from 'mobx';
 import isEmpty from 'lodash/isEmpty';
 import config from './config';
 import fetchReddit from '../api';
-import { isScrollAtEnd, hoursAgo } from '../utils';
+import { hoursAgo } from '../utils';
 import reddits from './reddits';
 
 class RedditStore {
@@ -60,7 +60,7 @@ class RedditStore {
   @action.bound
   mergeSummaries() {
     const { loading, currentReddit, nextPageId } = this;
-    if (isScrollAtEnd() && !loading && currentReddit && nextPageId) {
+    if (!loading && currentReddit && nextPageId) {
       this.loading = true;
       fetchReddit({
         pathPiece: ['r', currentReddit],
